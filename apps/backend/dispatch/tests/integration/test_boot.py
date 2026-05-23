@@ -1,26 +1,5 @@
-"""Smoke test: the app boots, lifespan completes, /health responds.
-
-Uses FastAPI's TestClient which drives the lifespan context manager
-end-to-end (DB connect, schema apply, scheduler start, projects.yml sync).
-"""
-from pathlib import Path
-
-import pytest
+"""Smoke test: the app boots, lifespan completes, /health responds."""
 from fastapi.testclient import TestClient
-
-
-@pytest.fixture
-def tmp_db_env(tmp_path, monkeypatch):
-    """Point the app at a tempdir SQLite file and disable APScheduler timing."""
-    db_path = tmp_path / "dispatch.db"
-    monkeypatch.setenv("DB_PATH", str(db_path))
-    # Phase 1 introduces this as a boot-gate (no encryption use yet).
-    monkeypatch.setenv("DISPATCH_MASTER_KEY", "test-key-not-secret")
-    # Force a fresh Settings() — the singleton caches across tests otherwise.
-    from core import config
-    config.get_settings.cache_clear()
-    yield db_path
-    config.get_settings.cache_clear()
 
 
 def test_app_boots_and_health_responds(tmp_db_env):
