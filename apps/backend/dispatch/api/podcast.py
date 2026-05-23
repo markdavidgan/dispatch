@@ -4,13 +4,12 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from fastapi import APIRouter, Depends, Request, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Request, HTTPException, BackgroundTasks
 
-from core.cf_access import verify_cf_access
 from dispatch.podcast.registry import load_podcasts, enabled_podcasts
 from dispatch.podcast import intake
 
-router = APIRouter(prefix="/podcasts", dependencies=[Depends(verify_cf_access)])
+router = APIRouter(prefix="/podcasts")
 
 
 @router.get("")

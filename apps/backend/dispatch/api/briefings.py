@@ -1,8 +1,8 @@
 """GET /briefings  — paginated list of past briefings.
 GET /briefings/{date} — single archived briefing (full payload).
 
-Both require CF Access (already enforced globally by the verify_cf_access
-middleware — see core/cf_access.py).
+Both endpoints are perimeter-protected at the deployment layer
+(Cloudflare Access, Tailscale, reverse-proxy auth — see CLAUDE.md).
 """
 from __future__ import annotations
 

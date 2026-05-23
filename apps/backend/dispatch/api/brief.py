@@ -1,16 +1,16 @@
 """Brief refresh endpoint — on-demand addendum synthesis + publish + audio.
 
-Protected by Cloudflare Access. Synchronous response (~5-15s).
-Capped at 25s to avoid gateway timeouts.
+Protected by the deployment perimeter (e.g. Cloudflare Access, Tailscale,
+reverse-proxy basic auth). No app-layer authentication. See CLAUDE.md.
+Synchronous response (~5-15s). Capped at 25s to avoid gateway timeouts.
 """
 import asyncio
 
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, HTTPException
 
-from core.cf_access import verify_cf_access
 from dispatch import orchestrator
 
-router = APIRouter(prefix="/brief", dependencies=[Depends(verify_cf_access)])
+router = APIRouter(prefix="/brief")
 
 _REFRESH_TIMEOUT = 25.0
 

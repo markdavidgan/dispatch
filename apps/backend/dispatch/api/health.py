@@ -1,4 +1,4 @@
-"""Health endpoints. /health is public; others land in Task 1.4 behind CF Access."""
+"""Health endpoint. Public; no auth dependency."""
 from fastapi import APIRouter, Request
 from datetime import datetime, timezone
 

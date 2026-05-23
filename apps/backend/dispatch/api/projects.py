@@ -1,10 +1,13 @@
-"""Project listing endpoint."""
-from fastapi import APIRouter, Request, Depends
+"""Project listing endpoint.
 
-from core.cf_access import verify_cf_access
+Protected by the deployment perimeter (e.g. Cloudflare Access, Tailscale,
+reverse-proxy basic auth). No app-layer authentication. See CLAUDE.md.
+"""
+from fastapi import APIRouter, Request
+
 from core.db import Database
 
-router = APIRouter(prefix="/projects", dependencies=[Depends(verify_cf_access)])
+router = APIRouter(prefix="/projects")
 
 
 @router.get("")

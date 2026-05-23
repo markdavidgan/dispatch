@@ -1,13 +1,14 @@
 """Live data endpoint — returns current project stats.
 
-Protected by Cloudflare Access (service token or JWT)."""
-from fastapi import APIRouter, Request, Depends
+Protected by the deployment perimeter (e.g. Cloudflare Access, Tailscale,
+reverse-proxy basic auth). No app-layer authentication. See CLAUDE.md.
+"""
+from fastapi import APIRouter, Request
 from datetime import datetime, timezone
 
-from core.cf_access import verify_cf_access
 from core.db import Database
 
-router = APIRouter(prefix="/live", dependencies=[Depends(verify_cf_access)])
+router = APIRouter(prefix="/live")
 
 
 @router.get("")
