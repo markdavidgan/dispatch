@@ -5,6 +5,7 @@ because TestClient/ASGITransport in starlette 0.41.x do not handle
 lifespan state reliably in this container environment.
 """
 import pytest
+import pytest_asyncio
 from unittest.mock import MagicMock, patch, AsyncMock
 
 from dispatch.api.briefings import list_briefings, get_briefing, _audio_url
@@ -17,7 +18,7 @@ def mock_request(db):
     return req
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def seeded_db(db):
     async with db.cursor() as cur:
         await cur.execute(

@@ -19,6 +19,18 @@ _QUIET_FALLBACK = "Quiet this week."
 _QUIET_THRESHOLD = 2
 
 
+def _build_prompt(display_name: str, events: list[dict]) -> str:
+    """Build a weekly-summary prompt for the given project and events."""
+    lines = [f"Weekly summary for {display_name}", ""]
+    for ev in events:
+        kind = ev.get("kind", "event")
+        title = ev.get("title", "")
+        lines.append(f"- [{kind}] {title}")
+    lines.append("")
+    lines.append("Write a concise 2-3 sentence summary of this week's activity.")
+    return "\n".join(lines)
+
+
 async def generate_from_the_desk(
     *,
     project_slug: str,

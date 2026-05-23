@@ -15,7 +15,10 @@ async def test_quiet_project_uses_literal_fallback_no_llm_call():
     events = [
         {"kind": "commit", "title": "single commit", "occurred_at": "2026-05-10T08:00:00Z"},
     ]
-    with patch("dispatch.synthesis.from_the_desk.call_kimi", new=AsyncMock()) as mock:
+    with patch(
+        "dispatch.synthesis.from_the_desk.KimiCLISynthesizer.generate",
+        new=AsyncMock(),
+    ) as mock:
         result = await generate_from_the_desk(
             project_slug="agos", display_name="AGOS", events=events,
         )
@@ -27,7 +30,10 @@ async def test_quiet_project_uses_literal_fallback_no_llm_call():
 @pytest.mark.asyncio
 async def test_zero_events_uses_literal_fallback_no_llm_call():
     """0 events also short-circuits to the fallback."""
-    with patch("dispatch.synthesis.from_the_desk.call_kimi", new=AsyncMock()) as mock:
+    with patch(
+        "dispatch.synthesis.from_the_desk.KimiCLISynthesizer.generate",
+        new=AsyncMock(),
+    ) as mock:
         result = await generate_from_the_desk(
             project_slug="signalstack", display_name="SignalStack", events=[],
         )
@@ -44,7 +50,7 @@ async def test_active_project_calls_kimi_with_event_window():
     ]
     canned_response = "A productive week on AGOS. The WebSocket fix landed."
     with patch(
-        "dispatch.synthesis.from_the_desk.call_kimi",
+        "dispatch.synthesis.from_the_desk.KimiCLISynthesizer.generate",
         new=AsyncMock(return_value=canned_response),
     ) as mock:
         result = await generate_from_the_desk(
@@ -53,7 +59,7 @@ async def test_active_project_calls_kimi_with_event_window():
     assert result["body"] == canned_response
     assert "generated_at" in result
     mock.assert_called_once()
-    # The prompt passed to call_kimi should mention the display name and
+    # The prompt passed to generate should mention the display name and
     # at least one of the event titles.
     (prompt_arg,), _ = mock.call_args
     assert "AGOS" in prompt_arg
@@ -65,7 +71,7 @@ async def test_returned_body_is_stripped():
     """Trim leading/trailing whitespace from Kimi's output."""
     events = [{"kind": "commit", "title": "a", "occurred_at": "2026-05-10T08:00:00Z"}] * 3
     with patch(
-        "dispatch.synthesis.from_the_desk.call_kimi",
+        "dispatch.synthesis.from_the_desk.KimiCLISynthesizer.generate",
         new=AsyncMock(return_value="\n\n  the body  \n"),
     ):
         result = await generate_from_the_desk(

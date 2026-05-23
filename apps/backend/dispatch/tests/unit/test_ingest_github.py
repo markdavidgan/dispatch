@@ -23,6 +23,7 @@ async def test_ingest_pulls_and_writes_prs(tmp_path, monkeypatch):
          "user": {"login": "markdavidgan"},
          "html_url": "https://github.com/markdavidgan/agos/pull/42",
          "created_at": "2026-05-13T14:30:00Z",
+         "updated_at": "2026-05-13T15:00:00Z",
          "merged_at": "2026-05-13T16:00:00Z",
          "state": "closed"},
     ]
