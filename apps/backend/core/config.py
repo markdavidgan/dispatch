@@ -29,4 +29,5 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
+    """Cached singleton accessor — call this instead of constructing directly."""
     return Settings()
