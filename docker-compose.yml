@@ -4,7 +4,7 @@ services:
   dispatch-backend:
     image: dispatch-backend:latest
     build:
-      context: ./backend
+      context: ./apps/backend
       dockerfile: Dockerfile
     container_name: dispatch-backend
     restart: unless-stopped

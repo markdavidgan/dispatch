@@ -15,8 +15,9 @@ A standalone daily editorial brief generator for software projects. Each deploye
 
 ```
 dispatch/
-├── frontend/          # Next.js app (Vercel)
-├── backend/           # FastAPI app (Docker)
+├── apps/
+│   ├── frontend/      # Next.js app (Vercel)
+│   └── backend/       # FastAPI app (Docker)
 ├── docker-compose.yml # Self-hosting setup
 └── docs/              # Brainstorm, specs, plans
 ```
@@ -33,7 +34,7 @@ dispatch/
 ### Frontend
 
 ```bash
-cd frontend
+cd apps/frontend
 pnpm install
 pnpm dev
 ```
@@ -41,7 +42,7 @@ pnpm dev
 ### Backend
 
 ```bash
-cd backend
+cd apps/backend
 pip install -r dispatch/requirements.txt
 DISPATCH_MASTER_KEY=changeme uvicorn dispatch.main:app --reload
 ```
