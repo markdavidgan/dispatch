@@ -1,0 +1,15 @@
+name = "marklab-dev-podcasts"
+main = "src/worker.ts"
+compatibility_date = "2026-05-10"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "marklab-media"
+
+# Secrets (set via `wrangler secret put`):
+#   AUTH_USERNAME    — basic-auth username (mirrored from agos PODCAST_AUTH_USERNAME)
+#   AUTH_PASSWORD    — basic-auth password (mirrored from agos PODCAST_AUTH_PASSWORD)
+
+[[routes]]
+pattern = "podcasts.marklab.uk/*"
+zone_name = "marklab.uk"

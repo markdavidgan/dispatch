@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  /* D4 — Field.io kinetic */
+  --color-paper:           #f9f7f2;
+  --color-paper-deep:      #f0ede5;
+  --color-ink:             #0b0b0e;
+  --color-ink-soft:        #2c2c30;
+  --color-ink-mute:        #787884;
+  --color-signal:          #ff2a2a;
+  --color-signal-dim:      rgba(255, 42, 42, 0.12);
+
+  --color-hair:            rgba(11, 11, 14, 0.08);
+  --color-hair-strong:     rgba(11, 11, 14, 0.16);
+
+  /* Project bullet state colors stay semantic; D4 maps them to ink/signal */
+  --color-bullet-red:      #ff2a2a;
+  --color-bullet-amber:    #0b0b0e;
+  --color-bullet-sand:     #787884;
+
+  --font-disp:             var(--font-inter-tight);
+  --font-mono:             var(--font-jetbrains-mono);
+
+  --text-numeral:          12.5rem;   /* 200px — the signature element */
+  --text-headline:         2.625rem;  /* 42px */
+  --text-body:             1rem;      /* 16px */
+  --text-label:            0.6875rem; /* 11px */
+  --text-meta:             0.625rem;  /* 10px */
+
+  --tracking-meta:         0.22em;
+  --tracking-nav:          0.14em;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-disp);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-signal);
+  color: var(--color-paper);
+}
+
+/* Motion — keyed to information, not decoration */
+@keyframes numeral-in {
+  from { opacity: 0; transform: translateY(8px); font-variation-settings: "wght" 400; }
+  to   { opacity: 1; transform: translateY(0);   font-variation-settings: "wght" 800; }
+}
+
+@keyframes addendum-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bullet-pulse {
+  /* rgba hardcoded (rather than var(--color-signal)) because var()
+     does not interpolate reliably inside box-shadow color stops. */
+  0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0   rgba(255, 42, 42, 0.4); }
+  50%      { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 42, 42, 0); }
+}
+
+@keyframes on-air {
+  0%, 40% { opacity: 1; }
+  50%, 90% { opacity: 0.25; }
+  100%    { opacity: 1; }
+}
+
+/* Respect users who've asked the OS to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

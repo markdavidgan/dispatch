@@ -1,0 +1,20 @@
+# Pinned for container reproducibility (target: Python 3.12 container).
+# Local Python 3.14 dev: install without pins — see Task 1.5 Dockerfile.
+# No aiobotocore/botocore — R2 access uses Cloudflare REST API (Task 4.2).
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+pydantic-settings==2.6.1
+aiosqlite==0.20.0
+httpx==0.28.1
+apscheduler==3.10.4
+PyYAML==6.0.2
+python-multipart==0.0.20
+pytest==8.3.4
+pytest-asyncio==0.24.0
+respx==0.21.1
+freezegun==1.5.1
+Jinja2==3.1.4
+feedgen==1.0.0
+notebooklm-py==0.4.0
+google-cloud-texttospeech==2.25.1

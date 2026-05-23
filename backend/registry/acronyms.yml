@@ -1,0 +1,49 @@
+# Acronyms recognized by the slug-to-display-name fallback titleizer.
+#
+# When `display_name` is absent from a project's entry in `projects.yml`
+# AND no `README.md` is found at the project's `local_path`, the resolver
+# falls back to titleizing the slug. Tokens whose uppercase form appears
+# in this list are kept ALL-CAPS rather than title-cased.
+#
+# Example: slug `jw-av-crew-training` with `JW` and `AV` here →
+#   "JW AV Crew Training" (not "Jw Av Crew Training").
+#
+# Keep entries short. Lower-case here is fine; the resolver does
+# case-insensitive matching.
+acronyms:
+  - AGOS
+  - AI
+  - API
+  - AV
+  - AWS
+  - CD
+  - CI
+  - CLI
+  - CSS
+  - GPT
+  - HD
+  - HTML
+  - HTTP
+  - HTTPS
+  - JS
+  - JSON
+  - JW
+  - LLM
+  - MCP
+  - PDF
+  - REST
+  - RSS
+  - SDK
+  - SQL
+  - SSH
+  - SVG
+  - TLS
+  - TLM
+  - TS
+  - TSX
+  - TTS
+  - UI
+  - URL
+  - VPN
+  - XML
+  - YAML

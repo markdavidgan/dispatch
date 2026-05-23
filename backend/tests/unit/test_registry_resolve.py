@@ -1,0 +1,191 @@
+"""Tests for the display-name resolution chain.
+
+The chain (highest priority first):
+  1. Explicit `display_name` override.
+  2. First H1 of <local_path>/README.md.
+  3. Titleize slug, respecting acronyms.yml.
+
+These tests pin the three behaviors against the resolution chain, and
+cover the edge cases that arise in practice (mixed-case overrides,
+acronym-laden slugs, absent local_path, missing README).
+"""
+from pathlib import Path
+
+import pytest
+
+from dispatch.registry.resolve import (
+    extract_readme_h1,
+    load_acronyms,
+    resolve_display_name,
+    titleize_slug,
+)
+
+
+@pytest.fixture
+def acronyms() -> set[str]:
+    return {"AGOS", "AI", "API", "AV", "JW", "MCP", "SDK", "UI", "URL"}
+
+
+def test_override_wins(acronyms, tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("# Should Not Win\n")
+    assert (
+        resolve_display_name(
+            slug="agos",
+            override="AGOS",
+            local_path=tmp_path,
+            acronyms=acronyms,
+        )
+        == "AGOS"
+    )
+
+
+def test_override_lowercase_preserved(acronyms):
+    assert (
+        resolve_display_name(
+            slug="marklab",
+            override="marklab",
+            local_path=None,
+            acronyms=acronyms,
+        )
+        == "marklab"
+    )
+
+
+def test_override_with_punctuation_preserved(acronyms):
+    assert (
+        resolve_display_name(
+            slug="mark-id",
+            override="mark.id",
+            local_path=None,
+            acronyms=acronyms,
+        )
+        == "mark.id"
+    )
+
+
+def test_override_whitespace_trimmed(acronyms):
+    assert (
+        resolve_display_name(
+            slug="x",
+            override="  Aether  ",
+            local_path=None,
+            acronyms=acronyms,
+        )
+        == "Aether"
+    )
+
+
+def test_readme_h1_wins_over_titleize(acronyms, tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("# Knowledge Vault\n\nA second brain.\n")
+    assert (
+        resolve_display_name(
+            slug="knowledge-vault",
+            override=None,
+            local_path=tmp_path,
+            acronyms=acronyms,
+        )
+        == "Knowledge Vault"
+    )
+
+
+def test_empty_override_falls_through_to_readme(acronyms, tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("# From The README\n")
+    assert (
+        resolve_display_name(
+            slug="x",
+            override="",
+            local_path=tmp_path,
+            acronyms=acronyms,
+        )
+        == "From The README"
+    )
+
+
+def test_missing_readme_falls_through_to_titleize(acronyms, tmp_path):
+    # tmp_path exists but has no README.md
+    assert (
+        resolve_display_name(
+            slug="aether-agent-plugins",
+            override=None,
+            local_path=tmp_path,
+            acronyms=acronyms,
+        )
+        == "Aether Agent Plugins"
+    )
+
+
+def test_missing_local_path_falls_through_to_titleize(acronyms):
+    assert (
+        resolve_display_name(
+            slug="personal-agent-skills",
+            override=None,
+            local_path=None,
+            acronyms=acronyms,
+        )
+        == "Personal Agent Skills"
+    )
+
+
+def test_titleize_respects_acronyms(acronyms):
+    assert titleize_slug("jw-av-crew-training", acronyms) == "JW AV Crew Training"
+
+
+def test_titleize_handles_underscore_separators(acronyms):
+    assert titleize_slug("knowledge_vault", acronyms) == "Knowledge Vault"
+
+
+def test_titleize_single_token_acronym(acronyms):
+    assert titleize_slug("agos", acronyms) == "AGOS"
+
+
+def test_titleize_single_token_non_acronym(acronyms):
+    assert titleize_slug("marcos", acronyms) == "Marcos"
+
+
+def test_titleize_ignores_empty_tokens(acronyms):
+    # Doubled separators shouldn't produce empty " Foo  Bar"
+    assert titleize_slug("foo--bar", acronyms) == "Foo Bar"
+
+
+def test_acronym_matching_case_insensitive(acronyms):
+    # User wrote `jw-av-...` lowercase; acronyms list stores `JW` uppercase
+    assert titleize_slug("jw-test", acronyms) == "JW Test"
+
+
+def test_readme_h1_skips_h2_and_text(acronyms, tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text(
+        "Some preamble.\n\n## A Section\n\n# Real Title\n\nbody\n"
+    )
+    # First H1 wins, not the H2
+    assert extract_readme_h1(tmp_path) == "Real Title"
+
+
+def test_readme_h1_empty_returns_none(tmp_path):
+    readme = tmp_path / "README.md"
+    readme.write_text("#   \n\nbody\n")
+    assert extract_readme_h1(tmp_path) is None
+
+
+def test_load_acronyms_missing_file_returns_empty(tmp_path):
+    assert load_acronyms(tmp_path / "nope.yml") == set()
+
+
+def test_load_acronyms_normalizes_to_upper(tmp_path):
+    f = tmp_path / "acronyms.yml"
+    f.write_text("acronyms:\n  - jw\n  - Av\n  - AGOS\n")
+    assert load_acronyms(f) == {"JW", "AV", "AGOS"}
+
+
+def test_real_project_acronyms_file_loads():
+    # The shipped acronyms.yml must parse and contain the ones we rely on.
+    path = (
+        Path(__file__).parent.parent.parent
+        / "registry"
+        / "acronyms.yml"
+    )
+    loaded = load_acronyms(path)
+    assert {"JW", "AV", "AGOS", "API", "URL"}.issubset(loaded)

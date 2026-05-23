@@ -1,0 +1,32 @@
+name: dispatch
+
+services:
+  dispatch-backend:
+    image: dispatch-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dispatch-backend
+    restart: unless-stopped
+    ports:
+      - "10060:10060"
+    volumes:
+      - dispatch-data:/data
+      - dispatch-kimi-cache:/home/dispatch/.kimi
+    environment:
+      - HOST=0.0.0.0
+      - PORT=10060
+      - DB_PATH=/data/dispatch.db
+      - DISPATCH_TZ=${DISPATCH_TZ:-UTC}
+      - DISPATCH_MASTER_KEY=${DISPATCH_MASTER_KEY}
+      # All other config is stored in the database and managed via the frontend admin UI.
+      # See docs/brainstorm/2026-05-23-standalone-dispatch/ for the migration plan.
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:10060/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  dispatch-data:
+  dispatch-kimi-cache:

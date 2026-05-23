@@ -1,0 +1,116 @@
+# Dispatch project registry — order matters.
+# Active projects render first, held next, archived hidden from home.
+#
+# display_name resolution order (see apps/backend/dispatch/registry/resolve.py):
+#   1. Explicit `display_name` here (this file is the override layer)
+#   2. First H1 of `<local_path>/README.md` (auto-discovered)
+#   3. Titleize slug, respecting acronyms in acronyms.yml
+#
+# Editing this file by hand is the manual workflow; the planned Console
+# registry editor will surface CRUD over these entries.
+version: 1
+timezone: Asia/Manila
+
+projects:
+  - slug: agos
+    display_name: AGOS
+    github: markdavidgan/agos
+    local_path: /repos/agos
+    status: active
+    kind: app
+    summary: Adaptive Gated Observational System — a research-first systematic crypto trading project. The loop is the product.
+    podcast:
+      title: "AGOS Dev"
+      description: "Weekly engineering podcast for AGOS, a systematic crypto trading research project."
+      author: "Mark"
+      itunes_category: "Technology"
+      cover_art: "apps/backend/dispatch/podcast/assets/agos/cover.jpg"
+      cron: "0 5 * * sat"
+      compose_window_days: 7
+      enabled: true
+
+  - slug: aether-focus
+    display_name: Made with Aether
+    github: markdavidgan/aether-focus
+    local_path: /repos/aether-focus
+    status: active
+    kind: app
+    summary: Apps designed for focus, clarity, and flow — monorepo for madewithaether.com. Ember, Cadence, Cue, Arc, Drift, Folio for iOS, macOS, and watchOS 26+.
+    podcast:
+      title: "Aether Dev"
+      description: "Weekly engineering podcast for the Made with Aether suite of productivity apps."
+      author: "Aether Team"
+      itunes_category: "Technology"
+      cover_art: "apps/backend/dispatch/podcast/assets/aether-focus/cover.jpg"
+      cron: "0 5 * * sat"
+      compose_window_days: 7
+      enabled: true
+
+  - slug: bellegan
+    display_name: Belle Gan
+    github: markdavidgan/bellegan
+    local_path: /repos/bellegan
+    status: active
+    kind: app
+    summary: Belle Gan's umbrella — shelf (private content ops at shelf.bellegan.com) plus the public marketing site at bellegan.com.
+
+  - slug: knowledge-vault
+    display_name: Knowledge Vault
+    github: markdavidgan/knowledge-vault
+    local_path: /repos/knowledge-vault
+    status: active
+    kind: tool
+    summary: A local-only AI second brain and information synthesizer over the curated vault and raw-dump stores.
+
+  - slug: jw-av-crew-training
+    display_name: JW AV Crew Training
+    github: markdavidgan/jw-av-crew-training
+    local_path: /repos/jw-av-crew-training
+    status: active
+    kind: app
+    summary: Training platform for volunteer audio-visual crews.
+
+  - slug: marcos
+    display_name: Marcos
+    github: markdavidgan/marcos
+    local_path: /repos/marcos
+    status: held
+    kind: app
+    summary: Successor to mark.id — personal landing and gateway. Repo not yet created; flip to active once initial commits land.
+
+  - slug: marklab
+    display_name: marklab
+    github: markdavidgan/marklab
+    local_path: /opt/marklab
+    status: active
+    kind: meta
+    summary: This homelab — the place from which everything else is dispatched.
+
+  - slug: aether-agent-plugins
+    display_name: Aether Agent Plugins
+    github: markdavidgan/aether-agent-plugins
+    local_path: /repos/aether-agent-plugins
+    status: active
+    kind: agents
+
+  - slug: personal-agent-skills
+    display_name: Personal Agent Skills
+    github: markdavidgan/personal-agent-skills
+    local_path: /repos/personal-agent-skills
+    status: active
+    kind: agents
+
+  - slug: signalstack
+    display_name: SignalStack
+    github: markdavidgan/signalstack
+    local_path: /repos/signalstack
+    status: archived
+    kind: service
+    summary: Earlier-generation signal/trading research project. Superseded by AGOS.
+
+  - slug: mark-id
+    display_name: mark.id
+    github: markdavidgan/mark.id
+    status: archived
+    kind: site
+    summary: Personal landing site. Superseded by Marcos.

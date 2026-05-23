@@ -1,0 +1,23 @@
+{# templates/source.md.j2 #}
+# {{ podcast_title }} — Week of {{ week_start_label }}
+
+This week's engineering work on {{ project_display_name }}.
+
+{% for day in days %}
+## {{ day.label }} ({{ day.date }})
+
+{% if day.events %}
+{% for e in day.events %}
+- **{{ e.kind }}**: {{ e.title }}{% if e.author %} ({{ e.author }}){% endif %}
+{% endfor %}
+{% else %}
+_No notable activity._
+{% endif %}
+
+{% endfor %}
+
+---
+
+## Summary
+
+{{ episode_count }} of {{ podcast_title }}. Window: {{ week_start_label }} → {{ week_end_label }}.
