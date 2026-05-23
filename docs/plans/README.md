@@ -4,8 +4,8 @@ Active implementation plans live here, named `YYYY-MM-DD-<short-desc>.md`. On co
 
 ## Active
 
-- [2026-05-23 — Dispatch Phase 1 Foundation](2026-05-23-dispatch-phase-1-foundation.md)
+_(none — see Completed below)_
 
 ## Completed
 
-_(none yet)_
+- [2026-05-23 — Dispatch Phase 1 Foundation](completed/2026-05/2026-05-23-dispatch-phase-1-foundation.md)
