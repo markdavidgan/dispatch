@@ -18,6 +18,15 @@ from dispatch.scheduler import start_jobs, stop_jobs
 
 core_logging.configure()
 settings = get_settings()
+
+if not settings.master_key:
+    raise RuntimeError(
+        "DISPATCH_MASTER_KEY is required. Set it in your environment "
+        "(see README → Key Management). "
+        "From Phase 3 onward this key encrypts all settings at rest; "
+        "Phase 1 enforces presence only."
+    )
+
 db = Database(settings.db_path)
 
 
