@@ -281,18 +281,21 @@ Default schedules populate on first run. Users can tweak cron expressions or dis
 3. **Podcast cover art storage?** Currently stored as local paths in the repo. In standalone, should cover art be uploaded to the configured storage backend?
    - *Yes — upload to storage backend, reference by URL.*
 
-4. **NotebookLM dependency?** The podcast pipeline depends on NotebookLM which has no official API — it uses Playwright browser automation with a manually-captured `storage_state.json` session. This is fragile, breaks when Google changes the UI, and requires manual setup that's impossible to automate for end users. **Decision: replace NotebookLM with a scripted-dialogue + TTS approach for the core product.**
+4. **NotebookLM dependency?** The podcast pipeline uses NotebookLM via `notebooklm-py`, which reverse-engineers Google's web UI. It requires a Playwright `storage_state.json` with Google session cookies. **This is viable for standalone deployment** because `notebooklm-py` supports the `NOTEBOOKLM_AUTH_JSON` environment variable — the entire storage state can be passed as inline JSON. No browser needed in the container.
 
-   Important clarification: NotebookLM does NOT replace the LLM for analysis. The LLM (Kimi/Claude) does the hard work of reading raw commits/PRs/issues and synthesizing them into coherent prose (headline, dek, article). NotebookLM only narrates pre-digested content. The standalone product absolutely still needs an LLM for daily brief synthesis.
+   Important clarification: NotebookLM does NOT replace the LLM for analysis. The LLM (Kimi/Claude) does the hard work of reading raw commits/PRs/issues and synthesizing them into coherent prose (headline, dek, article). NotebookLM only narrates the pre-digested weekly markdown source. The standalone product absolutely still needs an LLM for daily brief synthesis.
 
-   **Replacement approach:** Use the same LLM (Kimi/Claude) to generate a two-host dialogue script from the weekly markdown source (Jinja2 composer already exists). Then use two distinct TTS voices (Google Chirp HD, ElevenLabs, or Cartesia) to render it. Add ffmpeg crossfades and optionally a music bed. This is fully API-driven, container-friendly, and requires zero manual browser sessions.
+   **Containerization strategy for NotebookLM:**
+   - User runs `notebooklm login` once on their local machine → captures `storage_state.json`
+   - Pastes the JSON into the Dispatch admin UI → backend encrypts with Fernet → stores in DB
+   - At podcast runtime: decrypt → set `NOTEBOOKLM_AUTH_JSON` → `notebooklm-py` reads it directly
+   - `refresh_auth()` auto-refreshes short-lived tokens on each API call
+   - When session eventually expires (weeks/months), admin UI shows "re-authenticate" alert
 
    **Containerization status:**
    - ✅ **Kimi HTTP API:** Stateless, already containerized via `kimi-cli` + OAuth env var
    - ✅ **GCP Chirp HD TTS:** Standard Google Cloud API, container-friendly
-   - ❌ **NotebookLM:** Browser automation, requires manual session capture — NOT suitable for standalone deployable product
-
-   NotebookLM can be re-added later as an "enhanced podcast" experimental toggle for users willing to do manual setup.
+   - ✅ **NotebookLM:** Container-friendly via `NOTEBOOKLM_AUTH_JSON` — requires one-time manual session setup per deployed instance
 
 5. **Migration from marklab?** Do we need a migration path for existing marklab dispatch data?
    - *Nice-to-have. Can be a script that exports SQLite + projects.yml and imports into standalone.*
@@ -431,12 +434,12 @@ dispatch/
 - [ ] Daily full-repo pull
 - [ ] Enhanced PR/issue metadata
 
-### Phase 6b: Podcast Architecture Rework
-- [ ] Build LLM-based dialogue script generator (replaces NotebookLM source generation)
-- [ ] Add multi-voice TTS support (two distinct voices for Host 1 / Host 2)
-- [ ] ffmpeg mixing: concat speakers + crossfade + optional music bed
-- [ ] Remove NotebookLM dependency from core pipeline (keep as optional toggle)
-- [ ] Update podcast config UI to support voice selection
+### Phase 6b: NotebookLM Session Management
+- [ ] Add `notebooklm_session` encrypted setting to DB
+- [ ] Build admin UI for pasting/uploading `storage_state.json`
+- [ ] Update `entrypoint.sh` to hydrate `NOTEBOOKLM_AUTH_JSON` from DB setting (not bind-mount)
+- [ ] Graceful degradation when session is missing/expired (skip podcast job, alert admin)
+- [ ] Test podcast pipeline end-to-end in Docker container without host bind-mounts
 
 ### Phase 7: Polish + Deploy
 - [ ] E2E tests
