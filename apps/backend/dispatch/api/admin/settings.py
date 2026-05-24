@@ -23,12 +23,12 @@ async def list_settings(request: Request, prefix: str = "") -> dict[str, Any]:
     """List all settings (decrypted). Optionally filter by key prefix."""
     store = request.app.state.settings_store
     keys = await store.list_keys(prefix)
-    result: dict[str, str] = {}
+    rows: list[dict[str, str]] = []
     for k in keys:
         val = await store.get(k)
         if val is not None:
-            result[k] = val
-    return {"settings": result}
+            rows.append({"key": k, "value": val})
+    return {"settings": rows}
 
 
 @router.get("/{key:path}")

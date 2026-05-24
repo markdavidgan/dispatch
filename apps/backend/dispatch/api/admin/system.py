@@ -50,8 +50,8 @@ async def setup_status(request: Request) -> dict[str, Any]:
         "storage": has_storage,
         "ai": has_ai,
         "tts": has_tts,
-        "github": has_github,
-        "has_projects": has_projects,
+        "github_token_present": has_github,
+        "project_count": row[0] or 0,
         "storage_provider": storage_provider or None,
         "ai_provider": ai_provider or None,
     }

@@ -31,7 +31,7 @@ class ProjectUpdate(BaseModel):
 
 
 @router.get("")
-async def list_projects(request: Request) -> list[dict[str, Any]]:
+async def list_projects(request: Request) -> dict[str, Any]:
     db = request.app.state.db
     async with db.cursor() as cur:
         await cur.execute(
@@ -40,21 +40,23 @@ async def list_projects(request: Request) -> list[dict[str, Any]]:
         )
         rows = await cur.fetchall()
     import json
-    return [
-        {
-            "slug": r[0],
-            "display_name": r[1],
-            "github_repo": r[2],
-            "status": r[3],
-            "kind": r[4],
-            "color_hint": r[5],
-            "summary": r[6],
-            "podcast_config": json.loads(r[7]) if r[7] else None,
-            "sort_order": r[8],
-            "created_at": r[9],
-        }
-        for r in rows
-    ]
+    return {
+        "projects": [
+            {
+                "slug": r[0],
+                "display_name": r[1],
+                "github_repo": r[2],
+                "status": r[3],
+                "kind": r[4],
+                "color_hint": r[5],
+                "summary": r[6],
+                "podcast_config": json.loads(r[7]) if r[7] else None,
+                "sort_order": r[8],
+                "created_at": r[9],
+            }
+            for r in rows
+        ]
+    }
 
 
 @router.post("")
