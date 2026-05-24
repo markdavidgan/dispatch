@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dispatch · Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #020617;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(148,163,184,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; }
+
+    .toolbar { display: flex; gap: 0.75rem; justify-content: flex-end; margin-bottom: 1.5rem; }
+    .toolbar button {
+      background: rgba(30,41,59,0.8);
+      border: 1px solid rgba(148,163,184,0.2);
+      color: #94a3b8;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toolbar button:hover {
+      background: rgba(51,65,85,0.9);
+      color: #e2e8f0;
+      border-color: rgba(148,163,184,0.4);
+    }
+
+    .header { text-align: center; margin-bottom: 2.5rem; }
+    .header .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .header h1 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.5rem;
+    }
+    .header .tagline {
+      font-size: 1rem;
+      color: #94a3b8;
+      max-width: 640px;
+      margin: 0 auto 1rem;
+      line-height: 1.55;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #10b981;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .section {
+      background: rgba(15,23,42,0.6);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .section h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(148,163,184,0.15);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .section .lede {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      max-width: 900px;
+    }
+
+    .diagram-container {
+      background: rgba(2,6,23,0.6);
+      border: 1px solid rgba(148,163,184,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    svg { width: 100%; height: auto; display: block; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .card {
+      background: rgba(30,41,59,0.6);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .card h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #f8fafc;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .card p, .card ul {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+    .card ul { list-style: none; padding: 0; }
+    .card ul li { padding: 0.2rem 0; }
+    .card ul li::before { content: '› '; color: #475569; font-weight: bold; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: rgba(30,41,59,0.6);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.25rem;
+    }
+    .metric-label {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: rgba(30,41,59,0.6);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .feature-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      justify-content: center;
+      padding: 1rem 1.25rem;
+      background: rgba(15,23,42,0.6);
+      border: 1px solid rgba(148,163,184,0.1);
+      border-radius: 12px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    .legend-box {
+      width: 14px; height: 14px; border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 0 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #475569;
+      letter-spacing: 0.05em;
+    }
+    .footer a { color: #64748b; text-decoration: none; border-bottom: 1px dotted #334155; }
+    .footer a:hover { color: #94a3b8; }
+
+    .toolbar button[data-action="copy"]::before { content: '⧉ '; }
+    .toolbar button[data-action="print"]::before { content: '▤ '; }
+
+    @media print {
+      body { background: #020617; padding: 0; }
+      .toolbar { display: none; }
+      .container { max-width: 100%; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="toolbar">
+      <button data-action="copy" onclick="copyURL()">Copy link</button>
+      <button data-action="print" onclick="window.print()">Print / PDF</button>
+    </div>
+
+    <div class="header">
+      <div class="eyebrow">Architecture overview</div>
+      <h1>Dispatch</h1>
+      <p class="tagline">A standalone, self-hosted daily editorial brief generator for software projects. Watches a configurable registry of repositories, synthesizes a daily report with audio narration, and publishes weekly podcasts.</p>
+      <div class="status"><span class="status-dot"></span> SINGLE-ADMIN · PERIMETER-TRUSTING · DEPLOYMENT-AGNOSTIC</div>
+    </div>
+
+    <!-- ============ KEY METRICS ============ -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">1</div>
+        <div class="metric-label">Required env var</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">0</div>
+        <div class="metric-label">Auth code in app</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Storage backends</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3</div>
+        <div class="metric-label">AI providers</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">2</div>
+        <div class="metric-label">Deploy topologies</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">SQLite</div>
+        <div class="metric-label">No external DB</div>
+      </div>
+    </div>
+
+    <!-- ============ MAIN SYSTEM DIAGRAM ============ -->
+    <div class="section">
+      <h2>System architecture</h2>
+      <p class="lede">A Vite SPA frontend and a FastAPI backend, joined by a Caddy reverse proxy and gated by whatever perimeter the operator chooses. The backend is self-contained: SQLite for state, an in-process scheduler, and swappable adapters for storage, AI synthesis, and text-to-speech.</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+            </marker>
+            <marker id="arrow-dim" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+            </marker>
+          </defs>
+
+          <!-- ============ Connections (drawn first, behind boxes) ============ -->
+          <!-- user → perimeter -->
+          <path d="M 600,55 L 600,95" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- perimeter → caddy -->
+          <path d="M 600,165 L 600,205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- caddy → spa (left) -->
+          <path d="M 540,265 L 320,315" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- caddy → api (right) -->
+          <path d="M 660,265 L 880,315" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- spa → api (inter) -->
+          <path d="M 320,395 C 500,395 700,395 880,395" stroke="#475569" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+          <!-- api → db -->
+          <path d="M 880,475 L 720,545" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- api → storage -->
+          <path d="M 1000,475 L 1000,545" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+          <!-- scheduler → api (loop) -->
+          <path d="M 1080,395 L 1180,395 L 1180,335 L 1080,335" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+          <!-- scheduler → externals -->
+          <path d="M 1040,470 C 1040,560 850,640 270,660" stroke="#334155" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arrow-dim)"/>
+          <path d="M 1040,470 C 1040,560 850,640 510,660" stroke="#334155" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arrow-dim)"/>
+          <path d="M 1040,470 C 1040,560 900,640 770,660" stroke="#334155" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arrow-dim)"/>
+          <path d="M 1040,470 C 1040,560 1000,640 1030,660" stroke="#334155" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arrow-dim)"/>
+
+          <!-- ============ Top: user ============ -->
+          <g>
+            <rect x="500" y="15" width="200" height="40" rx="20" fill="#64748b" fill-opacity="0.15" stroke="#64748b" stroke-width="1.5"/>
+            <text x="600" y="40" text-anchor="middle" fill="#e2e8f0" font-family="Inter" font-size="13" font-weight="600">Reader · Operator</text>
+          </g>
+
+          <!-- ============ Perimeter (full-width) ============ -->
+          <g>
+            <rect x="100" y="95" width="1000" height="70" rx="10" fill="#f43f5e" fill-opacity="0.10" stroke="#f43f5e" stroke-width="2" stroke-dasharray="6,4"/>
+            <text x="600" y="120" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="11" font-weight="600" letter-spacing="2">DEPLOYMENT PERIMETER · operator's choice</text>
+            <text x="600" y="145" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Cloudflare Access · Tailscale · Caddy basic auth · Authelia</text>
+          </g>
+
+          <!-- ============ Caddy ============ -->
+          <g>
+            <rect x="450" y="205" width="300" height="60" rx="10" fill="#f59e0b" fill-opacity="0.15" stroke="#f59e0b" stroke-width="2"/>
+            <text x="600" y="230" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">Caddy</text>
+            <text x="600" y="250" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">reverse proxy · gzip · zstd · TLS</text>
+          </g>
+
+          <!-- ============ Frontend (SPA) ============ -->
+          <g>
+            <rect x="80" y="315" width="240" height="120" rx="12" fill="#06b6d4" fill-opacity="0.10" stroke="#06b6d4" stroke-width="2"/>
+            <rect x="80" y="315" width="240" height="32" rx="12" fill="#06b6d4" fill-opacity="0.25"/>
+            <rect x="80" y="335" width="240" height="12" fill="#06b6d4" fill-opacity="0.25"/>
+            <text x="200" y="336" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="12" font-weight="600">Vite SPA</text>
+            <text x="200" y="370" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">React 19 · React Router 7</text>
+            <text x="200" y="388" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Tailwind CSS v4</text>
+            <text x="200" y="412" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">static build → dist/</text>
+            <text x="200" y="428" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">no SSR · no auth</text>
+          </g>
+
+          <!-- ============ Backend (FastAPI) ============ -->
+          <g>
+            <rect x="880" y="315" width="240" height="160" rx="12" fill="#10b981" fill-opacity="0.10" stroke="#10b981" stroke-width="2"/>
+            <rect x="880" y="315" width="240" height="32" rx="12" fill="#10b981" fill-opacity="0.25"/>
+            <rect x="880" y="335" width="240" height="12" fill="#10b981" fill-opacity="0.25"/>
+            <text x="1000" y="336" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="12" font-weight="600">FastAPI backend</text>
+            <text x="1000" y="370" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Python 3.12 · uvicorn · async</text>
+
+            <!-- nested: API + scheduler -->
+            <rect x="900" y="380" width="100" height="32" rx="6" fill="#10b981" fill-opacity="0.18" stroke="#10b981" stroke-width="1"/>
+            <text x="950" y="401" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9" font-weight="600">api/* routes</text>
+
+            <rect x="1010" y="380" width="100" height="32" rx="6" fill="#f97316" fill-opacity="0.18" stroke="#f97316" stroke-width="1"/>
+            <text x="1060" y="401" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9" font-weight="600">APScheduler</text>
+
+            <!-- nested: settings + orchestrator -->
+            <rect x="900" y="422" width="100" height="32" rx="6" fill="#f43f5e" fill-opacity="0.18" stroke="#f43f5e" stroke-width="1"/>
+            <text x="950" y="443" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9" font-weight="600">Fernet settings</text>
+
+            <rect x="1010" y="422" width="100" height="32" rx="6" fill="#10b981" fill-opacity="0.18" stroke="#10b981" stroke-width="1"/>
+            <text x="1060" y="443" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9" font-weight="600">orchestrator</text>
+
+            <text x="1000" y="468" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">port 10060 (internal)</text>
+          </g>
+
+          <!-- ============ State row: SQLite + Storage ============ -->
+          <g>
+            <rect x="600" y="545" width="240" height="80" rx="12" fill="#8b5cf6" fill-opacity="0.12" stroke="#8b5cf6" stroke-width="2"/>
+            <text x="720" y="572" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="12" font-weight="600">SQLite (WAL)</text>
+            <text x="720" y="592" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">aiosqlite · raw SQL</text>
+            <text x="720" y="610" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">/data/dispatch.db</text>
+          </g>
+          <g>
+            <rect x="880" y="545" width="240" height="80" rx="12" fill="#8b5cf6" fill-opacity="0.12" stroke="#8b5cf6" stroke-width="2"/>
+            <text x="1000" y="572" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="12" font-weight="600">Storage backend</text>
+            <text x="1000" y="592" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">pluggable adapter</text>
+            <text x="1000" y="610" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">local · R2 · S3</text>
+          </g>
+
+          <!-- ============ External services row ============ -->
+          <g>
+            <text x="80" y="660" fill="#475569" font-family="JetBrains Mono" font-size="10" letter-spacing="2">EXTERNAL</text>
+
+            <rect x="200" y="650" width="140" height="60" rx="10" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="270" y="673" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="11" font-weight="600">GitHub</text>
+            <text x="270" y="690" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">REST API · ingest</text>
+
+            <rect x="440" y="650" width="140" height="60" rx="10" fill="#a855f7" fill-opacity="0.12" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="510" y="673" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="11" font-weight="600">AI synthesis</text>
+            <text x="510" y="690" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Kimi · Anthropic · OpenAI</text>
+
+            <rect x="700" y="650" width="140" height="60" rx="10" fill="#a855f7" fill-opacity="0.12" stroke="#a855f7" stroke-width="1.5"/>
+            <text x="770" y="673" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="11" font-weight="600">TTS</text>
+            <text x="770" y="690" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Google Chirp 3 HD</text>
+
+            <rect x="960" y="650" width="140" height="60" rx="10" fill="#64748b" fill-opacity="0.15" stroke="#64748b" stroke-width="1.5"/>
+            <text x="1030" y="673" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="11" font-weight="600">NotebookLM</text>
+            <text x="1030" y="690" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">podcast composition</text>
+          </g>
+
+          <!-- ============ Edge labels ============ -->
+          <text x="430" y="287" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">/* → SPA</text>
+          <text x="780" y="287" fill="#64748b" font-family="JetBrains Mono" font-size="9">/api/* · /health → API</text>
+          <text x="600" y="385" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">fetch JSON</text>
+
+          <!-- footer caption inside diagram -->
+          <text x="600" y="780" text-anchor="middle" fill="#475569" font-family="JetBrains Mono" font-size="10">All admin gating happens in the perimeter. The app has no users, no sessions, no JWT.</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ============ LEGEND ============ -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-box" style="background:#06b6d4;opacity:0.55"></div>Frontend</div>
+      <div class="legend-item"><div class="legend-box" style="background:#10b981;opacity:0.55"></div>Backend</div>
+      <div class="legend-item"><div class="legend-box" style="background:#8b5cf6;opacity:0.55"></div>State</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f59e0b;opacity:0.55"></div>Infra</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f43f5e;opacity:0.55"></div>Auth / Crypto</div>
+      <div class="legend-item"><div class="legend-box" style="background:#f97316;opacity:0.55"></div>Processing</div>
+      <div class="legend-item"><div class="legend-box" style="background:#0ea5e9;opacity:0.55"></div>Data source</div>
+      <div class="legend-item"><div class="legend-box" style="background:#a855f7;opacity:0.55"></div>AI · TTS</div>
+      <div class="legend-item"><div class="legend-box" style="background:#64748b;opacity:0.55"></div>External</div>
+    </div>
+
+    <!-- ============ DATA FLOW PIPELINE ============ -->
+    <div class="section" style="margin-top:1.5rem">
+      <h2>Daily pipeline</h2>
+      <p class="lede">A single scheduler tick walks four stages: ingest upstream activity, synthesize a brief with the configured AI provider, narrate it via TTS, and publish a snapshot plus an audio file to the storage backend. Each stage records its outcome in the <code style="color:#cbd5e1;font-family:'JetBrains Mono',monospace;font-size:0.85em;background:rgba(148,163,184,0.1);padding:2px 6px;border-radius:4px">runs</code> table.</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 1200 340" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="parr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+            </marker>
+          </defs>
+
+          <!-- pipeline arrows -->
+          <path d="M 220,150 L 270,150" stroke="#64748b" stroke-width="2" marker-end="url(#parr)"/>
+          <path d="M 490,150 L 540,150" stroke="#64748b" stroke-width="2" marker-end="url(#parr)"/>
+          <path d="M 760,150 L 810,150" stroke="#64748b" stroke-width="2" marker-end="url(#parr)"/>
+          <path d="M 1030,150 L 1080,150" stroke="#64748b" stroke-width="2" marker-end="url(#parr)"/>
+
+          <!-- stage 1: ingest -->
+          <g>
+            <rect x="40" y="100" width="180" height="100" rx="12" fill="#0ea5e9" fill-opacity="0.12" stroke="#0ea5e9" stroke-width="2"/>
+            <text x="130" y="130" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">1. Ingest</text>
+            <text x="130" y="152" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">GitHub REST · local git</text>
+            <text x="130" y="172" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">every 15 / 30 min</text>
+            <text x="130" y="190" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">→ events table</text>
+          </g>
+
+          <!-- stage 2: synthesize -->
+          <g>
+            <rect x="270" y="100" width="220" height="100" rx="12" fill="#a855f7" fill-opacity="0.12" stroke="#a855f7" stroke-width="2"/>
+            <text x="380" y="130" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">2. Synthesize</text>
+            <text x="380" y="152" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">AI provider · daily 02:00</text>
+            <text x="380" y="172" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Pydantic-schema response</text>
+            <text x="380" y="190" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">→ filings (kind='lead')</text>
+          </g>
+
+          <!-- stage 3: narrate -->
+          <g>
+            <rect x="540" y="100" width="220" height="100" rx="12" fill="#a855f7" fill-opacity="0.12" stroke="#a855f7" stroke-width="2"/>
+            <text x="650" y="130" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">3. Narrate</text>
+            <text x="650" y="152" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Chunk · TTS · concat</text>
+            <text x="650" y="172" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">ffmpeg loudnorm</text>
+            <text x="650" y="190" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">→ brief.mp3</text>
+          </g>
+
+          <!-- stage 4: publish -->
+          <g>
+            <rect x="810" y="100" width="220" height="100" rx="12" fill="#22c55e" fill-opacity="0.12" stroke="#22c55e" stroke-width="2"/>
+            <text x="920" y="130" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">4. Publish</text>
+            <text x="920" y="152" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Snapshot JSON + audio</text>
+            <text x="920" y="172" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">storage backend upload</text>
+            <text x="920" y="190" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">→ snapshot-archive/</text>
+          </g>
+
+          <!-- read -->
+          <g>
+            <rect x="1080" y="100" width="100" height="100" rx="12" fill="#06b6d4" fill-opacity="0.12" stroke="#06b6d4" stroke-width="2"/>
+            <text x="1130" y="130" text-anchor="middle" fill="#f8fafc" font-family="JetBrains Mono" font-size="13" font-weight="600">Reader</text>
+            <text x="1130" y="155" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">SPA</text>
+            <text x="1130" y="175" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">hydrates</text>
+            <text x="1130" y="192" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">snapshot</text>
+          </g>
+
+          <!-- top label -->
+          <text x="600" y="50" text-anchor="middle" fill="#475569" font-family="JetBrains Mono" font-size="11" letter-spacing="3">SCHEDULER TICK · ORCHESTRATOR</text>
+          <line x1="40" y1="70" x2="1180" y2="70" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,4"/>
+
+          <!-- bottom: weekly cycle -->
+          <text x="40" y="260" fill="#475569" font-family="JetBrains Mono" font-size="11" letter-spacing="3">WEEKLY · SUNDAY 23:00 + PER-PROJECT CRON</text>
+          <line x1="40" y1="270" x2="1180" y2="270" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,4"/>
+
+          <g>
+            <rect x="40" y="285" width="500" height="40" rx="8" fill="#f97316" fill-opacity="0.12" stroke="#f97316" stroke-width="1.5"/>
+            <text x="290" y="310" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">From-the-desk memo → next day's briefing</text>
+          </g>
+          <g>
+            <rect x="560" y="285" width="620" height="40" rx="8" fill="#f97316" fill-opacity="0.12" stroke="#f97316" stroke-width="1.5"/>
+            <text x="870" y="310" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">NotebookLM episode → RSS regenerate → storage upload</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ============ DEPLOYMENT TOPOLOGIES ============ -->
+    <div class="section">
+      <h2>Deployment topologies</h2>
+      <p class="lede">The same backend image and same SPA bundle support two shipping patterns without forking. The Caddy reverse proxy ships in the all-in-one path; the split path lets the operator host the SPA on a CDN.</p>
+      <div class="diagram-container">
+        <svg viewBox="0 0 1200 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="darr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+            </marker>
+          </defs>
+
+          <!-- Topology A: All-in-one -->
+          <g>
+            <text x="40" y="40" fill="#cbd5e1" font-family="JetBrains Mono" font-size="13" font-weight="600">A · ALL-IN-ONE DOCKER</text>
+            <text x="40" y="60" fill="#64748b" font-family="JetBrains Mono" font-size="10">docker compose up — one host, two containers</text>
+
+            <!-- single-host wrap -->
+            <rect x="40" y="80" width="520" height="240" rx="14" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <text x="50" y="100" fill="#475569" font-family="JetBrains Mono" font-size="9" letter-spacing="2">SINGLE HOST</text>
+
+            <!-- caddy container -->
+            <rect x="70" y="120" width="200" height="170" rx="10" fill="#f59e0b" fill-opacity="0.10" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="170" y="140" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">dispatch-frontend</text>
+            <text x="170" y="158" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">Caddy + static SPA</text>
+
+            <rect x="90" y="180" width="160" height="40" rx="6" fill="#f59e0b" fill-opacity="0.20" stroke="#f59e0b" stroke-width="1"/>
+            <text x="170" y="204" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">Caddy :80 published</text>
+
+            <rect x="90" y="230" width="160" height="40" rx="6" fill="#06b6d4" fill-opacity="0.20" stroke="#06b6d4" stroke-width="1"/>
+            <text x="170" y="254" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">Vite SPA · /var/www</text>
+
+            <!-- backend container -->
+            <rect x="330" y="120" width="200" height="170" rx="10" fill="#10b981" fill-opacity="0.10" stroke="#10b981" stroke-width="1.5"/>
+            <text x="430" y="140" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">dispatch-backend</text>
+            <text x="430" y="158" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">FastAPI :10060 internal</text>
+
+            <rect x="350" y="180" width="160" height="40" rx="6" fill="#10b981" fill-opacity="0.20" stroke="#10b981" stroke-width="1"/>
+            <text x="430" y="204" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">uvicorn + APScheduler</text>
+
+            <rect x="350" y="230" width="160" height="40" rx="6" fill="#8b5cf6" fill-opacity="0.20" stroke="#8b5cf6" stroke-width="1"/>
+            <text x="430" y="254" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">/data volume · SQLite</text>
+
+            <!-- proxy arrow -->
+            <path d="M 270,205 L 330,205" stroke="#64748b" stroke-width="1.5" marker-end="url(#darr)"/>
+            <text x="300" y="195" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="8">/api/*</text>
+          </g>
+
+          <!-- Topology B: Split -->
+          <g>
+            <text x="620" y="40" fill="#cbd5e1" font-family="JetBrains Mono" font-size="13" font-weight="600">B · SPLIT: CDN FRONTEND + SELF-HOSTED BACKEND</text>
+            <text x="620" y="60" fill="#64748b" font-family="JetBrains Mono" font-size="10">Same image. SPA on Vercel/CDN, backend on a homelab box.</text>
+
+            <!-- perimeter wrap (full B) -->
+            <rect x="620" y="80" width="540" height="240" rx="14" fill="#f43f5e" fill-opacity="0.04" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <text x="630" y="100" fill="#fda4af" font-family="JetBrains Mono" font-size="9" letter-spacing="2">CLOUDFLARE ACCESS · SHARED APEX *.example.com</text>
+
+            <!-- CDN frontend -->
+            <rect x="650" y="120" width="200" height="170" rx="10" fill="#06b6d4" fill-opacity="0.10" stroke="#06b6d4" stroke-width="1.5"/>
+            <text x="750" y="140" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">Vercel · Netlify · CDN</text>
+            <text x="750" y="158" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">dispatch.example.com</text>
+
+            <rect x="670" y="180" width="160" height="40" rx="6" fill="#06b6d4" fill-opacity="0.20" stroke="#06b6d4" stroke-width="1"/>
+            <text x="750" y="204" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">Vite SPA · static</text>
+
+            <rect x="670" y="230" width="160" height="40" rx="6" fill="#64748b" fill-opacity="0.20" stroke="#64748b" stroke-width="1"/>
+            <text x="750" y="248" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="9">VITE_DISPATCH_API_URL</text>
+            <text x="750" y="262" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="8">→ api.example.com</text>
+
+            <!-- self-hosted backend -->
+            <rect x="930" y="120" width="200" height="170" rx="10" fill="#10b981" fill-opacity="0.10" stroke="#10b981" stroke-width="1.5"/>
+            <text x="1030" y="140" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="11" font-weight="600">Homelab · VPS</text>
+            <text x="1030" y="158" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="9">api.example.com</text>
+
+            <rect x="950" y="180" width="160" height="40" rx="6" fill="#10b981" fill-opacity="0.20" stroke="#10b981" stroke-width="1"/>
+            <text x="1030" y="204" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">FastAPI + scheduler</text>
+
+            <rect x="950" y="230" width="160" height="40" rx="6" fill="#8b5cf6" fill-opacity="0.20" stroke="#8b5cf6" stroke-width="1"/>
+            <text x="1030" y="254" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="10">SQLite + R2 / S3</text>
+
+            <!-- fetch arrow -->
+            <path d="M 850,205 L 930,205" stroke="#64748b" stroke-width="1.5" marker-end="url(#darr)"/>
+            <text x="890" y="195" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="8">fetch (credentials: include)</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ============ FEATURE GRID ============ -->
+    <div class="section">
+      <h2>What's in the box</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>Encrypted-at-rest settings</h4>
+          <p>Every credential (AI, TTS, GitHub, storage) is Fernet-encrypted in SQLite under a key derived from <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">DISPATCH_MASTER_KEY</code>. A boot-time canary verifies the key matches a prior session.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Pluggable storage</h4>
+          <p>Single <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">StorageBackend</code> protocol with three implementations — local filesystem, Cloudflare R2, and any S3-compatible API. Swap by editing settings and restarting.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Snapshot pattern</h4>
+          <p>Publish writes an atomic JSON snapshot plus audio. The reader path only ever reads the current snapshot (or an archived one for a specific date) — the synthesis pipeline never blocks readers.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Runtime-editable schedules</h4>
+          <p>Cron expressions live in the <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">schedules</code> table and are editable from <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">/admin/schedules</code>. No redeploy to change cadence.</p>
+        </div>
+        <div class="feature-card">
+          <h4>On-demand addendums</h4>
+          <p>Operators trigger same-day brief updates via <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">POST /api/brief/refresh</code>. A 25-second compressed pipeline produces an addendum attached to the day's filing.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Editorial design system</h4>
+          <p>A hand-set, near-monochrome design language (Inter Tight + JetBrains Mono, signal-red accent, no shadows, square corners). Captured in <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em">DESIGN.md</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <div class="footer">
+      DISPATCH · ARCHITECTURE OVERVIEW · &nbsp;
+      <a href="ARCHITECTURE.md">ARCHITECTURE.md</a> &nbsp;·&nbsp;
+      <a href="DATA-FLOW.md">DATA-FLOW.md</a> &nbsp;·&nbsp;
+      <a href="DEPLOYMENT.md">DEPLOYMENT.md</a>
+    </div>
+  </div>
+
+  <script>
+    function copyURL() {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const b = document.querySelector('[data-action="copy"]');
+        const orig = b.textContent;
+        b.textContent = '✓ Copied';
+        setTimeout(() => { b.textContent = orig; }, 1500);
+      }).catch(() => {
+        alert(url);
+      });
+    }
+  </script>
+</body>
+</html>

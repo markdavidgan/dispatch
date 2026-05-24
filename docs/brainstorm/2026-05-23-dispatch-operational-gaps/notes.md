@@ -10,10 +10,10 @@ Follow-up to `docs/brainstorm/2026-05-23-standalone-dispatch/notes.md`. That bra
 
 These decisions are upstream of every gap below and override or refine the original brainstorm:
 
-1. **Audience: single-admin self-hosted.** Two private instances for the author (personal + revamplabs), plus a public showcase repo for others to self-host. No multi-tenancy, no in-app RBAC.
+1. **Audience: single-admin self-hosted.** One operator per instance. The author runs a couple of private instances; the public repo is for others to self-host. No multi-tenancy, no in-app RBAC.
 2. **Deployment-agnostic.** The repo supports two shapes without forking:
    - **All-in-one:** frontend + backend in one `docker-compose.yml`, served from one origin via a Caddy/Nginx reverse proxy. Closest-to-zero setup, ideal for showcase reviewers.
-   - **Split:** static frontend on Vercel + backend self-hosted (the author's pattern). Both sit behind a shared perimeter (e.g., `*.markdavidgan.com` proxied through Cloudflare) so a single cookie covers both.
+   - **Split:** static frontend on Vercel + backend self-hosted (the author's pattern). Both sit behind a shared perimeter (e.g., a shared apex domain proxied through Cloudflare Access) so a single cookie covers both.
 3. **Frontend: Vite + React 19 + Tailwind v4 + React Router.** Replaces the Next.js 15 choice from the prior brainstorm. The reader pages are a JSON-snapshot viewer and the admin pages are perimeter-gated — neither needs SSR. Vite gives instant client-side navigation, no SSR cold-starts, and a faster dev loop. The editorial design tokens (`DESIGN.md`) and component shapes carry over verbatim; only the framework shell changes.
 4. **No app-layer authentication.** The app trusts its deployment perimeter (Cloudflare Access, Tailscale, Caddy basic auth, Authelia, etc.). No login page, no `users` / `sessions` tables, no JWT, no bcrypt, no refresh-token flow. Route prefixes (`/admin/*`, `/api/admin/*` vs public reader paths) let the perimeter apply policy. This supersedes §2 of the prior brainstorm.
 
@@ -74,7 +74,7 @@ This prevents the silent failure mode where a wrong key would encrypt new settin
 
 **Operator perimeter recipes.** Shipped in `docs/operations/perimeter-recipes.md`. Each recipe is copy-pasteable:
 
-- **Cloudflare Access (author's pattern).** Both frontend and backend share an apex domain (`*.markdavidgan.com`). One CF Access application policy gates the apex with the operator's email allowlist. Cookie set at `.markdavidgan.com` covers all subdomains — Vercel frontend can `fetch(backend, { credentials: "include" })` and CF transparently authenticates.
+- **Cloudflare Access.** Both frontend and backend share an apex domain (e.g., `*.example.com`). One CF Access application policy gates the apex with the operator's email allowlist. The auth cookie issued at the apex covers all subdomains — the Vercel frontend can `fetch(backend, { credentials: "include" })` and Cloudflare transparently authenticates.
 - **Tailscale Funnel.** Backend exposed via Tailscale; only devices in the operator's tailnet reach it. Frontend either also on Tailscale or fully public.
 - **Caddy basic auth (all-in-one default).** Repo ships a `caddy/Caddyfile` with a commented `basicauth` block matched against both `/admin/*` (SPA UI) and `/api/admin/*` (admin API). Both prefixes must be gated together — gating only the UI leaves the API open. Operator uncomments, runs `caddy hash-password`, fills it in.
 - **Authelia.** Reverse-proxy-style config; gates `/admin/*` with forward auth.

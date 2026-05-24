@@ -11,10 +11,8 @@
 # Keep entries short. Lower-case here is fine; the resolver does
 # case-insensitive matching.
 acronyms:
-  - AGOS
   - AI
   - API
-  - AV
   - AWS
   - CD
   - CI
@@ -27,7 +25,6 @@ acronyms:
   - HTTPS
   - JS
   - JSON
-  - JW
   - LLM
   - MCP
   - PDF
@@ -38,7 +35,6 @@ acronyms:
   - SSH
   - SVG
   - TLS
-  - TLM
   - TS
   - TSX
   - TTS

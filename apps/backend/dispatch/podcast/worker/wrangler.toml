@@ -1,15 +1,16 @@
-name = "marklab-dev-podcasts"
+name = "dispatch-podcast-proxy"
 main = "src/worker.ts"
 compatibility_date = "2026-05-10"
 
 [[r2_buckets]]
 binding = "MEDIA"
-bucket_name = "marklab-media"
+bucket_name = "dispatch-media"
 
 # Secrets (set via `wrangler secret put`):
-#   AUTH_USERNAME    — basic-auth username (mirrored from agos PODCAST_AUTH_USERNAME)
-#   AUTH_PASSWORD    — basic-auth password (mirrored from agos PODCAST_AUTH_PASSWORD)
+#   AUTH_USERNAME    — basic-auth username
+#   AUTH_PASSWORD    — basic-auth password
 
-[[routes]]
-pattern = "podcasts.marklab.uk/*"
-zone_name = "marklab.uk"
+# Bind the worker to a hostname you own, e.g.:
+# [[routes]]
+# pattern = "podcasts.example.com/*"
+# zone_name = "example.com"

@@ -12,7 +12,7 @@ class PodcastConfig:
     description: str
     author: str
     itunes_category: str
-    cover_art: str               # repo-relative path
+    cover_art: str               # repo-relative path; empty when no asset shipped
     cron: str                    # cron expression in DISPATCH_TZ
     compose_window_days: int
     enabled: bool
@@ -35,9 +35,9 @@ def load_podcasts(projects_yml: Path) -> list[PodcastConfig]:
             project_slug=p["slug"],
             title=block["title"],
             description=block.get("description", "").strip(),
-            author=block.get("author", "Mark"),
+            author=block.get("author", "Dispatch"),
             itunes_category=block.get("itunes_category", "Technology"),
-            cover_art=block["cover_art"],
+            cover_art=block.get("cover_art", ""),
             cron=block.get("cron", "0 5 * * sat"),
             compose_window_days=int(block.get("compose_window_days", 7)),
             enabled=bool(block.get("enabled", True)),

@@ -23,7 +23,7 @@ from dispatch.registry.resolve import (
 
 @pytest.fixture
 def acronyms() -> set[str]:
-    return {"AGOS", "AI", "API", "AV", "JW", "MCP", "SDK", "UI", "URL"}
+    return {"AI", "API", "CLI", "HTTP", "JSON", "MCP", "SDK", "TTS", "UI", "URL"}
 
 
 def test_override_wins(acronyms, tmp_path):
@@ -31,36 +31,36 @@ def test_override_wins(acronyms, tmp_path):
     readme.write_text("# Should Not Win\n")
     assert (
         resolve_display_name(
-            slug="agos",
-            override="AGOS",
+            slug="my-api",
+            override="My API",
             local_path=tmp_path,
             acronyms=acronyms,
         )
-        == "AGOS"
+        == "My API"
     )
 
 
 def test_override_lowercase_preserved(acronyms):
     assert (
         resolve_display_name(
-            slug="marklab",
-            override="marklab",
+            slug="dispatch",
+            override="dispatch",
             local_path=None,
             acronyms=acronyms,
         )
-        == "marklab"
+        == "dispatch"
     )
 
 
 def test_override_with_punctuation_preserved(acronyms):
     assert (
         resolve_display_name(
-            slug="mark-id",
-            override="mark.id",
+            slug="node-js",
+            override="Node.js",
             local_path=None,
             acronyms=acronyms,
         )
-        == "mark.id"
+        == "Node.js"
     )
 
 
@@ -68,11 +68,11 @@ def test_override_whitespace_trimmed(acronyms):
     assert (
         resolve_display_name(
             slug="x",
-            override="  Aether  ",
+            override="  Astro  ",
             local_path=None,
             acronyms=acronyms,
         )
-        == "Aether"
+        == "Astro"
     )
 
 
@@ -108,29 +108,29 @@ def test_missing_readme_falls_through_to_titleize(acronyms, tmp_path):
     # tmp_path exists but has no README.md
     assert (
         resolve_display_name(
-            slug="aether-agent-plugins",
+            slug="agent-plugins",
             override=None,
             local_path=tmp_path,
             acronyms=acronyms,
         )
-        == "Aether Agent Plugins"
+        == "Agent Plugins"
     )
 
 
 def test_missing_local_path_falls_through_to_titleize(acronyms):
     assert (
         resolve_display_name(
-            slug="personal-agent-skills",
+            slug="personal-skills",
             override=None,
             local_path=None,
             acronyms=acronyms,
         )
-        == "Personal Agent Skills"
+        == "Personal Skills"
     )
 
 
 def test_titleize_respects_acronyms(acronyms):
-    assert titleize_slug("jw-av-crew-training", acronyms) == "JW AV Crew Training"
+    assert titleize_slug("http-api-client", acronyms) == "HTTP API Client"
 
 
 def test_titleize_handles_underscore_separators(acronyms):
@@ -138,11 +138,11 @@ def test_titleize_handles_underscore_separators(acronyms):
 
 
 def test_titleize_single_token_acronym(acronyms):
-    assert titleize_slug("agos", acronyms) == "AGOS"
+    assert titleize_slug("api", acronyms) == "API"
 
 
 def test_titleize_single_token_non_acronym(acronyms):
-    assert titleize_slug("marcos", acronyms) == "Marcos"
+    assert titleize_slug("astro", acronyms) == "Astro"
 
 
 def test_titleize_ignores_empty_tokens(acronyms):
@@ -151,8 +151,8 @@ def test_titleize_ignores_empty_tokens(acronyms):
 
 
 def test_acronym_matching_case_insensitive(acronyms):
-    # User wrote `jw-av-...` lowercase; acronyms list stores `JW` uppercase
-    assert titleize_slug("jw-test", acronyms) == "JW Test"
+    # User wrote `mcp-server` lowercase; acronyms list stores `MCP` uppercase
+    assert titleize_slug("mcp-server", acronyms) == "MCP Server"
 
 
 def test_readme_h1_skips_h2_and_text(acronyms, tmp_path):
@@ -176,16 +176,16 @@ def test_load_acronyms_missing_file_returns_empty(tmp_path):
 
 def test_load_acronyms_normalizes_to_upper(tmp_path):
     f = tmp_path / "acronyms.yml"
-    f.write_text("acronyms:\n  - jw\n  - Av\n  - AGOS\n")
-    assert load_acronyms(f) == {"JW", "AV", "AGOS"}
+    f.write_text("acronyms:\n  - api\n  - Sdk\n  - HTTP\n")
+    assert load_acronyms(f) == {"API", "SDK", "HTTP"}
 
 
 def test_real_project_acronyms_file_loads():
-    # The shipped acronyms.yml must parse and contain the ones we rely on.
+    # The shipped acronyms.yml must parse and contain common tech acronyms.
     path = (
         Path(__file__).parent.parent.parent
         / "registry"
         / "acronyms.yml"
     )
     loaded = load_acronyms(path)
-    assert {"JW", "AV", "AGOS", "API", "URL"}.issubset(loaded)
+    assert {"API", "URL", "HTTP", "CLI", "SDK"}.issubset(loaded)

@@ -1,7 +1,7 @@
-// marklab-dev-podcasts
-// Basic-Auth gated reverse proxy in front of the marklab-media R2 bucket.
-// Serves both Phase 1 audio (/dispatch/audio/...) and Phase 2 podcasts
-// (/<project-slug>{.xml,/episode-...}).
+// dispatch-podcast-proxy
+// Basic-Auth gated reverse proxy in front of the Dispatch R2 media bucket.
+// Serves both daily-brief audio (/dispatch/audio/...) and per-project
+// podcast feeds and episodes (/<slug>.xml, /<slug>/episode-...).
 
 interface Env {
   MEDIA: R2Bucket;
@@ -24,8 +24,8 @@ export default {
     }
 
     // Map path → R2 key.
-    //   /dispatch/...               → marklab-media/dispatch/...
-    //   /<slug>.xml or /<slug>/...  → marklab-media/podcast/<slug>...
+    //   /dispatch/...               → dispatch-media/dispatch/...
+    //   /<slug>.xml or /<slug>/...  → dispatch-media/podcast/<slug>...
     const path = url.pathname.replace(/^\//, "");
     if (!path) return new Response("Not found", { status: 404 });
     const key = path.startsWith("dispatch/") ? path : `podcast/${path}`;
@@ -66,6 +66,6 @@ export default {
 function unauthorized(): Response {
   return new Response("Unauthorized", {
     status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="marklab podcasts"' },
+    headers: { "WWW-Authenticate": 'Basic realm="dispatch podcasts"' },
   });
 }

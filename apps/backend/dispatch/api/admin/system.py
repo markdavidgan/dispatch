@@ -114,3 +114,55 @@ async def backup_now(request: Request) -> dict[str, Any]:
     except Exception as e:
         log.exception("backup failed")
         return {"status": "error", "error": str(e)}
+
+
+class BackfillBody(BaseModel):
+    max_days: int = 30
+    ingest: bool = True
+
+
+@router.post("/backfill")
+async def backfill(request: Request, body: BackfillBody | None = None) -> dict[str, Any]:
+    """Catch-up backfill: ingest fresh events, then synthesize one brief per
+    uncovered day with activity until the look-back window is fully covered
+    (capped at *max_days* iterations).
+
+    Used by `scripts/bootstrap.sh` on first boot and available as a
+    one-shot admin action whenever the instance falls behind.
+    """
+    from dispatch import orchestrator
+
+    body = body or BackfillBody()
+    db = request.app.state.db
+
+    ingested: dict[str, int | str] = {}
+    if body.ingest:
+        for name, fn in (
+            ("github", orchestrator.run_ingest_github),
+            ("git", orchestrator.run_ingest_git),
+        ):
+            try:
+                ingested[name] = await fn(db)
+            except Exception as e:
+                log.warning("backfill ingest_%s failed: %s", name, e)
+                ingested[name] = f"error: {e}"
+
+    generated: list[str] = []
+    errors: list[str] = []
+    for _ in range(max(1, body.max_days)):
+        try:
+            result = await orchestrator.run_synthesis_lead(db)
+        except Exception as e:
+            log.exception("backfill synthesis failed")
+            errors.append(str(e)[:500])
+            break
+        if result.get("skipped"):
+            break
+        if result.get("date"):
+            generated.append(result["date"])
+
+    return {
+        "ingested": ingested,
+        "generated": generated,
+        "errors": errors,
+    }

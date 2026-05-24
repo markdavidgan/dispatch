@@ -208,6 +208,72 @@ async def _next_issue_no(db: Database) -> int:
     return row[0] or 1
 
 
+async def _is_lead_covered(db: Database, date_str: str) -> bool:
+    async with db.cursor() as cur:
+        await cur.execute(
+            "SELECT 1 FROM filings WHERE date=? AND kind='lead' LIMIT 1",
+            (date_str,),
+        )
+        return (await cur.fetchone()) is not None
+
+
+async def _has_events_on(db: Database, date_str: str) -> bool:
+    events = await _events_for_window(
+        db, f"{date_str}T00:00:00+00:00", f"{date_str}T23:59:59+00:00"
+    )
+    return any(events.values())
+
+
+async def find_oldest_uncovered_day_with_activity(
+    db: Database, look_back_days: int = 30
+) -> date | None:
+    """Oldest date in the past *look_back_days* that has events but no
+    'lead' filing yet. Used by the scheduler and the backfill endpoint to
+    catch up after downtime or a fresh boot.
+    """
+    today = datetime.now(timezone.utc).astimezone().date()
+    earliest = today - timedelta(days=look_back_days)
+    latest = today - timedelta(days=1)
+    async with db.cursor() as cur:
+        await cur.execute(
+            """
+            SELECT DISTINCT DATE(occurred_at) AS d
+            FROM events
+            WHERE DATE(occurred_at) BETWEEN ? AND ?
+              AND DATE(occurred_at) NOT IN (
+                  SELECT date FROM filings WHERE kind='lead'
+              )
+            ORDER BY d ASC
+            LIMIT 1
+            """,
+            (earliest.isoformat(), latest.isoformat()),
+        )
+        row = await cur.fetchone()
+    return date.fromisoformat(row[0]) if row else None
+
+
+async def _resolve_target_date(db: Database) -> tuple[str, str] | tuple[None, str]:
+    """Choose which date the next lead briefing should cover.
+
+    Priority:
+      1. Yesterday — if uncovered AND has events.
+      2. Oldest uncovered day in the look-back window with events.
+      3. None — nothing to do (returns the reason for the runs log).
+    """
+    yesterday = (
+        datetime.now(timezone.utc).astimezone() - timedelta(days=1)
+    ).strftime("%Y-%m-%d")
+
+    if not await _is_lead_covered(db, yesterday) and await _has_events_on(db, yesterday):
+        return yesterday, "yesterday"
+
+    backlog = await find_oldest_uncovered_day_with_activity(db)
+    if backlog is not None:
+        return backlog.isoformat(), "backlog"
+
+    return None, "no events anywhere in look-back window"
+
+
 # ------------------------------------------------------------------
 # Synthesis
 # ------------------------------------------------------------------
@@ -255,15 +321,27 @@ async def _synthesize_with_fallback(
 async def run_synthesis_lead(db: Database, target_date: date | None = None) -> dict:
     """Generate the morning lead filing. Returns the filing row as dict.
 
-    If *target_date* is provided, synthesize for that date instead of yesterday.
+    Without *target_date*, walks a priority chain:
+      1. yesterday (if uncovered and active),
+      2. oldest uncovered day with activity in the last 30 days (catch-up),
+      3. skip with reason="nothing to cover".
+
+    With *target_date*, synthesize for that date regardless of coverage (the
+    existing row will be overwritten and the issue number reused).
     """
     tz = os.environ.get("DISPATCH_TZ", "Asia/Manila")
     if target_date is not None:
         date_local = target_date.isoformat()
+        chosen_reason = "explicit"
     else:
-        now = datetime.now(timezone.utc)
-        # Covers "yesterday" in local tz: 00:00 to 23:59
-        date_local = (now.astimezone() - timedelta(days=1)).strftime("%Y-%m-%d")
+        chosen_date, chosen_reason = await _resolve_target_date(db)
+        if chosen_date is None:
+            log.info("synthesis_lead: nothing to cover (%s)", chosen_reason)
+            await _log_run(db, "synthesis:lead", "skipped")
+            return {"date": None, "skipped": True, "reason": chosen_reason}
+        date_local = chosen_date
+        log.info("synthesis_lead: targeting %s (%s)", date_local, chosen_reason)
+
     covers_from = f"{date_local}T00:00:00+00:00"
     covers_until = f"{date_local}T23:59:59+00:00"
 

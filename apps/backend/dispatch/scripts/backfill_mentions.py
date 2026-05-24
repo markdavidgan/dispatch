@@ -1,5 +1,5 @@
 """One-time backfill: re-extract mentions from every snapshot archive
-in R2 marklab-media/dispatch/snapshot-archive/*.json.
+under <storage-root>/dispatch/snapshot-archive/*.json.
 
 Run interactively:
     cd apps/backend/dispatch
