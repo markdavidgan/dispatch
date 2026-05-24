@@ -4,8 +4,8 @@ A standalone daily editorial brief generator for software projects. Each deploye
 
 ## Architecture
 
-- **Frontend:** Next.js 15 + React 19 + Tailwind CSS v4 — deployed to Vercel
-- **Backend:** FastAPI + Python 3.13 + SQLite (WAL mode) — self-hosted via Docker
+- **Frontend:** Vite SPA + React 19 + Tailwind CSS v4 + React Router — static build, deployed anywhere (Vercel, CDN, or served from the same origin)
+- **Backend:** FastAPI + Python 3.12 + SQLite (WAL mode) — self-hosted via Docker
 - **Scheduler:** In-process APScheduler (no Redis, no Celery)
 - **Storage:** Pluggable backends — Cloudflare R2, AWS S3, or local filesystem
 - **AI Synthesis:** Configurable providers (Kimi, Anthropic, OpenAI)
@@ -16,7 +16,7 @@ A standalone daily editorial brief generator for software projects. Each deploye
 ```
 dispatch/
 ├── apps/
-│   ├── frontend/      # Next.js app (Vercel)
+│   ├── frontend/      # Vite SPA (static build)
 │   └── backend/       # FastAPI app (Docker)
 ├── docker-compose.yml # Self-hosting setup
 └── docs/              # Brainstorm, specs, plans
@@ -52,15 +52,30 @@ export DISPATCH_MASTER_KEY=$(python -c "import secrets; print(secrets.token_urls
 docker compose up --build
 ```
 
-Visit http://localhost:10060/health.
+The stack:
+- `dispatch-backend` — FastAPI on internal port 10060 (not published)
+- `dispatch-frontend` — Caddy serving the Vite SPA + reverse-proxying `/api/*` and `/health` to the backend
 
-### Frontend
+By default the frontend is exposed at `http://localhost:8080`. Override with `DISPATCH_HTTP_PORT=80`.
 
-The frontend pivot to a Vite SPA is **Phase 2** of the standalone extraction. The existing `apps/frontend/` is the previous Next.js extraction and will be replaced. See `docs/plans/` for the active plan.
+Visit:
+- http://localhost:8080/ → SPA
+- http://localhost:8080/health → backend health
+- http://localhost:8080/api/projects → backend API
+
+### Frontend dev
+
+```bash
+cd apps/frontend
+npm install
+npm run dev
+```
+
+The dev server runs on `http://localhost:5173`. Vite proxies `/api/*` and `/health` to `http://127.0.0.1:10060`, so run the backend (above) alongside it.
 
 ## Key Management
 
-The single required env var is `DISPATCH_MASTER_KEY`. From Phase 3 onward this key encrypts every credential the app holds (AI provider keys, TTS credentials, GitHub tokens, storage credentials, NotebookLM session).
+The single required env var is `DISPATCH_MASTER_KEY`. This key encrypts every credential the app holds at rest (AI provider keys, TTS credentials, GitHub tokens, storage credentials, NotebookLM session).
 
 **If you lose this key, those encrypted settings are unrecoverable** and you will need to re-enter them via the admin UI. Briefings, audio, snapshots, and projects are unaffected. Back up the key in a password manager.
 
@@ -78,7 +93,7 @@ Route prefixes are designed so any perimeter can apply policy:
 - `/admin/*` and `/api/admin/*` — operator-only; gate these in your perimeter.
 - `/`, `/briefings/*`, `/podcasts/*`, `/api/snapshot` — public reader paths; gate them too if you want a fully private instance.
 
-Recipes for the common perimeters land in `docs/operations/perimeter-recipes.md` (added in Phase 2).
+Perimeter recipes for Cloudflare Access, Tailscale, Caddy basic auth, and Authelia live in `docs/operations/perimeter-recipes.md`.
 
 ## Development Status
 

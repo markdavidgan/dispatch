@@ -1,15 +1,11 @@
-name: dispatch
-
 services:
   dispatch-backend:
-    image: dispatch-backend:latest
     build:
-      context: ./apps/backend
+      context: apps/backend
       dockerfile: Dockerfile
     container_name: dispatch-backend
-    restart: unless-stopped
-    ports:
-      - "10060:10060"
+    expose:
+      - "10060"
     volumes:
       - dispatch-data:/data
       - dispatch-kimi-cache:/home/dispatch/.kimi
@@ -17,15 +13,29 @@ services:
       - HOST=0.0.0.0
       - PORT=10060
       - DB_PATH=/data/dispatch.db
-      - DISPATCH_TZ=${DISPATCH_TZ:-UTC}
-      - DISPATCH_MASTER_KEY=${DISPATCH_MASTER_KEY}
-      # All other config is stored in the database and managed via the frontend admin UI.
-      # See docs/brainstorm/2026-05-23-standalone-dispatch/ for the migration plan.
+      - DISPATCH_TZ=Asia/Manila
+      - DISPATCH_MASTER_KEY=${DISPATCH_MASTER_KEY:?DISPATCH_MASTER_KEY must be set}
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:10060/health"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  dispatch-frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      # Build context includes both apps/frontend (for the SPA source)
+      # and caddy/ (for the Caddyfile). We mount it from the repo root.
+    container_name: dispatch-frontend
+    ports:
+      - "${DISPATCH_HTTP_PORT:-8080}:80"
+    depends_on:
+      dispatch-backend:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   dispatch-data:

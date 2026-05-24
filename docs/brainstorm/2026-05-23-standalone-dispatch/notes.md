@@ -1,5 +1,11 @@
 # Dispatch — Standalone Extraction Brainstorm
 
+> **⚠️ Superseded.** This document is preserved for original context. The decisions in §2 (built-in authentication) and §10/Key Decision #3 (Next.js frontend) have been replaced by the [operational-gaps follow-up](../2026-05-23-dispatch-operational-gaps/notes.md):
+> - **No app-layer authentication.** Perimeter-trusting only (Cloudflare Access, Tailscale, Caddy basic auth, Authelia).
+> - **Frontend is a Vite SPA** + React Router, not Next.js.
+>
+> Read the operational-gaps document first for current source of truth.
+
 ## Date
 2026-05-23
 
@@ -53,35 +59,13 @@ Extract the Dispatch app from the `marklab` monorepo into a standalone, self-hos
 
 **DB migration:** Add `sort_order` and `created_at` to `projects` table. Drop `local_path` (no longer needed — see §3).
 
-### 2. Authentication: Cloudflare Access → Built-in Auth
+### 2. Authentication: Cloudflare Access → Perimeter-Trusting (Superseded)
 
-**Current:** Cloudflare Access gates everything (service tokens + JWT assertions).
+> **Update:** This section was replaced by the operational-gaps follow-up. The app does **not** implement built-in authentication. Instead, it trusts its deployment perimeter (Cloudflare Access, Tailscale, Caddy basic auth, Authelia). See the [operational-gaps brainstorm](../2026-05-23-dispatch-operational-gaps/notes.md) for the resolved design.
 
-**New:** Simple built-in authentication suitable for single-admin or small-team use:
-- **Primary:** Password-based login with bcrypt-hashed passwords stored in SQLite
-- **Session:** JWT access token (short-lived) + httpOnly refresh token cookie
-- **API protection:** `Authorization: Bearer <token>` for backend API calls from frontend
-- **Optional future:** GitHub OAuth for "sign in with GitHub"
+**Original idea (kept for context):** Built-in password-based auth with bcrypt + JWT sessions.
 
-**Rationale:** Cloudflare Access ties the app to Cloudflare infrastructure. A standalone product needs its own auth so it can run anywhere (Vercel + Render, Vercel + self-hosted VPS, etc.).
-
-**New tables:**
-```sql
-CREATE TABLE users (
-  id INTEGER PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL,
-  is_admin INTEGER NOT NULL DEFAULT 0,
-  created_at TEXT NOT NULL
-);
-
-CREATE TABLE sessions (
-  id TEXT PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
-  expires_at TEXT NOT NULL,
-  created_at TEXT NOT NULL
-);
-```
+**Why it changed:** Perimeter auth is simpler, has no users/sessions tables, and works identically across all deployment shapes (all-in-one Docker, split Vercel+backend, Tailscale, etc.). Route prefixes (`/admin/*` and `/api/admin/*` vs public paths) let the perimeter apply policy.
 
 ### 3. Ingest: Local Git + GitHub API → GitHub API Only (with Daily Full Pull)
 
@@ -250,20 +234,27 @@ Default schedules populate on first run. Users can tweak cron expressions or dis
 
 ### 10. Deployment Architecture
 
-**Frontend (Vercel):**
-- Next.js standalone output
-- Environment: `DISPATCH_API_URL` (backend URL)
-- No other secrets needed — all auth via JWT to backend
+**Two supported shapes:**
+
+1. **All-in-one (Docker Compose):**
+   - Caddy reverse proxy serves the static SPA (`dist/`) and proxies `/api/*` to the backend
+   - Single origin — no CORS needed
+   - Ships with a commented `basicauth` block in `caddy/Caddyfile` for perimeter gating
+
+2. **Split (static frontend + self-hosted backend):**
+   - Frontend: static build deployed to Vercel, CDN, or any static host
+   - Backend: Docker container (`python:3.12-slim` + ffmpeg)
+   - CORS origins configured via admin UI (`settings.web.allowed_origins`)
 
 **Backend (Self-hosted):**
-- Docker container with the same base image (`python:3.13-slim` + ffmpeg + git)
+- Docker container with the same base image (`python:3.12-slim` + ffmpeg + git)
 - SQLite volume mounted for persistence
 - Only required env var: `DISPATCH_MASTER_KEY` (for settings encryption)
 - Optional: `PORT`, `HOST`, `DB_PATH`
 - Can run on: Render, Railway, Fly.io, VPS, homelab
 
 **Communication:**
-- Frontend → Backend: HTTPS API calls with `Authorization: Bearer <jwt>`
+- Frontend → Backend: HTTPS API calls (no auth headers — identity is handled by the perimeter)
 - Backend → GitHub: HTTPS API with configured token
 - Backend → AI providers: HTTPS API with configured keys
 - Backend → Storage: S3-compatible API with configured credentials
@@ -355,36 +346,34 @@ dispatch/
 │   ├── entrypoint.sh
 │   └── requirements.txt
 ├── frontend/
-│   ├── app/                    # Next.js app router
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── globals.css
-│   │   ├── api/                # Next.js API routes (thin proxies)
-│   │   │   └── audio/[...key]/route.ts
-│   │   ├── (public)/           # Public pages
-│   │   │   ├── briefings/
-│   │   │   ├── projects/
-│   │   │   └── podcasts/
-│   │   ├── admin/              # NEW: admin pages
-│   │   │   ├── layout.tsx
-│   │   │   ├── page.tsx
-│   │   │   ├── projects/
-│   │   │   ├── settings/
-│   │   │   ├── schedules/
-│   │   │   └── runs/
-│   │   ├── login/
-│   │   │   └── page.tsx
-│   │   └── setup/
-│   │       └── page.tsx
-│   ├── components/
-│   ├── lib/
-│   │   ├── api.ts              # NEW: backend API client
-│   │   ├── auth.ts             # NEW: auth state + token management
-│   │   ├── snapshot.ts         # Updated: fetch from backend, not R2
-│   │   └── ...
-│   ├── public/
+│   ├── index.html              # Vite entry
+│   ├── src/
+│   │   ├── main.tsx            # React root
+│   │   ├── App.tsx             # Router outlet
+│   │   ├── router.tsx          # React Router config
+│   │   ├── globals.css         # Tailwind v4 + design tokens
+│   │   ├── pages/              # Route pages
+│   │   │   ├── Home.tsx
+│   │   │   ├── Briefings.tsx
+│   │   │   ├── BriefingDetail.tsx
+│   │   │   ├── Projects.tsx
+│   │   │   ├── ProjectDetail.tsx
+│   │   │   ├── Podcasts.tsx
+│   │   │   ├── PodcastDetail.tsx
+│   │   │   ├── AdminDashboard.tsx
+│   │   │   ├── AdminProjects.tsx
+│   │   │   ├── AdminSettings.tsx
+│   │   │   ├── AdminSchedules.tsx
+│   │   │   ├── AdminRuns.tsx
+│   │   │   └── Setup.tsx
+│   │   ├── components/         # Shared React components
+│   │   ├── lib/
+│   │   │   ├── api.ts          # Thin fetch wrapper (VITE_DISPATCH_API_URL)
+│   │   │   ├── snapshot.ts     # Fetch snapshot from backend
+│   │   │   └── ...
+│   │   └── public/
 │   ├── package.json
-│   ├── next.config.ts
+│   ├── vite.config.ts
 │   ├── tsconfig.json
 │   └── playwright.config.ts
 ├── docker-compose.yml          # Standalone compose for self-hosting
@@ -406,11 +395,15 @@ dispatch/
 - [ ] Get frontend running standalone with existing functionality
 - [ ] Docker Compose setup for local dev
 
-### Phase 2: Auth + Admin Shell
-- [ ] Add auth tables + JWT middleware
-- [ ] Build `/login` and `/setup` pages
-- [ ] Build admin layout + navigation
-- [ ] Protect admin routes (frontend + backend)
+### Phase 2: Frontend Pivot + Perimeter Recipes
+- [ ] Scaffold `apps/frontend/` as Vite + React 19 + Tailwind v4 + React Router
+- [ ] Port all components and pages from Next.js to React Router
+- [ ] Add admin routes: `/admin`, `/admin/projects`, `/admin/settings`, `/admin/runs`
+- [ ] Add `/setup` wizard
+- [ ] Client-side data fetching via thin API client
+- [ ] Delete old Next.js frontend code
+- [ ] Write `docs/operations/perimeter-recipes.md`
+- [ ] Write `caddy/Caddyfile`
 
 ### Phase 3: Frontend-Driven Configuration
 - [ ] Add `settings` table + crypto layer
@@ -442,11 +435,12 @@ dispatch/
 - [ ] Test podcast pipeline end-to-end in Docker container without host bind-mounts
 
 ### Phase 7: Polish + Deploy
-- [ ] E2E tests
-- [ ] Documentation
-- [ ] Vercel deploy for frontend
-- [ ] Docker image publish for backend
-- [ ] First production instance
+- [ ] E2E tests (Playwright)
+- [ ] SQLite nightly backup job
+- [ ] Restore runbook
+- [ ] Migration script from marklab
+- [ ] Documentation polish
+- [ ] Docker image publish ready
 
 ---
 
@@ -454,9 +448,9 @@ dispatch/
 
 1. **SQLite stays.** No migration to PostgreSQL. The app is designed for single-instance, moderate data volume. SQLite + WAL is perfect.
 2. **No Redis, no Celery, no message queue.** APScheduler in-process is sufficient and keeps the architecture minimal.
-3. **Frontend is Next.js 15 + Tailwind v4.** No framework changes. The editorial design is sacred.
+3. **Frontend is Vite SPA + React 19 + Tailwind v4 + React Router.** The editorial design (`DESIGN.md`) is sacred; only the framework shell changed from Next.js.
 4. **Backend is FastAPI + Python 3.13.** No framework changes.
-5. **Auth is built-in, not OAuth-first.** Simple password auth for MVP. OAuth can be added later.
+5. **No app-layer authentication.** The app trusts its deployment perimeter. No users table, no JWT, no bcrypt.
 6. **Storage is pluggable but S3-compatible first.** R2, S3, MinIO all speak the same protocol. Local filesystem for dev/testing.
 7. **Secrets are encrypted at rest with Fernet.** Master key from single env var. All other config lives in DB.
 
@@ -464,7 +458,7 @@ dispatch/
 
 ## Notes
 
-- The existing `core/` module from marklab (`config.py`, `db.py`, `cf_access.py`, `logging.py`) is copied into the new repo. `cf_access.py` can be removed once built-in auth replaces Cloudflare Access.
+- The existing `core/` module from marklab (`config.py`, `db.py`, `cf_access.py`, `logging.py`) is copied into the new repo. `cf_access.py` was removed in Phase 1 — the app is perimeter-trusting with no Cloudflare Access dependency.
 - The existing `ingest/git.py` (local git log parsing) should be **removed** in Phase 6 since all ingest moves to GitHub API. The `local_path` field in `projects` should be dropped.
 - The `kimi-config.toml` and `skills/creative-writing/` directory are Kimi-specific artifacts. Keep them for the synthesis pipeline but document that they're optional.
 - The podcast cover art assets (`podcast/assets/`) should be moved to configurable URLs (uploaded via admin UI to storage backend) rather than baked into the container.

@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+**/node_modules
+**/.venv
+**/__pycache__
+**/dist
+**/build
+**/test-results
+**/.vite
+**/*.log
+docs
+**/*.md

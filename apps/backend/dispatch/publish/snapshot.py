@@ -1,6 +1,6 @@
 """Snapshot assembly, signing, and publishing.
 
-The snapshot is the JSON contract consumed by the Next.js frontend.
+The snapshot is the JSON contract consumed by the frontend SPA.
 It is HMAC-signed so the frontend can verify integrity before rendering.
 """
 from __future__ import annotations
@@ -166,7 +166,6 @@ async def build_snapshot(db: Database) -> dict:
             for row in await cur.fetchall()
         ]
 
-    # Episodes (Phase 2 stub — empty list)
     episodes: list[dict] = []
 
     payload = {

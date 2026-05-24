@@ -1,0 +1,59 @@
+# Caddyfile for Dispatch all-in-one deployment.
+#
+# Serves the Vite SPA static build at /var/www/dispatch and proxies
+# /api/* + /health to the backend container at dispatch-backend:10060.
+#
+# To enable basic auth on admin routes, see the bottom of this file.
+
+{
+	auto_https off
+}
+
+:80 {
+	encode gzip zstd
+
+	# Backend health check — passes through to backend
+	handle /health {
+		reverse_proxy dispatch-backend:10060
+	}
+
+	# Backend API
+	handle /api/* {
+		reverse_proxy dispatch-backend:10060
+	}
+
+	# Everything else → SPA (with client-side routing fallback)
+	handle {
+		root * /var/www/dispatch
+		try_files {path} /index.html
+		file_server
+	}
+
+	# Uncomment to gate admin SPA + admin API behind basic auth.
+	# Generate a hash with: docker run --rm caddy:2-alpine caddy hash-password
+	#
+	# @admin {
+	# 	path /admin/* /api/admin/*
+	# }
+	# basicauth @admin {
+	# 	admin $2a$14$REPLACE_ME
+	# }
+}
+
+# TLS-enabled production variant — replace example.com with your domain.
+# Caddy will fetch a Let's Encrypt cert automatically.
+#
+# example.com {
+# 	encode gzip zstd
+# 	handle /health {
+# 		reverse_proxy dispatch-backend:10060
+# 	}
+# 	handle /api/* {
+# 		reverse_proxy dispatch-backend:10060
+# 	}
+# 	handle {
+# 		root * /var/www/dispatch
+# 		try_files {path} /index.html
+# 		file_server
+# 	}
+# }

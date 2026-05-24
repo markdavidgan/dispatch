@@ -2,6 +2,9 @@
 
 Uses the Cloudflare Global API Key (no S3 tokens).
 Pattern proven in aether-focus/tools/podcast/scripts/upload_to_r2.py.
+
+Delegates to the pluggable storage backend when one is configured via
+app.state. Falls back to legacy direct R2 calls for backward compatibility.
 """
 from __future__ import annotations
 
@@ -12,7 +15,17 @@ from typing import Any
 
 import httpx
 
+from dispatch.storage.base import StorageBackend
+
 log = logging.getLogger(__name__)
+
+# Module-level storage backend — set by main.py lifespan
+_storage_backend: StorageBackend | None = None
+
+
+def set_storage_backend(backend: StorageBackend | None) -> None:
+    global _storage_backend
+    _storage_backend = backend
 
 
 def _credentials() -> tuple[str, str, str]:
@@ -53,6 +66,9 @@ async def upload_bytes(
     content_type: str = "application/json",
 ) -> str:
     """Upload *data* to R2 at *r2_key*. Returns the public URL."""
+    if _storage_backend is not None:
+        return await _storage_backend.upload_bytes(data, r2_key, content_type)
+
     account, email, api_key = _credentials()
     bucket = _bucket()
     url = _api_url(account, bucket, r2_key)
@@ -81,13 +97,16 @@ async def signed_url(r2_key: str, expires_in_seconds: int = 3600) -> str:
     """Return a pre-signed URL for *r2_key*.
 
     For MVP we use the public r2.dev URL directly since the bucket
-    is configured for public read. Phase 2 can add signed URL logic.
+    is configured for public read.
     """
     return f"{_public_base()}/{r2_key}"
 
 
 async def download_bytes(r2_key: str) -> bytes:
     """Download an object from R2."""
+    if _storage_backend is not None:
+        return await _storage_backend.download_bytes(r2_key)
+
     account, email, api_key = _credentials()
     bucket = _bucket()
     url = _api_url(account, bucket, r2_key)
@@ -103,6 +122,9 @@ async def download_bytes(r2_key: str) -> bytes:
 
 async def delete_object(r2_key: str) -> bool:
     """Delete an object from R2. Returns True if deleted (or already absent)."""
+    if _storage_backend is not None:
+        return await _storage_backend.delete_object(r2_key)
+
     account, email, api_key = _credentials()
     bucket = _bucket()
     url = _api_url(account, bucket, r2_key)
@@ -138,6 +160,9 @@ async def list_objects(
             "success": true
         }
     """
+    if _storage_backend is not None:
+        return await _storage_backend.list_objects(prefix, limit, cursor)
+
     account, email, api_key = _credentials()
     bucket = _bucket()
     url = _api_url(account, bucket)

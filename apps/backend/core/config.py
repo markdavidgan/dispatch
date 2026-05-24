@@ -17,8 +17,7 @@ class Settings(BaseSettings):
     port: int = 10060
     db_path: str = "/data/dispatch.db"
     dispatch_tz: str = "Asia/Manila"
-    # Mandatory: encrypts settings at rest from Phase 3 onward.
-    # Phase 1 validates presence only; no encryption is performed yet.
+    # Mandatory: encrypts settings at rest.
     # validation_alias pins the env var name to DISPATCH_MASTER_KEY
     # instead of the pydantic-settings default of MASTER_KEY.
     master_key: str | None = Field(

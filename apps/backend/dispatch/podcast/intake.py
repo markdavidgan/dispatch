@@ -55,14 +55,67 @@ async def _project_display_name(db: Database, project_slug: str) -> str:
     return row[0] if row else project_slug
 
 
-async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) -> str:
-    """Run the full pipeline. Returns episode_id."""
+async def _notebooklm_session(db: Database) -> dict | None:
+    """Read NotebookLM session from DB settings, or return None if not configured."""
+    from dispatch.settings_store import SettingsStore
+    from dispatch.crypto import Crypto
+    from core.config import get_settings
+    crypto = Crypto(get_settings().master_key)
+    store = SettingsStore(db, crypto)
+    return await store.notebooklm_session()
+
+
+async def _probe_notebooklm(storage_state: dict | None) -> str:
+    """Pre-flight probe. Returns 'ok', 'transient', or 'auth'."""
+    import httpx
+    try:
+        # A lightweight probe: try to list notebooks
+        from notebooklm import NotebookLMClient
+        import json, tempfile
+        if storage_state is not None:
+            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+                json.dump(storage_state, f)
+                tmp_path = f.name
+            client = await NotebookLMClient.from_storage(path=tmp_path)
+        else:
+            client = await NotebookLMClient.from_storage(
+                path=os.environ.get("NOTEBOOKLM_SESSION_PATH", "/home/dispatch/.notebooklm/profiles/default/storage_state.json")
+            )
+        await client.notebooks.list()
+        return "ok"
+    except Exception as e:
+        err = str(e).lower()
+        if "401" in err or "403" in err or "unauthorized" in err:
+            return "auth"
+        return "transient"
+
+
+async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) -> str | None:
+    """Run the full pipeline. Returns episode_id, or None if skipped due to missing NotebookLM session."""
     episode_id = str(uuid.uuid4())
     episode_no = await _next_episode_no(db, podcast.project_slug)
     project_display = await _project_display_name(db, podcast.project_slug)
     title = f"{podcast.title} — Week of {week_start.isoformat()}"
     now = datetime.now(timezone.utc).isoformat()
     audio_key = f"podcast/{podcast.project_slug}/episode-{episode_no:03d}-{week_start.isoformat()}.mp3"
+
+    # Phase 6b: Check NotebookLM session before starting
+    nblm_session = await _notebooklm_session(db)
+    if nblm_session is None:
+        log.warning("notebooklm session not configured — skipping podcast episode for %s", podcast.project_slug)
+        await _set_episode_status(db, episode_id, "skipped")
+        return None
+
+    # Pre-flight probe
+    probe = await _probe_notebooklm(nblm_session)
+    if probe == "auth":
+        log.error("notebooklm auth expired for %s", podcast.project_slug)
+        await _set_episode_status(db, episode_id, "failed_auth")
+        return None
+    if probe == "transient":
+        log.warning("notebooklm transient failure for %s — will retry on next schedule", podcast.project_slug)
+        await _set_episode_status(db, episode_id, "failed_transient")
+        return None
 
     async with db.cursor() as cur:
         await cur.execute(
@@ -92,6 +145,7 @@ async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) ->
             notebook_title=podcast.title,
             source_text=source_md,
             source_title=source_title,
+            storage_state=nblm_session,
         )
         async with db.cursor() as cur:
             await cur.execute("UPDATE episodes SET notebooklm_artifact_id=? WHERE id=?",
@@ -110,6 +164,7 @@ async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) ->
                 notebook_title=podcast.title,
                 artifact_id=artifact_id,
                 dest=dash_path,
+                storage_state=nblm_session,
             )
             await _log_job(db, episode_id, "poll_nblm", "ok")
             await _set_episode_status(db, episode_id, "downloading")
@@ -130,15 +185,15 @@ async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) ->
             await _log_job(db, episode_id, "normalize", "ok",
                            detail=f"duration={duration}s, size={size}")
 
-            # Step 5: R2 upload
-            await _log_job(db, episode_id, "r2_upload", "in_progress")
+            # Step 5: upload to storage
+            await _log_job(db, episode_id, "upload", "in_progress")
             await r2.upload_bytes(final.read_bytes(), audio_key, "audio/mpeg")
             async with db.cursor() as cur:
                 await cur.execute(
                     "UPDATE episodes SET audio_size_bytes=?, duration_seconds=?, status='ready' WHERE id=?",
                     (size, duration, episode_id),
                 )
-            await _log_job(db, episode_id, "r2_upload", "ok")
+            await _log_job(db, episode_id, "upload", "ok")
 
         # Step 6: regenerate RSS
         await _log_job(db, episode_id, "rss", "in_progress")

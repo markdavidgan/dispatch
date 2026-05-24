@@ -12,7 +12,7 @@ def test_projects_yml_syncs_on_boot(tmp_db_env):
     with TestClient(app) as client:
         # /projects is the public list route; after boot it should
         # return >= 1 project from projects.yml.
-        resp = client.get("/projects")
+        resp = client.get("/api/projects")
         assert resp.status_code == 200
         body = resp.json()
         # The response shape is whatever the existing projects.py returns;

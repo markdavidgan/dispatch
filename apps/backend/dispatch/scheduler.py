@@ -20,6 +20,7 @@ from dispatch.synthesis.from_the_desk import generate_from_the_desk
 from dispatch.podcast.registry import enabled_podcasts
 from dispatch.podcast import intake
 from dispatch.publish.r2 import delete_object, list_objects
+from dispatch.ingest import github_commits
 
 log = logging.getLogger(__name__)
 _scheduler: AsyncIOScheduler | None = None
@@ -55,6 +56,15 @@ def start_jobs(db: Database) -> None:
         IntervalTrigger(minutes=30, jitter=60),
         args=[db],
         id="ingest_github",
+        replace_existing=True,
+    )
+
+    # Ingest: github commits (branch-aware) every 60 min
+    sched.add_job(
+        _ingest_github_commits,
+        IntervalTrigger(minutes=60, jitter=120),
+        args=[db],
+        id="ingest_github_commits",
         replace_existing=True,
     )
 
@@ -111,6 +121,20 @@ def stop_jobs() -> None:
         _scheduler.shutdown(wait=False)
         _scheduler = None
         log.info("scheduler stopped")
+
+
+async def _ingest_github_commits(db: Database) -> None:
+    """Run branch-aware commit ingest for all projects with a github_repo."""
+    async with db.cursor() as cur:
+        await cur.execute("SELECT slug, github_repo FROM projects WHERE github_repo IS NOT NULL")
+        rows = await cur.fetchall()
+    for slug, repo in rows:
+        try:
+            n = await github_commits.ingest_commits(db, slug, repo)
+            if n:
+                log.info("github commits: %s +%d", slug, n)
+        except Exception as e:
+            log.exception("github commits failed for %s", slug)
 
 
 async def _synthesis_lead_pipeline(db: Database):

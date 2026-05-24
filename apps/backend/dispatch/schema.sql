@@ -9,6 +9,10 @@ CREATE TABLE IF NOT EXISTS projects (
   status TEXT NOT NULL,
   kind TEXT,
   color_hint TEXT,
+  summary TEXT,
+  podcast_config TEXT,  -- JSON
+  sort_order INTEGER DEFAULT 0,
+  created_at TEXT,
   from_the_desk TEXT,
   from_the_desk_generated_at TEXT,
   first_seen_at TEXT,
@@ -122,3 +126,26 @@ CREATE TABLE IF NOT EXISTS briefing_mentions (
 
 CREATE INDEX IF NOT EXISTS briefing_mentions_project
   ON briefing_mentions(project_slug, briefing_date DESC);
+
+-- Encrypted settings at rest. Keys are dot-namespaced (e.g. "ai.provider").
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,         -- encrypted Fernet ciphertext (base64)
+  updated_at TEXT NOT NULL
+);
+
+-- Job schedules (replaces hardcoded cron in scheduler.py)
+CREATE TABLE IF NOT EXISTS schedules (
+  job_name TEXT PRIMARY KEY,
+  cron_expression TEXT NOT NULL,
+  is_enabled INTEGER NOT NULL DEFAULT 1,
+  last_run_at TEXT,
+  next_run_at TEXT
+);
+
+-- System metadata (key canary, version, etc.)
+CREATE TABLE IF NOT EXISTS system (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);

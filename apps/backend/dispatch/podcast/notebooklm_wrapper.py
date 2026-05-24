@@ -3,11 +3,16 @@
 Normalizes the interface for intake.py. Each podcast project gets its own
 notebook (created once, reused thereafter). Sources are added per-episode
 and old sources are pruned to keep the notebook focused.
+
+Phase 6b: Supports DB-backed session storage (passed as inline JSON) in
+addition to the legacy file-path approach.
 """
 from __future__ import annotations
 
+import json
 import logging
 import os
+import tempfile
 from pathlib import Path
 
 from notebooklm import NotebookLMClient
@@ -15,14 +20,23 @@ from notebooklm.rpc.types import AudioFormat, AudioLength
 
 log = logging.getLogger(__name__)
 
-# Map environment to notebooklm-py storage path
+# Legacy file-path fallback
 _STORAGE_PATH = os.environ.get(
     "NOTEBOOKLM_SESSION_PATH",
     "/home/dispatch/.notebooklm/profiles/default/storage_state.json",
 )
 
 
-async def _client() -> NotebookLMClient:
+async def _client(storage_state: dict | None = None) -> NotebookLMClient:
+    if storage_state is not None:
+        # Write inline JSON to a temp file for notebooklm-py
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(storage_state, f)
+            tmp_path = f.name
+        try:
+            return await NotebookLMClient.from_storage(path=tmp_path)
+        finally:
+            Path(tmp_path).unlink(missing_ok=True)
     return await NotebookLMClient.from_storage(path=_STORAGE_PATH)
 
 
@@ -60,12 +74,13 @@ async def generate_audio_overview(
     instructions: str | None = None,
     audio_format_str: str | None = None,
     audio_length_str: str | None = None,
+    storage_state: dict | None = None,
 ) -> str:
     """Upload source, generate audio, return artifact_id (task_id).
 
     Raises RuntimeError on any failure.
     """
-    async with await _client() as client:
+    async with await _client(storage_state) as client:
         notebook_id = await _get_or_create_notebook(client, notebook_title)
 
         # Add source
@@ -111,12 +126,13 @@ async def wait_and_download(
     dest: Path,
     timeout_s: int = 4 * 3600,
     poll_interval_s: int = 60,
+    storage_state: dict | None = None,
 ) -> None:
     """Poll until artifact is ready, then download to *dest*.
 
     Raises TimeoutError or RuntimeError on failure.
     """
-    async with await _client() as client:
+    async with await _client(storage_state) as client:
         notebook_id = await _get_or_create_notebook(client, notebook_title)
 
         # Wait for completion
