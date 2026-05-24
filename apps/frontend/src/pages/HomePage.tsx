@@ -51,9 +51,14 @@ export default function HomePage() {
   if (!brief) {
     return (
       <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-        <p className="font-disp text-base text-ink-soft">
-          The newsroom hasn't filed yet. Check back after the daily synthesis.
+        <p className="font-disp text-base text-ink-soft mb-6">
+          The newsroom hasn't filed yet.
         </p>
+        <RefreshButton
+          variant="button"
+          label="Generate Briefing"
+          onSuccess={() => window.location.reload()}
+        />
       </main>
     );
   }

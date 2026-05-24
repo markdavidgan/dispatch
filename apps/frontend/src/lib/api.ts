@@ -122,7 +122,12 @@ export async function triggerBackup() {
   return apiFetch("/admin/system/backup-now", { method: "POST" });
 }
 
-// Refresh briefing
+// Refresh briefing (legacy public endpoint — addendum only)
 export async function refreshBriefing() {
   return apiFetch("/brief/refresh", { method: "POST" });
+}
+
+// Admin — Generate briefing (lead if none exists, addendum if lead exists)
+export async function generateBriefing() {
+  return apiFetch("/api/admin/briefings/generate", { method: "POST" });
 }
