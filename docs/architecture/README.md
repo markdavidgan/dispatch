@@ -21,6 +21,8 @@ These docs describe the system as it exists in this repository.
 1. **No app-layer authentication.** The backend trusts its deployment perimeter
    (Cloudflare Access, Tailscale, Caddy basic auth, Authelia). Admin routes are
    prefix-gated (`/admin/*`, `/api/admin/*`) so any HTTP-level policy works.
+   In the all-in-one topology, Caddy is the **gateway** — the only published
+   service; the backend has no external port.
 2. **One required env var.** `DISPATCH_MASTER_KEY`. Every other credential lives
    in the DB, encrypted with Fernet derived from the master key.
 3. **Deployment-agnostic.** Ship as a single `docker compose up`, or split the
@@ -35,7 +37,7 @@ These docs describe the system as it exists in this repository.
 flowchart LR
     user["Reader / Operator"]
     perimeter["Perimeter<br/>(Cloudflare Access · Tailscale · Caddy auth)"]
-    caddy["Caddy<br/>reverse proxy"]
+    caddy["Caddy<br/>gateway / reverse proxy"]
     spa["Vite SPA<br/>React 19 + Tailwind"]
     api["FastAPI backend<br/>Python 3.12"]
     db[("SQLite WAL<br/>aiosqlite")]

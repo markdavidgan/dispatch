@@ -8,6 +8,27 @@ self-contained: it holds its data in a single SQLite file, runs its own
 scheduler in-process, and talks to swappable storage and AI/TTS providers via
 narrow adapters.
 
+### Caddy as the gateway
+
+In the default all-in-one deployment, **Caddy is the sole gateway** — the only
+service reachable from outside the Docker network. Every external request flows
+through it:
+
+- **`/api/*` and `/health`** → proxied to the backend container (`dispatch-backend:10060`)
+- **Everything else (`/*`)** → served as static files from the built Vite SPA
+
+The backend container has **no published ports**. It is only `expose`d internally
+inside the Docker network. This means the backend is completely invisible to the
+outside world unless traffic passes through Caddy first. The frontend SPA, running
+in the browser, also reaches the backend by sending requests back to Caddy, which
+forwards them onward.
+
+This gateway pattern is why switching the frontend framework (e.g. to Next.js)
+does not remove the need for request routing — it only changes *which* process
+performs it. Either Next.js takes over the proxying role (via rewrites or API
+routes), or the backend must be published directly, breaking the single-entry-point
+model.
+
 ```mermaid
 flowchart TB
     subgraph perimeter["Deployment perimeter (operator's choice)"]

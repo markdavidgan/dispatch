@@ -47,6 +47,11 @@ The Caddyfile sends `/api/*` and `/health` to `dispatch-backend:10060` and
 serves everything else as a static SPA with a `try_files {path} /index.html`
 fallback for React Router.
 
+**Crucially, the backend has no published port.** It lives entirely inside the
+Docker network. Caddy is the *gateway*: the single entry point for all external
+traffic. The SPA in the browser calls `/api/...` relative to the same origin,
+which Caddy routes to the backend. The backend is never exposed directly.
+
 ### One-command bring-up
 
 ```bash
