@@ -1,3 +1,5 @@
+import { formatTimeLocalShort } from "@/lib/time";
+
 interface Event {
   project_slug: string;
   kind: string;
@@ -29,7 +31,7 @@ export default function EventStream({ events, limit = 20 }: Props) {
               key={`${ev.project_slug}-${ev.external_id}`}
               className="grid grid-cols-[84px_110px_1fr_24px] gap-3.5 items-baseline py-2.5 border-b border-hair font-mono text-xs hover:bg-paper-deep"
             >
-              <span className="text-ink tabular-nums font-medium">{ev.occurred_at?.split("T")[1]?.slice(0, 5) ?? "—"}</span>
+              <span className="text-ink tabular-nums font-medium">{formatTimeLocalShort(ev.occurred_at)}</span>
               <span className="text-[10px] uppercase tracking-[0.18em] text-signal font-semibold">{ev.kind}</span>
               <span className="font-disp text-sm text-ink font-medium">{ev.title}</span>
               {ev.url && (

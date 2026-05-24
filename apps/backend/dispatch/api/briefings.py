@@ -110,6 +110,8 @@ async def list_briefings(
         await cur.execute("SELECT COUNT(*) FROM filings WHERE kind='lead'")
         (total,) = await cur.fetchone()
 
+    from dispatch.scheduler import get_lead_time
+    lead_time = await get_lead_time(db)
     briefings = [
         BriefingSummary(
             date=row[0],
@@ -117,7 +119,7 @@ async def list_briefings(
             lead_headline=row[2] or "",
             audio_url=_audio_url(row[0], "lead"),
             active_count=row[3] or 0,
-            filed_at=(row[4] or "")[11:16] or "02:00",
+            filed_at=(row[4] or "")[11:16] or lead_time,
         )
         for row in rows
     ]
@@ -153,6 +155,8 @@ async def get_briefing(request: Request, date: str) -> BriefingDetail:
 
     recent_events = await _recent_events_for_date(date)
 
+    from dispatch.scheduler import get_lead_time
+    lead_time = await get_lead_time(db)
     return BriefingDetail(
         date=lead[0],
         issue_no=lead[2] or 0,
@@ -164,6 +168,6 @@ async def get_briefing(request: Request, date: str) -> BriefingDetail:
         audio_lead_url=_audio_url(date, "lead"),
         audio_addendum_url=_audio_url(date, "addendum") if has_addendum else None,
         active_count=lead[5] or 0,
-        filed_at=(lead[7] or "")[11:16] or "02:00",
+        filed_at=(lead[7] or "")[11:16] or lead_time,
         recent_events=recent_events,
     )

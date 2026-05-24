@@ -138,6 +138,7 @@ CREATE TABLE IF NOT EXISTS settings (
 CREATE TABLE IF NOT EXISTS schedules (
   job_name TEXT PRIMARY KEY,
   cron_expression TEXT NOT NULL,
+  timezone TEXT NOT NULL DEFAULT 'UTC',
   is_enabled INTEGER NOT NULL DEFAULT 1,
   last_run_at TEXT,
   next_run_at TEXT

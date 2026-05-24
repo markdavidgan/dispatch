@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listRuns } from "@/lib/api";
+import { formatDateTimeLocal } from "@/lib/time";
 
 interface Run {
   id: number;
@@ -177,9 +178,7 @@ export default function AdminRunsPage() {
               </div>
               <div className="px-3 py-2.5 flex items-center">
                 <span className="font-mono text-[11px] text-ink-mute">
-                  {run.started_at
-                    ? new Date(run.started_at).toLocaleString()
-                    : "—"}
+                  {formatDateTimeLocal(run.started_at)}
                 </span>
               </div>
               <div className="px-3 py-2.5 flex items-center justify-end">

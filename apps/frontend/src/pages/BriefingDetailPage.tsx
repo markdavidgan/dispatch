@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { fetchBriefing } from "@/lib/api";
+import { formatTimeLocalShort } from "@/lib/time";
 import Masthead from "@/components/Masthead";
 import Numeral from "@/components/Numeral";
 import LeadHero from "@/components/LeadHero";
@@ -105,7 +106,7 @@ export default function BriefingDetailPage() {
                   className="flex flex-wrap sm:grid sm:grid-cols-[84px_110px_1fr_24px] gap-x-3.5 gap-y-1 items-baseline py-2.5 border-b border-hair font-mono text-xs"
                 >
                   <span className="text-ink tabular-nums font-medium shrink-0 w-[52px] sm:w-auto">
-                    {e.occurred_at?.split("T")[1]?.slice(0, 5) ?? "—"}
+                    {formatTimeLocalShort(e.occurred_at)}
                   </span>
                   <span className="text-[10px] uppercase tracking-[0.18em] text-signal font-semibold shrink-0 w-[80px] sm:w-auto">
                     {e.kind}

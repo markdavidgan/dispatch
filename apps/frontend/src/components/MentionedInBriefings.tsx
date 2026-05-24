@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { formatDateLocal } from "@/lib/time";
 
 interface Mention {
   date: string;
@@ -35,7 +36,7 @@ export default function MentionedInBriefings({ mentions }: Props) {
                     </span>
                   )}
                   <span className="block font-mono text-[9.5px] tracking-[0.18em] text-ink-mute uppercase mt-1">
-                    {new Date(`${m.date}T00:00:00Z`).toUTCString().slice(5, 16)}
+                    {formatDateLocal(m.date)}
                   </span>
                 </span>
                 <span className="font-disp text-lg leading-[1.4] text-ink font-medium tracking-[-0.005em]">{m.excerpt}</span>

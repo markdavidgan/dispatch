@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSnapshot, fetchLive } from "@/lib/api";
+import { formatTimeLocalShort } from "@/lib/time";
 import Masthead from "@/components/Masthead";
 import Numeral from "@/components/Numeral";
 import LeadHero from "@/components/LeadHero";
@@ -51,7 +52,7 @@ export default function HomePage() {
     return (
       <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
         <p className="font-disp text-base text-ink-soft">
-          The newsroom hasn't filed yet. Check back after the 02:00 synthesis.
+          The newsroom hasn't filed yet. Check back after the daily synthesis.
         </p>
       </main>
     );
@@ -65,7 +66,7 @@ export default function HomePage() {
   const tickerRows = (snapshot?.recent_events ?? [])
     .slice(0, 12)
     .map((e: any, i: number) => ({
-      time: e.occurred_at?.split("T")[1]?.slice(0, 5) ?? "—",
+      time: formatTimeLocalShort(e.occurred_at),
       slug: e.project_slug,
       isLatest: i === 0,
     }));
@@ -77,7 +78,7 @@ export default function HomePage() {
           <Masthead
             issueNo={brief.issue_no}
             date={brief.date}
-            filedAt={brief.filed_at ?? "02:00:18"}
+            filedAt={brief.filed_at ?? undefined}
             durationSec={brief.audio?.lead_duration_s ?? undefined}
           />
           <FilingTicker rows={tickerRows} />

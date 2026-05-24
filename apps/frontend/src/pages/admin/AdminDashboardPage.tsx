@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSetupStatus, triggerBackup, listRuns } from "@/lib/api";
+import { formatDateTimeLocal } from "@/lib/time";
 
 interface SetupStatus {
   storage_provider?: string;
@@ -187,9 +188,7 @@ export default function AdminDashboardPage() {
                   {run.status}
                 </span>
                 <span className="font-mono text-[11px] text-ink-mute px-3 py-2.5">
-                  {run.started_at
-                    ? new Date(run.started_at).toLocaleString()
-                    : "—"}
+                  {formatDateTimeLocal(run.started_at)}
                 </span>
                 <span className="font-mono text-[11px] text-ink px-3 py-2.5 text-right tabular-nums">
                   {run.events_added ?? "—"}

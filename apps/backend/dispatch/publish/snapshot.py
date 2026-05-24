@@ -96,6 +96,9 @@ async def build_snapshot(db: Database) -> dict:
             )
         rows = await cur.fetchall()
 
+    from dispatch.scheduler import get_lead_time
+    lead_time = await get_lead_time(db)
+
     lead: dict | None = None
     addendums: list[dict] = []
     lead_audio_url: str | None = None
@@ -114,7 +117,7 @@ async def build_snapshot(db: Database) -> dict:
             lead = {
                 "date": date,
                 "issue_no": issue_no,
-                "filed_at": generated_at.split("T")[1][:5] if generated_at and "T" in generated_at else "02:00",
+                "filed_at": generated_at.split("T")[1][:5] if generated_at and "T" in generated_at else lead_time,
                 "active_count": f"{active_count:02d}" if active_count is not None else "00",
                 "lead_headline": lead_headline or "",
                 "lead_body": lead_body or "",
@@ -127,7 +130,7 @@ async def build_snapshot(db: Database) -> dict:
         elif kind == "addendum":
             addendums.append({
                 "filed_at": generated_at.split("T")[1][:5] if generated_at and "T" in generated_at else "",
-                "label": addendum_label or f"Filed since 02:00",
+                "label": addendum_label or f"Filed since {lead_time}",
                 "body": addendum_body or "",
             })
             # Latest addendum wins — rows are ordered by id ascending within

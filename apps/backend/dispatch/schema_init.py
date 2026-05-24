@@ -44,12 +44,14 @@ async def apply(db: Database) -> None:
     # Migration: add from_the_desk columns if they don't exist yet,
     # and the long-form article column on filings (added 2026-05-17 —
     # see synthesis/article.py).
+    # Migration: add schedules.timezone (2026-05-25)
     for column_ddl in (
         "ALTER TABLE projects ADD COLUMN from_the_desk TEXT",
         "ALTER TABLE projects ADD COLUMN from_the_desk_generated_at TEXT",
         "ALTER TABLE filings ADD COLUMN lead_article TEXT",
         "ALTER TABLE filings ADD COLUMN audio_url TEXT",
         "ALTER TABLE filings ADD COLUMN audio_duration_s INTEGER",
+        "ALTER TABLE schedules ADD COLUMN timezone TEXT NOT NULL DEFAULT 'UTC'",
     ):
         try:
             async with db.cursor() as cur:

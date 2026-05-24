@@ -5,7 +5,7 @@ interface Props {
   durationSec?: number;
 }
 
-export default function Masthead({ issueNo, date, filedAt = "02:00:18", durationSec }: Props) {
+export default function Masthead({ issueNo, date, filedAt, durationSec }: Props) {
   if (issueNo == null && !date) return null;
   const duration = durationSec
     ? `${Math.floor(durationSec / 60)}:${String(durationSec % 60).padStart(2, "0")}`

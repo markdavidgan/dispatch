@@ -34,7 +34,7 @@ export default function BriefingsPage() {
           <p className="font-disp text-base text-ink-soft italic">Loading…</p>
         ) : briefings.length === 0 ? (
           <p className="font-disp text-base text-ink-soft italic">
-            The newsroom hasn&apos;t filed yet. Check back after the 02:00 synthesis.
+            The newsroom hasn&apos;t filed yet. Check back after the daily synthesis.
           </p>
         ) : (
           <ul>

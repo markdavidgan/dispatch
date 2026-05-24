@@ -1,6 +1,9 @@
 """APScheduler wiring — ingest, synthesis, publish, audio, podcast, housekeeping.
 
 All jobs run in-process. Jittered start avoids thundering herd.
+Cron schedules are read from the DB at startup; interval jobs remain
+hardcoded. A restart (or calling reload_job) is required for schedule
+changes to take effect.
 """
 from __future__ import annotations
 
@@ -24,6 +27,7 @@ from dispatch.ingest import github_commits
 
 log = logging.getLogger(__name__)
 _scheduler: AsyncIOScheduler | None = None
+_db: Database | None = None
 
 
 def get_scheduler() -> AsyncIOScheduler:
@@ -37,11 +41,40 @@ def _jittered_minute() -> int:
     return random.randint(0, 59)
 
 
-def start_jobs(db: Database) -> None:
-    sched = get_scheduler()
-    tz = os.environ.get("DISPATCH_TZ", "Asia/Manila")
+def _parse_cron(cron: str) -> dict:
+    """Parse a 5-part cron string into CronTrigger kwargs."""
+    parts = cron.split()
+    if len(parts) != 5:
+        raise ValueError(f"Invalid cron expression: {cron!r} (expected 5 parts)")
+    minute, hour, day, month, dow = parts
+    return {
+        "minute": minute,
+        "hour": hour,
+        "day": day if day != "*" else None,
+        "month": month if month != "*" else None,
+        "day_of_week": dow if dow != "*" else None,
+    }
 
-    # Ingest: git every 15 min
+
+async def _load_cron_schedules(db: Database) -> list[dict]:
+    """Read cron schedules from the DB."""
+    async with db.cursor() as cur:
+        await cur.execute(
+            "SELECT job_name, cron_expression, timezone, is_enabled FROM schedules WHERE job_name != ''"
+        )
+        rows = await cur.fetchall()
+    return [
+        {"job_name": r[0], "cron": r[1], "timezone": r[2] or "UTC", "enabled": bool(r[3])}
+        for r in rows
+    ]
+
+
+async def start_jobs(db: Database) -> None:
+    global _db
+    _db = db
+    sched = get_scheduler()
+
+    # Interval-based ingest jobs (not configurable via schedules table)
     sched.add_job(
         orchestrator.run_ingest_git,
         IntervalTrigger(minutes=15, jitter=60),
@@ -49,8 +82,6 @@ def start_jobs(db: Database) -> None:
         id="ingest_git",
         replace_existing=True,
     )
-
-    # Ingest: github every 30 min
     sched.add_job(
         orchestrator.run_ingest_github,
         IntervalTrigger(minutes=30, jitter=60),
@@ -58,8 +89,6 @@ def start_jobs(db: Database) -> None:
         id="ingest_github",
         replace_existing=True,
     )
-
-    # Ingest: github commits (branch-aware) every 60 min
     sched.add_job(
         _ingest_github_commits,
         IntervalTrigger(minutes=60, jitter=120),
@@ -68,34 +97,15 @@ def start_jobs(db: Database) -> None:
         replace_existing=True,
     )
 
-    # Synthesis: lead daily at 02:00
-    sched.add_job(
-        _synthesis_lead_pipeline,
-        CronTrigger(hour=2, minute=_jittered_minute(), timezone=tz),
-        args=[db],
-        id="synthesis_lead",
-        replace_existing=True,
-    )
+    # Cron-based jobs from DB
+    schedules = await _load_cron_schedules(db)
+    for s in schedules:
+        if not s["enabled"]:
+            log.info("schedule %s is disabled; skipping", s["job_name"])
+            continue
+        _add_cron_job(sched, db, s["job_name"], s["cron"], s["timezone"])
 
-    # Housekeeping: daily 03:30
-    sched.add_job(
-        _housekeeping,
-        CronTrigger(hour=3, minute=30, timezone=tz),
-        args=[db],
-        id="housekeeping",
-        replace_existing=True,
-    )
-
-    # From-the-desk: weekly summary per active+held project (Sunday 23:00)
-    sched.add_job(
-        _from_the_desk_weekly,
-        CronTrigger(day_of_week="sun", hour=23, minute=_jittered_minute(), timezone=tz),
-        args=[db],
-        id="synthesis:from_the_desk",
-        replace_existing=True,
-    )
-
-    # Podcasts: one weekly job per enabled podcast
+    # Podcasts: one weekly job per enabled podcast (from projects.yml)
     projects_yml = Path(__file__).parent / "projects.yml"
     for podcast in enabled_podcasts(projects_yml):
         parts = podcast.cron.split()
@@ -115,11 +125,76 @@ def start_jobs(db: Database) -> None:
     log.info("scheduler started with %d jobs", len(sched.get_jobs()))
 
 
+def _add_cron_job(sched: AsyncIOScheduler, db: Database, job_name: str, cron: str, tz: str) -> None:
+    """Add or replace a cron job from the schedules table."""
+    try:
+        kwargs = _parse_cron(cron)
+    except ValueError as e:
+        log.warning("bad cron for %s: %s", job_name, e)
+        return
+
+    trigger = CronTrigger(**kwargs, timezone=tz)
+
+    job_map = {
+        "synthesis:lead": (_synthesis_lead_pipeline, [db]),
+        "housekeeping": (_housekeeping, [db]),
+        "synthesis:from_the_desk": (_from_the_desk_weekly, [db]),
+    }
+
+    if job_name not in job_map:
+        log.warning("unknown cron job %s; skipping", job_name)
+        return
+
+    func, args = job_map[job_name]
+    sched.add_job(func, trigger, args=args, id=job_name, replace_existing=True)
+    log.info("scheduled %s at %s (%s)", job_name, cron, tz)
+
+
+async def get_lead_time(db: Database) -> str:
+    """Return the configured lead synthesis time as HH:MM from the schedules table."""
+    async with db.cursor() as cur:
+        await cur.execute(
+            "SELECT cron_expression FROM schedules WHERE job_name = 'synthesis:lead'"
+        )
+        row = await cur.fetchone()
+    if row:
+        parts = row[0].split()
+        if len(parts) == 5:
+            return f"{parts[1].zfill(2)}:{parts[0].zfill(2)}"
+    return "01:00"
+
+
+def reload_job(job_name: str, cron: str | None = None, timezone: str | None = None, enabled: bool = True) -> bool:
+    """Reload a single cron job without restarting the whole scheduler.
+
+    Returns True if the job was updated, False if the scheduler isn't running.
+    """
+    global _db
+    if _scheduler is None or _db is None:
+        return False
+    sched = get_scheduler()
+
+    if not enabled:
+        try:
+            sched.remove_job(job_name)
+            log.info("removed job %s", job_name)
+        except Exception:
+            pass
+        return True
+
+    if cron is None:
+        return False
+
+    _add_cron_job(sched, _db, job_name, cron, timezone or "UTC")
+    return True
+
+
 def stop_jobs() -> None:
-    global _scheduler
+    global _scheduler, _db
     if _scheduler:
         _scheduler.shutdown(wait=False)
         _scheduler = None
+        _db = None
         log.info("scheduler stopped")
 
 

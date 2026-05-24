@@ -416,7 +416,9 @@ async def run_synthesis_addendum(db: Database) -> dict:
     result, model_name = await _synthesize_with_fallback(prompt, AddendumFiling, provider, db)
 
     generated_at = datetime.now(timezone.utc).isoformat()
-    label = f"Filed since 02:00 · {generated_at.split('T')[1][:5]}"
+    from dispatch.scheduler import get_lead_time
+    lead_time = await get_lead_time(db)
+    label = f"Filed since {lead_time} · {generated_at.split('T')[1][:5]}"
     async with db.cursor() as cur:
         await cur.execute(
             """INSERT INTO filings

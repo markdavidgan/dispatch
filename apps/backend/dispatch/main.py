@@ -84,7 +84,7 @@ async def lifespan(app: FastAPI):
         await sync_to_db(db, load_yaml(projects_yml))
 
     app.state.db = db
-    start_jobs(db)
+    await start_jobs(db)
     yield
     stop_jobs()
     await db.close()

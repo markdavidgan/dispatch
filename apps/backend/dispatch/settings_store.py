@@ -16,12 +16,14 @@ from dispatch.crypto import Crypto
 log = logging.getLogger(__name__)
 
 # Default schedules to populate on first boot
+# Cron expressions are interpreted in the schedule's timezone.
+# Default synthesis:lead is 1 AM UTC (GMT).
 DEFAULT_SCHEDULES = [
-    ("ingest:git", "*/15 * * * *"),
-    ("ingest:github", "*/30 * * * *"),
-    ("synthesis:lead", "0 2 * * *"),
-    ("housekeeping", "30 3 * * *"),
-    ("synthesis:from_the_desk", "0 23 * * 0"),
+    ("ingest:git", "*/15 * * * *", "UTC"),
+    ("ingest:github", "*/30 * * * *", "UTC"),
+    ("synthesis:lead", "0 1 * * *", "UTC"),
+    ("housekeeping", "30 3 * * *", "UTC"),
+    ("synthesis:from_the_desk", "0 23 * * 0", "UTC"),
 ]
 
 
@@ -108,11 +110,11 @@ class SettingsStore:
 
         now = datetime.now(timezone.utc).isoformat()
         async with self.db.cursor() as cur:
-            for job_name, cron in DEFAULT_SCHEDULES:
+            for job_name, cron, tz in DEFAULT_SCHEDULES:
                 await cur.execute(
-                    """INSERT INTO schedules (job_name, cron_expression, is_enabled, last_run_at, next_run_at)
-                       VALUES (?, ?, 1, NULL, NULL)""",
-                    (job_name, cron),
+                    """INSERT INTO schedules (job_name, cron_expression, timezone, is_enabled, last_run_at, next_run_at)
+                       VALUES (?, ?, ?, 1, NULL, NULL)""",
+                    (job_name, cron, tz),
                 )
         log.info("settings_store: bootstrapped default schedules")
 
