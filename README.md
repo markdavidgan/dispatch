@@ -195,6 +195,33 @@ your first boot, either:
 
 See the comments at the top of `projects.yml` for the full schema.
 
+## Weekly podcasts
+
+Dispatch ships with one podcast enabled by default — **Dispatch Weekly**, a
+dispatch-wide cross-project digest. Every Saturday morning (5:00 UTC), the
+scheduler picks up the past seven days of curated lead briefings and hands
+them to NotebookLM, which composes a single 25–30 minute conversational
+episode surfacing themes that span projects rather than reciting per-day
+activity.
+
+To enable per-project podcasts (one weekly episode per tracked repo) edit the
+`podcast:` block on the relevant project entry in `projects.yml` and set
+`enabled: true`.
+
+Manual trigger (e.g. after editing the registry):
+
+```
+POST /api/admin/podcasts/dispatch-weekly/compose
+```
+
+A preview of the markdown that will be sent to NotebookLM is available at
+`GET /api/admin/podcasts/{slug}/preview-source` — handy for tuning the source
+template without burning compose credits.
+
+> Episode generation requires a NotebookLM session token in
+> `podcast.notebooklm_session` (admin Settings). Without it the compose job
+> runs through to the upload step and records `skipped` in the episodes table.
+
 ## Backfill and catch-up
 
 The daily synthesis job follows a small priority chain:

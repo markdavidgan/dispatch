@@ -10,10 +10,15 @@ from pathlib import Path
 from dispatch.podcast.registry import load_podcasts, enabled_podcasts
 
 
-def test_shipped_registry_has_no_podcasts():
+def test_shipped_registry_ships_only_dispatch_weekly_podcast():
+    """The shipped showcase YAML enables one podcast — the dispatch-wide
+    weekly aggregate. Per-project podcasts are demo-instance choices and
+    are not enabled by default in the public registry."""
     path = Path(__file__).parent.parent.parent / "projects.yml"
-    assert load_podcasts(path) == []
-    assert enabled_podcasts(path) == []
+    slugs = {p.project_slug for p in load_podcasts(path)}
+    enabled = {p.project_slug for p in enabled_podcasts(path)}
+    assert slugs == {"dispatch-weekly"}
+    assert enabled == {"dispatch-weekly"}
 
 
 def test_loader_parses_inline_podcast_config(tmp_path):

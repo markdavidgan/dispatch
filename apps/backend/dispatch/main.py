@@ -30,6 +30,7 @@ from dispatch.api.admin import schedules as admin_schedules_router
 from dispatch.api.admin import runs as admin_runs_router
 from dispatch.api.admin import system as admin_system_router
 from dispatch.api.admin import briefings as admin_briefings_router
+from dispatch.api.admin import podcasts as admin_podcasts_router
 
 core_logging.configure()
 settings = get_settings()
@@ -134,3 +135,4 @@ app.include_router(admin_schedules_router.router, prefix="/api")
 app.include_router(admin_runs_router.router, prefix="/api")
 app.include_router(admin_system_router.router, prefix="/api")
 app.include_router(admin_briefings_router.router, prefix="/api")
+app.include_router(admin_podcasts_router.router, prefix="/api")

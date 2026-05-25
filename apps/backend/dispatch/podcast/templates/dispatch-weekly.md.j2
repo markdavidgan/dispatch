@@ -1,0 +1,37 @@
+{# templates/dispatch-weekly.md.j2 — source for the dispatch-wide weekly podcast.
+
+The input here is the week's curated daily briefings, NOT raw events.
+Each brief is already a synthesized narrative; NotebookLM's job is to
+weave them into a single conversational episode that surfaces cross-
+project themes (e.g. "AI-agent CLIs converged on credential safety",
+"frontier frameworks pushed toward server components") rather than
+re-listing per-day per-project activity.
+#}
+# Dispatch Weekly — Week of {{ week_start_label }} → {{ week_end_label }}
+
+{{ episode_count }}.
+
+This week's editorial digest spans every project Dispatch tracks. Each
+day below summarizes the most consequential movement in narrative
+prose, already curated by the daily lead. Surface the cross-project
+threads — convergence between projects, recurring themes, the shape
+of the week — rather than reciting per-day activity.
+
+---
+
+{% for b in briefs %}
+## {{ b.date }} — Issue {{ b.issue_no }}: {{ b.headline }}
+
+{{ b.article }}
+
+{% endfor %}
+
+{% if not briefs %}
+_No briefings filed this week._
+{% endif %}
+
+---
+
+## Summary
+
+Window: {{ week_start_label }} → {{ week_end_label }}. {{ briefs|length }} daily briefing{{ "s" if briefs|length != 1 else "" }} curated; weave into a single 25–30 minute conversational episode focused on cross-project themes.

@@ -47,3 +47,17 @@ projects:
     status: active
     kind: meta
     summary: This repository — a self-hosted daily editorial brief generator. Included as a meta example so the instance reports on its own development activity.
+
+  - slug: dispatch-weekly
+    display_name: Dispatch Weekly
+    status: active
+    kind: meta
+    summary: Cross-project weekly podcast — NotebookLM composes one 25–30 minute episode from the week's daily briefings, surfacing themes that span projects rather than reciting per-day activity.
+    podcast:
+      title: "Dispatch Weekly"
+      description: "Weekly cross-project digest. One episode picks the best insights from every project Dispatch tracks, woven into a conversational 25–30 minute listen."
+      author: "Dispatch"
+      itunes_category: "Technology"
+      cron: "0 5 * * sat"
+      compose_window_days: 7
+      enabled: true

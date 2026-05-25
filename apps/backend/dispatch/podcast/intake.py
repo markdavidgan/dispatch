@@ -129,10 +129,17 @@ async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) ->
     try:
         # Step 1: compose
         await _log_job(db, episode_id, "compose", "in_progress")
-        source_md = await composer.compose(
-            db, podcast.project_slug, podcast.title, project_display,
-            week_start, podcast.compose_window_days, episode_no,
-        )
+        if podcast.project_slug == composer.DISPATCH_WEEKLY_SLUG:
+            # Dispatch-wide cross-project digest: source is the week's
+            # curated lead briefings, not raw events.
+            source_md = await composer.compose_dispatch_weekly(
+                db, week_start, podcast.compose_window_days, episode_no,
+            )
+        else:
+            source_md = await composer.compose(
+                db, podcast.project_slug, podcast.title, project_display,
+                week_start, podcast.compose_window_days, episode_no,
+            )
         async with db.cursor() as cur:
             await cur.execute("UPDATE episodes SET source_markdown=? WHERE id=?", (source_md, episode_id))
         await _log_job(db, episode_id, "compose", "ok")

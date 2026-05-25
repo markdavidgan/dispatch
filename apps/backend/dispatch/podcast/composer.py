@@ -1,4 +1,13 @@
-"""Compose source markdown for NotebookLM from a project's week of events."""
+"""Compose source markdown for NotebookLM.
+
+Two flavors:
+  - `compose()`              — single-project weekly from raw events
+  - `compose_dispatch_weekly()` — cross-project weekly from curated briefings
+
+The dispatch-wide flavor feeds NotebookLM already-synthesized narratives
+(the daily leads) rather than raw events, so the resulting podcast can
+focus on cross-project themes instead of reciting per-day activity.
+"""
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -6,6 +15,9 @@ import jinja2
 from core.db import Database
 
 TEMPLATE_PATH = Path(__file__).parent / "templates" / "source.md.j2"
+DISPATCH_WEEKLY_TEMPLATE = Path(__file__).parent / "templates" / "dispatch-weekly.md.j2"
+
+DISPATCH_WEEKLY_SLUG = "dispatch-weekly"
 
 
 async def compose(
@@ -60,5 +72,51 @@ async def compose(
         week_start_label=week_start.strftime("%B %-d, %Y"),
         week_end_label=(week_start + timedelta(days=window_days - 1)).strftime("%B %-d, %Y"),
         days=days,
+        episode_count=f"Episode {episode_no}",
+    )
+
+
+async def compose_dispatch_weekly(
+    db: Database,
+    week_start: date,
+    window_days: int = 7,
+    episode_no: int = 1,
+) -> str:
+    """Compose source markdown for the dispatch-wide weekly podcast.
+
+    Reads curated lead briefings (filings.kind='lead') from the week and
+    feeds them to NotebookLM as already-narrative input. The episode's
+    job is to weave cross-project themes, not to recite per-day activity.
+    """
+    week_end = week_start + timedelta(days=window_days)
+    async with db.cursor() as cur:
+        await cur.execute(
+            "SELECT date, issue_no, lead_headline, lead_body, lead_article "
+            "FROM filings WHERE kind='lead' AND date >= ? AND date < ? "
+            "ORDER BY date ASC",
+            (week_start.isoformat(), week_end.isoformat()),
+        )
+        rows = await cur.fetchall()
+
+    briefs = [
+        {
+            "date": r[0],
+            "issue_no": r[1],
+            "headline": r[2] or "",
+            "body": r[3] or "",
+            "article": (r[4] or r[3] or "").strip(),
+        }
+        for r in rows
+    ]
+
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(DISPATCH_WEEKLY_TEMPLATE.parent),
+        trim_blocks=True, lstrip_blocks=True,
+    )
+    tpl = env.get_template(DISPATCH_WEEKLY_TEMPLATE.name)
+    return tpl.render(
+        week_start_label=week_start.strftime("%B %-d, %Y"),
+        week_end_label=(week_start + timedelta(days=window_days - 1)).strftime("%B %-d, %Y"),
+        briefs=briefs,
         episode_count=f"Episode {episode_no}",
     )

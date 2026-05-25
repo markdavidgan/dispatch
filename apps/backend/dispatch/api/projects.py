@@ -12,10 +12,13 @@ router = APIRouter(prefix="/projects")
 
 @router.get("")
 async def list_projects(request: Request) -> list[dict]:
+    """Public project listing — meta entries (e.g. dispatch-weekly podcast
+    aggregator) are hidden so the tile grid only shows real tracked repos."""
     db: Database = request.app.state.db
     async with db.cursor() as cur:
         await cur.execute(
-            "SELECT slug, display_name, status, kind, color_hint, github_repo, local_path FROM projects ORDER BY status DESC, slug"
+            "SELECT slug, display_name, status, kind, color_hint, github_repo, local_path "
+            "FROM projects WHERE kind != 'meta' ORDER BY status DESC, slug"
         )
         rows = await cur.fetchall()
     return [
