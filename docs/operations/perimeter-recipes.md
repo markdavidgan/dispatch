@@ -26,6 +26,25 @@ The Access cookie issued at the apex covers both subdomains, so the SPA can
 `fetch(backend, { credentials: "include" })` and Cloudflare transparently
 authenticates the call.
 
+**CORS bootstrap for split deployments**
+
+Because the SPA and backend are on different origins, the backend must allow
+the frontend origin in CORS. The easiest way is to set the env var at
+backend boot time:
+
+```bash
+DISPATCH_CORS_ORIGINS=https://dispatch.example.com
+```
+
+(You can also set `web.allowed_origins` via the admin UI once you're in;
+the env var is just there to avoid a chicken-and-egg problem on first
+deployment.)
+
+If you serve podcast episodes through the backend (local-filesystem storage
+rather than R2/S3 presigned URLs), episode `<audio>` elements will also need
+the Access cookie. The frontend already sends `credentials: "include"` and
+sets `crossOrigin="use-credentials"` on podcast audio tags.
+
 ### Cloudflare Access — Public demo with gated admin routes
 
 If you want the **reader-facing pages public** and only the **admin UI + admin

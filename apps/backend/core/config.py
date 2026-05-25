@@ -24,6 +24,11 @@ class Settings(BaseSettings):
         default=None,
         validation_alias="DISPATCH_MASTER_KEY",
     )
+    # Comma-separated list of additional CORS origins (e.g.
+    # "https://app.example.com,https://staging.example.com").
+    # Primarily used for split deployments where the SPA is hosted on
+    # a different origin than the backend.
+    cors_origins: str = Field(default="", validation_alias="DISPATCH_CORS_ORIGINS")
 
 
 @lru_cache

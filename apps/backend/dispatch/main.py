@@ -99,6 +99,8 @@ app = FastAPI(title="Dispatch Collector", version="0.1.0", lifespan=lifespan)
 async def cors_middleware(request, call_next):
     origin = request.headers.get("origin", "")
     allowed = ["http://localhost:5173", "http://127.0.0.1:5173"]
+    if settings.cors_origins:
+        allowed.extend([o.strip() for o in settings.cors_origins.split(",") if o.strip()])
     if hasattr(request.app.state, "settings_store"):
         try:
             configured = await request.app.state.settings_store.web_allowed_origins()
