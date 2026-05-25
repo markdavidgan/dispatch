@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import Response
 
 from core import logging as core_logging
 from core.config import get_settings
@@ -97,9 +97,7 @@ app = FastAPI(title="Dispatch Collector", version="0.1.0", lifespan=lifespan)
 # CORS — origins from DB settings, with dev defaults
 @app.middleware("http")
 async def cors_middleware(request, call_next):
-    response = await call_next(request)
     origin = request.headers.get("origin", "")
-    # Dev defaults + any configured origins
     allowed = ["http://localhost:5173", "http://127.0.0.1:5173"]
     if hasattr(request.app.state, "settings_store"):
         try:
@@ -107,13 +105,17 @@ async def cors_middleware(request, call_next):
             allowed.extend(configured)
         except Exception:
             pass
+
+    if request.method == "OPTIONS":
+        response = Response(status_code=204)
+    else:
+        response = await call_next(request)
+
     if origin in allowed:
         response.headers["access-control-allow-origin"] = origin
         response.headers["access-control-allow-credentials"] = "true"
         response.headers["access-control-allow-methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-        response.headers["access-control-allow-headers"] = "content-type, authorization"
-    if request.method == "OPTIONS":
-        response.status_code = 204
+        response.headers["access-control-allow-headers"] = "content-type, authorization, x-requested-with"
     return response
 
 
