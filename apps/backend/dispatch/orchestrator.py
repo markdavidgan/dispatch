@@ -224,26 +224,29 @@ async def _has_events_on(db: Database, date_str: str) -> bool:
     return any(events.values())
 
 
-async def find_oldest_uncovered_day_with_activity(
-    db: Database, look_back_days: int = 30
+async def _uncovered_day_with_activity(
+    db: Database, look_back_days: int = 30, order: str = "DESC"
 ) -> date | None:
-    """Oldest date in the past *look_back_days* that has events but no
-    'lead' filing yet. Used by the scheduler and the backfill endpoint to
-    catch up after downtime or a fresh boot.
+    """A date in the past *look_back_days* that has events but no 'lead'
+    filing yet. Ordered ASC (oldest) or DESC (latest) — the scheduler is
+    intentionally not used for catch-up; only the backfill / manual-generate
+    paths reach back at all, and they pick the LATEST so a fresh install
+    surfaces a single recent brief rather than a 30-day reconstruction.
     """
+    assert order in ("ASC", "DESC"), "order must be ASC or DESC"
     today = datetime.now(timezone.utc).astimezone().date()
     earliest = today - timedelta(days=look_back_days)
     latest = today - timedelta(days=1)
     async with db.cursor() as cur:
         await cur.execute(
-            """
+            f"""
             SELECT DISTINCT DATE(occurred_at) AS d
             FROM events
             WHERE DATE(occurred_at) BETWEEN ? AND ?
               AND DATE(occurred_at) NOT IN (
                   SELECT date FROM filings WHERE kind='lead'
               )
-            ORDER BY d ASC
+            ORDER BY d {order}
             LIMIT 1
             """,
             (earliest.isoformat(), latest.isoformat()),
@@ -252,26 +255,38 @@ async def find_oldest_uncovered_day_with_activity(
     return date.fromisoformat(row[0]) if row else None
 
 
-async def _resolve_target_date(db: Database) -> tuple[str, str] | tuple[None, str]:
-    """Choose which date the next lead briefing should cover.
+async def find_oldest_uncovered_day_with_activity(
+    db: Database, look_back_days: int = 30
+) -> date | None:
+    """Oldest uncovered day with events in the look-back window."""
+    return await _uncovered_day_with_activity(db, look_back_days, order="ASC")
 
-    Priority:
-      1. Yesterday — if uncovered AND has events.
-      2. Oldest uncovered day in the look-back window with events.
-      3. None — nothing to do (returns the reason for the runs log).
+
+async def find_latest_uncovered_day_with_activity(
+    db: Database, look_back_days: int = 30
+) -> date | None:
+    """Latest (most recent) uncovered day with events in the look-back window.
+
+    Used by the backfill endpoint and the manual Generate Briefing button:
+    a fresh install gets one recent brief, not a 30-day catch-up.
+    """
+    return await _uncovered_day_with_activity(db, look_back_days, order="DESC")
+
+
+async def _resolve_target_date(db: Database) -> tuple[str, str] | tuple[None, str]:
+    """Daily-tick target. Yesterday if uncovered AND active; else skip.
+
+    Intentionally does not catch up older quiet days. The backfill endpoint
+    handles "first-run" by picking the latest uncovered active day instead.
     """
     yesterday = (
         datetime.now(timezone.utc).astimezone() - timedelta(days=1)
     ).strftime("%Y-%m-%d")
-
-    if not await _is_lead_covered(db, yesterday) and await _has_events_on(db, yesterday):
-        return yesterday, "yesterday"
-
-    backlog = await find_oldest_uncovered_day_with_activity(db)
-    if backlog is not None:
-        return backlog.isoformat(), "backlog"
-
-    return None, "no events anywhere in look-back window"
+    if await _is_lead_covered(db, yesterday):
+        return None, "yesterday already covered"
+    if not await _has_events_on(db, yesterday):
+        return None, "no events yesterday (quiet day, skipping)"
+    return yesterday, "yesterday"
 
 
 # ------------------------------------------------------------------
@@ -544,27 +559,41 @@ async def run_publish(db: Database) -> tuple[str, dict]:
     return url, snapshot
 
 
-async def run_audio(db: Database, text: str | None = None, kind: str = "lead") -> dict:
-    """Generate TTS audio for the brief, upload to R2, and persist the URL.
+async def run_audio(
+    db: Database,
+    text: str | None = None,
+    kind: str = "lead",
+    target_date: str | None = None,
+) -> dict:
+    """Generate TTS audio for the brief, upload to storage, and persist the URL.
 
     Writes audio_url / audio_duration_s onto the matching filings row so
-    publish_snapshot can emit them. Keyed by the filing's own `date`, not
-    "now in UTC" — these can differ when the brief covers yesterday-local.
+    publish_snapshot can emit them.
+
+    *target_date* pins the audio to a specific filing date — callers that
+    generate a brief for an older day (backfill, manual generate) MUST pass
+    this; otherwise the helper defaults to the most-recent filing of *kind*,
+    which causes the audio file to be named after the wrong day.
     """
     started = datetime.now(timezone.utc).isoformat()
 
-    # Resolve the filing row we're generating audio for. We always work
-    # against the most-recent filing of this kind so addendum refreshes
-    # and lead generation both target the row that publish will read.
     async with db.cursor() as cur:
-        await cur.execute(
-            "SELECT date, lead_headline, lead_body, lead_article, addendum_label, addendum_body "
-            "FROM filings WHERE kind=? ORDER BY date DESC, id DESC LIMIT 1",
-            (kind,),
-        )
+        if target_date is not None:
+            await cur.execute(
+                "SELECT date, lead_headline, lead_body, lead_article, addendum_label, addendum_body "
+                "FROM filings WHERE kind=? AND date=? ORDER BY id DESC LIMIT 1",
+                (kind, target_date),
+            )
+        else:
+            await cur.execute(
+                "SELECT date, lead_headline, lead_body, lead_article, addendum_label, addendum_body "
+                "FROM filings WHERE kind=? ORDER BY date DESC, id DESC LIMIT 1",
+                (kind,),
+            )
         row = await cur.fetchone()
     if not row:
-        raise RuntimeError(f"No {kind} filing to generate audio for")
+        scope = f" for {target_date}" if target_date else ""
+        raise RuntimeError(f"No {kind} filing{scope} to generate audio for")
     filing_date = row[0]
 
     if text is None:

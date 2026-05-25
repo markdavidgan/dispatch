@@ -12,18 +12,21 @@ SOURCE = "github"
 
 
 def _client() -> httpx.AsyncClient:
+    """GitHub HTTP client.
+
+    GITHUB_TOKEN is optional. Without it, the unauthenticated GitHub REST
+    API is used (60 requests/hour limit per IP). For continuous ingestion
+    against more than a couple of repos, set a personal access token via
+    the admin Settings page or the GITHUB_TOKEN environment variable.
+    """
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
     token = os.environ.get("GITHUB_TOKEN")
-    if not token:
-        raise RuntimeError("GITHUB_TOKEN not set")
-    return httpx.AsyncClient(
-        base_url=API,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28",
-        },
-        timeout=30.0,
-    )
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return httpx.AsyncClient(base_url=API, headers=headers, timeout=30.0)
 
 
 async def _get_cursor(db: Database, slug: str, source: str) -> str | None:

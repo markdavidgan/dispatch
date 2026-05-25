@@ -22,6 +22,24 @@ ARCHIVE_PREFIX = "dispatch/snapshot-archive"
 SIGNING_SECRET_ENV = "DISPATCH_SNAPSHOT_SECRET"
 
 
+def _public_audio_url(url: str | None) -> str | None:
+    """Translate a stored audio URL into a browser-loadable HTTP URL.
+
+    Local-filesystem storage records URLs as `local://<key>` placeholders.
+    Without translation those URLs can't be loaded by the SPA. When
+    R2_PUBLIC_BASE_URL is set, prefix it; otherwise return the URL as-is
+    (R2/S3 URLs are already public).
+    """
+    if not url:
+        return None
+    if not url.startswith("local://"):
+        return url
+    base = os.environ.get("R2_PUBLIC_BASE_URL", "").rstrip("/")
+    if not base:
+        return None
+    return f"{base}/{url[len('local://'):]}"
+
+
 def _signing_secret() -> bytes:
     secret = os.environ.get(SIGNING_SECRET_ENV, "")
     if not secret:
@@ -141,11 +159,13 @@ async def build_snapshot(db: Database) -> dict:
 
     if lead:
         lead["addendums"] = addendums
-        if lead_audio_url or addendum_audio_url:
+        public_lead = _public_audio_url(lead_audio_url)
+        public_addendum = _public_audio_url(addendum_audio_url)
+        if public_lead or public_addendum:
             lead["audio"] = {
-                "lead_url": lead_audio_url,
+                "lead_url": public_lead,
                 "lead_duration_s": lead_audio_dur,
-                "addendum_url": addendum_audio_url,
+                "addendum_url": public_addendum,
                 "addendum_duration_s": addendum_audio_dur,
                 "voice": os.environ.get("GCP_TTS_VOICE", "en-US-Chirp3-HD-Leda"),
             }

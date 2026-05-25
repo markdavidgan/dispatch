@@ -17,7 +17,7 @@ class LeadFiling(BaseModel):
     # consistently produced 410-450 chars and tripped Pydantic on every
     # backfill attempt over 7 historical windows. 600 keeps the cap
     # honest without rejecting legitimate prose.
-    lead_headline: str = Field(max_length=120)
+    lead_headline: str = Field(max_length=160)
     lead_body: str = Field(max_length=600)
     active_count: str = Field(pattern=r"^\d{2}$")
     project_lines: list[ProjectLine]

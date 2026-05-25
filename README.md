@@ -4,6 +4,9 @@
 > Each instance watches a configurable registry of GitHub repositories, synthesizes a
 > daily report with audio narration, and produces weekly podcasts.
 
+**Live demo:** [dispatch-demo.markdavidgan.com](https://dispatch-demo.markdavidgan.com) —
+a public instance watching `anthropics/claude-code`, `withastro/astro`, and this repo.
+
 Dispatch is deliberately built as a **single-admin per instance, perimeter-trusting**
 application — no users table, no login page, no JWTs. Authentication lives at the
 deployment perimeter (Cloudflare Access, Tailscale, Caddy basic auth, Authelia, etc.).
@@ -59,13 +62,16 @@ dispatch/
 
 ## Quick start
 
+Every common task is wrapped in a `make` target. Run `make` (with no arguments)
+to see the menu.
+
 ### One-command bring-up (recommended)
 
 ```bash
-./scripts/bootstrap.sh
+make bootstrap
 ```
 
-That script generates a `DISPATCH_MASTER_KEY` into `.env` if you don't have one,
+That generates a `DISPATCH_MASTER_KEY` into `.env` if you don't have one,
 brings up the docker compose stack, waits for the backend to report healthy,
 then triggers an ingest + look-back synthesis backfill against the three
 example projects shipped in `apps/backend/dispatch/projects.yml`
@@ -82,13 +88,48 @@ Override the host port with `DISPATCH_HTTP_PORT=80`.
 > Note: brief *generation* requires an AI provider key (Kimi, Anthropic, or
 > OpenAI). The bootstrap script ingests events and primes the catch-up loop,
 > but the first narrated brief only appears once you add a provider key under
-> `/admin/settings` and re-run the backfill from `/admin` (or hit
-> `POST /api/admin/system/backfill`).
+> `/admin/settings` and re-run the backfill from `/admin` (or `make backfill`).
+
+### Day-to-day
+
+```bash
+make up         # build + start the stack in the background
+make logs       # tail logs from all services
+make down       # stop (keeps volumes)
+make nuke       # stop AND delete volumes (destructive — wipes the DB)
+make backfill   # POST /api/admin/system/backfill against the running stack
+make key        # print a fresh DISPATCH_MASTER_KEY
+```
+
+### Local dev (no Docker)
+
+```bash
+make install    # venv + pip install backend, npm install frontend
+make dev        # backend (uvicorn --reload) + frontend (vite) together
+```
+
+Or run them individually with `make dev-backend` / `make dev-frontend`. The
+Vite dev server runs on `http://localhost:5173` and proxies `/api/*` and
+`/health` to `http://127.0.0.1:10060`. For backend env, copy
+`apps/backend/.env.example` → `apps/backend/.env` and set `DISPATCH_MASTER_KEY`
+(use `make key` to generate one).
+
+### Tests & quality
+
+```bash
+make test       # backend pytest suite
+make test-e2e   # frontend Playwright e2e
+make lint       # frontend Biome
+make typecheck  # frontend tsc
+make build      # production SPA build
+```
 
 ### Manual Docker bring-up
 
+If you prefer to drive `docker compose` directly:
+
 ```bash
-export DISPATCH_MASTER_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
+export DISPATCH_MASTER_KEY=$(make key)
 docker compose up --build
 ```
 
@@ -97,38 +138,6 @@ The stack is two services:
 - `dispatch-backend` — FastAPI on **internal** port 10060 (not published).
 - `dispatch-frontend` — Caddy serving the Vite SPA and reverse-proxying
   `/api/*` and `/health` to the backend.
-
-### Local backend dev
-
-```bash
-cd apps/backend
-cp .env.example .env
-# Edit .env — at minimum set DISPATCH_MASTER_KEY.
-python -m venv .venv && source .venv/bin/activate
-pip install -r dispatch/requirements.txt
-set -a && source .env && set +a
-uvicorn dispatch.main:app --reload --host "$HOST" --port "$PORT"
-```
-
-Then `curl http://127.0.0.1:10060/health` → expect `{"status": "healthy", ...}`.
-
-### Backend tests
-
-```bash
-cd apps/backend
-pytest
-```
-
-### Local frontend dev
-
-```bash
-cd apps/frontend
-npm install
-npm run dev
-```
-
-The Vite dev server runs on `http://localhost:5173` and proxies `/api/*`
-and `/health` to `http://127.0.0.1:10060`, so run the backend alongside it.
 
 ---
 

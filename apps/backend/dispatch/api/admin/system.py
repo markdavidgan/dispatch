@@ -117,18 +117,18 @@ async def backup_now(request: Request) -> dict[str, Any]:
 
 
 class BackfillBody(BaseModel):
-    max_days: int = 30
+    look_back_days: int = 30
     ingest: bool = True
 
 
 @router.post("/backfill")
 async def backfill(request: Request, body: BackfillBody | None = None) -> dict[str, Any]:
-    """Catch-up backfill: ingest fresh events, then synthesize one brief per
-    uncovered day with activity until the look-back window is fully covered
-    (capped at *max_days* iterations).
+    """First-install backfill: ingest fresh events, then synthesize a brief
+    for the **latest** uncovered day with activity (one brief, single 24-hour
+    window — not a multi-day catch-up).
 
-    Used by `scripts/bootstrap.sh` on first boot and available as a
-    one-shot admin action whenever the instance falls behind.
+    Used by `scripts/bootstrap.sh` on first boot. Quiet days are intentionally
+    skipped — a brand-new instance with no recent activity reports nothing.
     """
     from dispatch import orchestrator
 
@@ -147,22 +147,40 @@ async def backfill(request: Request, body: BackfillBody | None = None) -> dict[s
                 log.warning("backfill ingest_%s failed: %s", name, e)
                 ingested[name] = f"error: {e}"
 
-    generated: list[str] = []
-    errors: list[str] = []
-    for _ in range(max(1, body.max_days)):
-        try:
-            result = await orchestrator.run_synthesis_lead(db)
-        except Exception as e:
-            log.exception("backfill synthesis failed")
-            errors.append(str(e)[:500])
-            break
-        if result.get("skipped"):
-            break
-        if result.get("date"):
-            generated.append(result["date"])
+    target = await orchestrator.find_latest_uncovered_day_with_activity(
+        db, look_back_days=body.look_back_days
+    )
+    if target is None:
+        return {
+            "ingested": ingested,
+            "generated": None,
+            "reason": "no uncovered day with activity in look-back window",
+        }
+
+    try:
+        result = await orchestrator.run_synthesis_lead(db, target_date=target)
+    except Exception as e:
+        log.exception("backfill synthesis failed")
+        return {"ingested": ingested, "generated": None, "error": str(e)[:500]}
+
+    # Non-fatal: try audio + publish so the brief is fully presentable.
+    audio: dict | None = None
+    try:
+        audio = await orchestrator.run_audio(
+            db, kind="lead", target_date=result.get("date")
+        )
+    except Exception as e:
+        log.warning("backfill audio non-fatal failure: %s", e)
+    try:
+        await orchestrator.run_publish(db)
+    except Exception as e:
+        log.warning("backfill publish non-fatal failure: %s", e)
 
     return {
         "ingested": ingested,
-        "generated": generated,
-        "errors": errors,
+        "generated": result.get("date"),
+        "headline": result.get("headline"),
+        "skipped": result.get("skipped", False),
+        "reason": result.get("reason"),
+        "audio": audio,
     }

@@ -19,6 +19,16 @@ ENV_FILE="$REPO_ROOT/.env"
 HOST_PORT="${DISPATCH_HTTP_PORT:-8080}"
 BASE_URL="http://localhost:${HOST_PORT}"
 
+# Prefer docker; fall back to podman. Both expose a `compose` subcommand.
+if command -v docker >/dev/null 2>&1; then
+  COMPOSE_BIN="docker"
+elif command -v podman >/dev/null 2>&1; then
+  COMPOSE_BIN="podman"
+else
+  echo "Neither docker nor podman is installed; please install one." >&2
+  exit 1
+fi
+
 color() { printf '\033[%sm%s\033[0m\n' "$1" "$2"; }
 say()   { color "1;36" "▸ $*"; }
 ok()    { color "1;32" "✓ $*"; }
@@ -38,9 +48,9 @@ else
   warn "back this key up in a password manager — losing it makes encrypted settings unrecoverable"
 fi
 
-# ---------- 2. docker compose up ----------
-say "building and starting docker compose stack"
-docker compose --env-file "$ENV_FILE" up -d --build
+# ---------- 2. compose up ----------
+say "building and starting compose stack (${COMPOSE_BIN} compose)"
+"$COMPOSE_BIN" compose --env-file "$ENV_FILE" up -d --build
 
 # ---------- 3. wait for health ----------
 say "waiting for backend to be healthy at ${BASE_URL}/health"
@@ -51,7 +61,7 @@ for i in $(seq 1 60); do
   fi
   sleep 2
   if [ "$i" = 60 ]; then
-    warn "backend did not become healthy in 120s — check 'docker compose logs dispatch-backend'"
+    warn "backend did not become healthy in 120s — check '${COMPOSE_BIN} compose logs dispatch-backend'"
     exit 1
   fi
 done
