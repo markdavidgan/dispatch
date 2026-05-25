@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import tempfile
 import uuid
 from datetime import date, datetime, timedelta, timezone
@@ -66,27 +67,23 @@ async def _notebooklm_session(db: Database) -> dict | None:
 
 
 async def _probe_notebooklm(storage_state: dict | None) -> str:
-    """Pre-flight probe. Returns 'ok', 'transient', or 'auth'."""
-    import httpx
+    """Pre-flight probe. Returns 'ok', 'transient', or 'auth'.
+
+    NotebookLMClient is an async context manager — listing notebooks
+    requires an `async with` to initialize the underlying RPC channel.
+    Reuses the wrapper's `_client()` so it goes through the same
+    storage-state persistence path as the real compose calls.
+    """
     try:
-        # A lightweight probe: try to list notebooks
-        from notebooklm import NotebookLMClient
-        import json, tempfile
-        if storage_state is not None:
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
-                json.dump(storage_state, f)
-                tmp_path = f.name
-            client = await NotebookLMClient.from_storage(path=tmp_path)
-        else:
-            client = await NotebookLMClient.from_storage(
-                path=os.environ.get("NOTEBOOKLM_SESSION_PATH", "/home/dispatch/.notebooklm/profiles/default/storage_state.json")
-            )
-        await client.notebooks.list()
+        client = await notebooklm_wrapper._client(storage_state)
+        async with client:
+            await client.notebooks.list()
         return "ok"
     except Exception as e:
         err = str(e).lower()
         if "401" in err or "403" in err or "unauthorized" in err:
             return "auth"
+        log.warning("notebooklm probe failed (transient): %s", e)
         return "transient"
 
 

@@ -10,7 +10,7 @@ export default function BriefingsPage() {
     async function load() {
       try {
         const data = await fetchBriefings();
-        setBriefings(data);
+        setBriefings(Array.isArray(data) ? data : (data.briefings ?? []));
       } catch (e) {
         console.error(e);
       } finally {

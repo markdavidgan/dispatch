@@ -26,6 +26,62 @@ The Access cookie issued at the apex covers both subdomains, so the SPA can
 `fetch(backend, { credentials: "include" })` and Cloudflare transparently
 authenticates the call.
 
+### Cloudflare Access — Public demo with gated admin routes
+
+If you want the **reader-facing pages public** and only the **admin UI + admin
+API** behind Cloudflare Access, create **two path-scoped Access applications**
+on the same hostname:
+
+| Application | Path | Policy |
+|-------------|------|--------|
+| Admin SPA | `dispatch-demo.example.com/admin*` | Require identity (email allowlist, OTP, or IdP) |
+| Admin API | `dispatch-demo.example.com/api/admin*` | Same identity requirement |
+
+Leave the root paths (`/`, `/briefings/*`, `/podcasts/*`, `/api/snapshot`,
+etc.) uncovered — they pass through to the origin with no Access challenge.
+
+**Why this works without code changes**
+
+- The SPA (`/admin*`) and the backend (`/api/admin*`) live on the **same
+  origin**, so the browser automatically sends the `CF_Authorization` cookie
+  with every `fetch()` call. No `credentials: "include"` or CORS changes are
+  needed.
+- After the user authenticates through the Cloudflare Access login page, the
+  cookie is valid for the entire domain. Navigating to `/admin/settings` or
+  calling `/api/admin/settings` both carry the same session.
+
+**Setup steps**
+
+1. Ensure `dispatch-demo.example.com` is **orange-clouded** (proxied) in
+   Cloudflare DNS.
+2. In **Zero Trust → Access → Applications**, click *Add an application*.
+3. Choose *Self-hosted*.
+4. **Application 1 (Admin SPA):**
+   - Application name: `dispatch-admin-spa`
+   - Session duration: `24h` (or your preference)
+   - Domain: `dispatch-demo.example.com`
+   - Path: `/admin*`  
+   - Identity providers: pick your IdP or *One-time PIN*.
+   - Policy name: `admin-only`
+   - Action: *Allow*
+   - Include: *Emails* → add your email address(es).
+5. **Application 2 (Admin API):**
+   - Repeat the above but set Path to `/api/admin*`.
+   - Policy: same `admin-only` allowlist.
+6. Save both. Changes propagate in ~60 seconds.
+
+**Hardening the origin**
+
+Because the app is perimeter-trusting with no app-layer auth, anyone who
+bypasses Cloudflare and hits the origin IP directly could reach `/api/admin/*`.
+Lock down the origin server's firewall to **only Cloudflare IP ranges**:
+
+- Cloudflare publishes its IP ranges at
+  https://www.cloudflare.com/ips/ — allow only those on ports 80/443
+  (and your SSH port from your own IP).
+- If you run on a VPS, most providers have a cloud-firewall UI where you can
+  paste these CIDR blocks.
+
 ## Tailscale Funnel
 
 Expose the backend over the Tailscale mesh; only devices in your tailnet

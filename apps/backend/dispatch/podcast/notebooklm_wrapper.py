@@ -28,15 +28,22 @@ _STORAGE_PATH = os.environ.get(
 
 
 async def _client(storage_state: dict | None = None) -> NotebookLMClient:
+    """Build a NotebookLMClient.
+
+    When *storage_state* is provided (DB-backed flow), persist it to the
+    stable `_STORAGE_PATH` so notebooklm-py can re-read it for downstream
+    operations (audio download in particular re-loads cookies from the
+    path). Writing to a tempfile and deleting it immediately broke the
+    audio-download step because the lib expected the file to still exist.
+    """
     if storage_state is not None:
-        # Write inline JSON to a temp file for notebooklm-py
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+        Path(_STORAGE_PATH).parent.mkdir(parents=True, exist_ok=True)
+        with open(_STORAGE_PATH, "w") as f:
             json.dump(storage_state, f)
-            tmp_path = f.name
         try:
-            return await NotebookLMClient.from_storage(path=tmp_path)
-        finally:
-            Path(tmp_path).unlink(missing_ok=True)
+            os.chmod(_STORAGE_PATH, 0o600)
+        except OSError:
+            pass
     return await NotebookLMClient.from_storage(path=_STORAGE_PATH)
 
 

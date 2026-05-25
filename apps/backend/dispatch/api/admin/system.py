@@ -20,31 +20,39 @@ class RotateKeyBody(BaseModel):
 
 @router.get("/setup-status")
 async def setup_status(request: Request) -> dict[str, Any]:
-    """Returns configuration status for the setup wizard."""
+    """Returns configuration status for the setup wizard + admin sidebar.
+
+    Each capability flag is True when *either* a relevant setting is stored
+    in the encrypted DB store, or the equivalent environment variable is
+    present at boot. This keeps env-only installs (the common all-in-one
+    Docker case) from looking misconfigured in the UI.
+    """
+    import os
     store = request.app.state.settings_store
     db = request.app.state.db
 
-    # Check if storage is configured
     storage_provider = await store.get("storage.provider", "")
-    has_storage = bool(storage_provider)
+    # Local filesystem is the implicit default at boot — count it as configured.
+    has_storage = bool(storage_provider) or True
 
-    # Check AI provider
     ai_provider = await store.get("ai.provider", "")
-    has_ai = bool(ai_provider)
+    has_ai = bool(ai_provider) or bool(
+        os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("KIMI_OAUTH_JSON")
+        or os.environ.get("OPENAI_API_KEY")
+    )
 
-    # Check TTS
     tts_provider = await store.get("tts.provider", "")
-    has_tts = bool(tts_provider)
+    has_tts = bool(tts_provider) or bool(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
 
-    # Check GitHub token
     gh_token = await store.get("github.global_token", "")
-    has_github = bool(gh_token)
+    has_github = bool(gh_token) or bool(os.environ.get("GITHUB_TOKEN"))
 
-    # Check projects
+    nblm = await store.get("podcast.notebooklm_session", "")
+    has_notebooklm = bool(nblm)
+
     async with db.cursor() as cur:
-        await cur.execute("SELECT COUNT(*) FROM projects")
+        await cur.execute("SELECT COUNT(*) FROM projects WHERE kind != 'meta'")
         row = await cur.fetchone()
-    has_projects = (row[0] or 0) > 0
 
     settings = get_settings()
     return {
@@ -52,8 +60,9 @@ async def setup_status(request: Request) -> dict[str, Any]:
         "ai": has_ai,
         "tts": has_tts,
         "github_token_present": has_github,
+        "notebooklm": has_notebooklm,
         "project_count": row[0] or 0,
-        "storage_provider": storage_provider or None,
+        "storage_provider": storage_provider or "local",
         "ai_provider": ai_provider or None,
         "dispatch_tz": settings.dispatch_tz,
     }

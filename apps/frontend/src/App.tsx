@@ -25,6 +25,10 @@ export default function App() {
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:slug" element={<ProjectDetailPage />} />
         <Route path="/projects/archive" element={<ProjectsArchivePage />} />
+        {/* /podcast (singular) is the canonical route — focuses on the
+            dispatch-wide weekly. /podcasts/* kept as legacy aliases. */}
+        <Route path="/podcast" element={<PodcastsPage />} />
+        <Route path="/podcast/:slug" element={<PodcastDetailPage />} />
         <Route path="/podcasts" element={<PodcastsPage />} />
         <Route path="/podcasts/:slug" element={<PodcastDetailPage />} />
 

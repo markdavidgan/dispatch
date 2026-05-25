@@ -1,21 +1,25 @@
 import { Link, useLocation } from "react-router-dom";
+import { Gear } from "@phosphor-icons/react";
 
 const NAV = [
   { href: "/", label: "Today" },
   { href: "/briefings", label: "Briefings" },
   { href: "/projects", label: "Projects" },
-  { href: "/podcasts", label: "Podcasts" },
+  { href: "/podcast", label: "Podcast" },
 ];
 
 export default function Nav() {
   const { pathname } = useLocation();
   return (
-    <nav className="flex gap-0 font-mono overflow-x-auto">
+    <nav className="flex items-center gap-0 font-mono overflow-x-auto">
       {NAV.map((item) => {
+        // Treat /podcasts as an alias of /podcast for the nav-active check.
         const active =
           item.href === "/"
             ? pathname === "/"
-            : pathname === item.href || pathname.startsWith(item.href + "/");
+            : pathname === item.href
+              || pathname.startsWith(item.href + "/")
+              || (item.href === "/podcast" && pathname.startsWith("/podcasts"));
         return (
           <Link
             key={item.href}
@@ -29,6 +33,16 @@ export default function Nav() {
           </Link>
         );
       })}
+      <Link
+        to="/admin"
+        aria-label="Admin"
+        title="Admin"
+        className={`ml-1 sm:ml-2 px-2 py-2 transition-colors ${
+          pathname.startsWith("/admin") ? "text-ink" : "text-ink-mute hover:text-ink"
+        }`}
+      >
+        <Gear size={16} weight="regular" />
+      </Link>
     </nav>
   );
 }

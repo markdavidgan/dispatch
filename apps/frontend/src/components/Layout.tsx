@@ -1,5 +1,4 @@
 import { Link, Outlet } from "react-router-dom";
-import { Gear } from "@phosphor-icons/react";
 import Nav from "./Nav";
 
 export default function Layout() {
@@ -7,28 +6,18 @@ export default function Layout() {
     <div className="min-h-screen">
       <header className="border-b border-ink sticky top-0 bg-paper z-20">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-4 flex items-center justify-between gap-6">
-          <div className="flex items-center gap-3.5">
-            <Link
-              to="/"
-              className="font-disp font-extrabold text-lg tracking-tight flex items-center gap-2.5"
-            >
-              <span
-                className="w-2 h-2 rounded-full bg-signal"
-                style={{ animation: "on-air 3.6s ease-in-out infinite" }}
-                aria-hidden
-                title="Dispatch is on the air"
-              />
-              DISPATCH
-            </Link>
-            <Link
-              to="/admin"
-              aria-label="Admin"
-              title="Admin"
-              className="text-ink-mute hover:text-ink transition-colors"
-            >
-              <Gear size={16} weight="regular" />
-            </Link>
-          </div>
+          <Link
+            to="/"
+            className="font-disp font-extrabold text-lg tracking-tight flex items-center gap-2.5"
+          >
+            <span
+              className="w-2 h-2 rounded-full bg-signal"
+              style={{ animation: "on-air 3.6s ease-in-out infinite" }}
+              aria-hidden
+              title="Dispatch is on the air"
+            />
+            DISPATCH
+          </Link>
           <Nav />
         </div>
       </header>

@@ -8,12 +8,42 @@ interface Setting {
 }
 
 const CATEGORIES = [
-  { prefix: "storage", label: "Storage" },
   { prefix: "ai", label: "AI" },
   { prefix: "tts", label: "TTS" },
   { prefix: "github", label: "GitHub" },
+  { prefix: "storage", label: "Storage" },
+  { prefix: "podcast", label: "Podcast" },
   { prefix: "web", label: "Web / CORS" },
 ];
+
+// Known keys per category — surface them as empty editable rows when
+// they're not yet set, so operators can configure on first visit
+// without having to know the key names ahead of time.
+const KNOWN_KEYS: Record<string, string[]> = {
+  ai: ["ai.provider"],
+  tts: ["tts.provider"],
+  github: ["github.global_token"],
+  storage: [
+    "storage.provider",
+    "storage.local_root",
+    "storage.r2_account_id",
+    "storage.r2_bucket",
+    "storage.r2_access_key_id",
+    "storage.r2_secret_access_key",
+    "storage.r2_public_base_url",
+    "storage.s3_endpoint",
+    "storage.s3_bucket",
+    "storage.s3_access_key_id",
+    "storage.s3_secret_access_key",
+    "storage.s3_region",
+    "storage.s3_public_base_url",
+  ],
+  podcast: [
+    "podcast.notebooklm_session",
+    "podcast.notebooklm_status",
+  ],
+  web: ["web.allowed_origins", "snapshot.public"],
+};
 
 export default function AdminSettingsPage() {
   const [activeCategory, setActiveCategory] = useState("storage");
@@ -35,9 +65,15 @@ export default function AdminSettingsPage() {
     try {
       const data = await listSettings(prefix);
       const rows: Setting[] = data.settings ?? data ?? [];
-      setSettings(rows);
+      // Merge with KNOWN_KEYS so unset keys still appear as editable
+      // empty fields. Stored keys take precedence (preserve their value).
+      const byKey = new Map<string, Setting>();
+      (KNOWN_KEYS[prefix] ?? []).forEach((k) => byKey.set(k, { key: k, value: "" }));
+      rows.forEach((s) => byKey.set(s.key, s));
+      const merged = Array.from(byKey.values()).sort((a, b) => a.key.localeCompare(b.key));
+      setSettings(merged);
       const map: Record<string, string> = {};
-      rows.forEach((s) => {
+      merged.forEach((s) => {
         map[s.key] = s.value ?? "";
       });
       setDraft(map);
