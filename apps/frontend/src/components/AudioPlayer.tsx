@@ -44,6 +44,7 @@ export default function AudioPlayer({ leadUrl, addendumUrl, durationLabel = "" }
         src={src}
         onEnded={() => setPlaying(false)}
         preload="none"
+        crossOrigin="use-credentials"
       />
     </span>
   );
