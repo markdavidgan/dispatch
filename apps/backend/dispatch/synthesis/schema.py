@@ -35,4 +35,4 @@ class ArticleFiling(BaseModel):
     # rejects single-paragraph stubs; 2200 ceiling leaves a little
     # headroom on top of the 300-word target without letting the brief
     # drift back into the old 3-4 minute slab.
-    article: str = Field(min_length=600, max_length=2200)
+    article: str = Field(min_length=600, max_length=5500)

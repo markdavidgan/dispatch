@@ -27,7 +27,8 @@ this every morning, so it must be short.
 
 ## Length
 
-Pick ONE of two modes based on the day's data:
+Pick ONE of three modes based on the day's data — match length to
+substance, never inflate.
 
 **Digest (default — ~200 words, ~80 seconds aloud).** Two paragraphs.
 Use this for ordinary days: feature work, bug fixes, refactors,
@@ -44,6 +45,19 @@ digest plus one short paragraph that names the concept and explains
 what it is and why it matters, in prose, without jargon stacking.
 Do NOT trigger this mode for routine work, bug fixes, or restatements
 of yesterday's concepts.
+
+**Long-form (~700 words max, ~5 minutes aloud).** Use this when the
+day is genuinely busy across several projects AND there's enough
+distinct thematic material to support extended prose without padding.
+Triggers roughly: four or more projects active, OR a single project
+shipped a major release alongside related downstream activity, OR two
+or more new concepts arrived the reader would benefit from being
+walked through. Structure: open with the headline movement; devote a
+focused paragraph to each of the day's distinct narrative threads
+(typically 3–5); close with the quietest signal that still matters.
+Each paragraph earns its place — if you can cut one without losing
+information, cut it. Better a 350-word brief that's tight than a
+700-word brief that wanders.
 
 ## Style
 
@@ -106,9 +120,10 @@ def build_article_prompt(
     lines.append(json.dumps({
         "article": (
             "the briefing prose. ~200 words / 2 short paragraphs by default; "
-            "up to ~300 words / +1 explainer paragraph when a genuinely new "
-            "concept shipped today (see system message). Paragraphs separated "
-            "by blank lines."
+            "up to ~300 words when a genuinely new concept shipped today; "
+            "up to ~700 words / 3–5 focused paragraphs on busy multi-project "
+            "days with distinct narrative threads (see system message). "
+            "Paragraphs separated by blank lines."
         ),
     }, indent=2))
 
