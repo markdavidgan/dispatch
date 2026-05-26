@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import { getDb } from "./db";
-import { uploadBytes } from "./storage";
+import { getDb } from "./db.js";
+import { uploadBytes } from "./storage.js";
 
 const SNAPSHOT_KEY = "dispatch/snapshot.json";
 const ARCHIVE_PREFIX = "dispatch/snapshot-archive";

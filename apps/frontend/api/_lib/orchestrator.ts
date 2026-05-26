@@ -1,13 +1,13 @@
-import { getDb } from "./db";
-import { synthesize } from "./llm";
-import { generateAudio, estimateDuration } from "./tts";
-import { uploadBytes } from "./storage";
-import { publishSnapshot } from "./snapshot";
-import { refreshMentions } from "./mention-extraction";
-import { deriveBullet, deriveActiveCount } from "./bullets";
-import { lintLead } from "./brief-lint";
-import { buildArticlePrompt, buildLeadPrompt, buildAddendumPrompt } from "./prompt";
-import { ArticleFilingSchema, LeadFilingSchema, AddendumFilingSchema } from "./schema";
+import { getDb } from "./db.js";
+import { synthesize } from "./llm.js";
+import { generateAudio, estimateDuration } from "./tts.js";
+import { uploadBytes } from "./storage.js";
+import { publishSnapshot } from "./snapshot.js";
+import { refreshMentions } from "./mention-extraction.js";
+import { deriveBullet, deriveActiveCount } from "./bullets.js";
+import { lintLead } from "./brief-lint.js";
+import { buildArticlePrompt, buildLeadPrompt, buildAddendumPrompt } from "./prompt.js";
+import { ArticleFilingSchema, LeadFilingSchema, AddendumFilingSchema } from "./schema.js";
 
 const TZ = process.env.DISPATCH_TZ || "Asia/Manila";
 

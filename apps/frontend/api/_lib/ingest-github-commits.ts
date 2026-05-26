@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import { getDb } from "./db.js";
 
 async function getGitHubToken(): Promise<string | undefined> {
   const { getSetting } = await import("./settings");

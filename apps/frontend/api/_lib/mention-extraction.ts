@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import { getDb } from "./db.js";
 
 export function extractMentions(text: string, projects: Record<string, string>): Array<{ slug: string; name: string; excerpt: string; position: number }> {
   const mentions: Array<{ slug: string; name: string; excerpt: string; position: number }> = [];

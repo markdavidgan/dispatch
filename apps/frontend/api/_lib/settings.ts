@@ -1,5 +1,5 @@
-import { getDb } from "./db";
-import { encrypt, decrypt } from "./crypto";
+import { getDb } from "./db.js";
+import { encrypt, decrypt } from "./crypto.js";
 
 export async function getSetting(key: string): Promise<string | null> {
   const db = getDb();
