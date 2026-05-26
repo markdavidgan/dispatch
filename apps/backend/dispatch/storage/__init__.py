@@ -19,40 +19,37 @@ log = logging.getLogger(__name__)
 
 async def get_storage_backend(db: Database, crypto: Crypto) -> StorageBackend:
     """Instantiate the configured storage backend from DB settings."""
-    async with db.cursor() as cur:
-        await cur.execute("SELECT key, value FROM settings WHERE key LIKE 'storage.%'")
-        rows = {row[0]: row[1] for row in await cur.fetchall()}
+    from dispatch.settings_store import SettingsStore
 
-    provider = rows.get("storage.provider", "local")
+    store = SettingsStore(db, crypto)
+    provider = await store.get("storage.provider", "local") or "local"
 
     if provider == "local":
-        root = rows.get("storage.local_root", "./dispatch-media")
+        root = await store.get("storage.local_root", "./dispatch-media") or "./dispatch-media"
         return LocalStorage(root)
 
     # Decrypt credentials for remote backends
-    def _get(key: str) -> str:
-        val = rows.get(key, "")
-        if val:
-            return crypto.decrypt(val)
-        return ""
+    async def _get(key: str) -> str:
+        val = await store.get(key, "")
+        return val or ""
 
     if provider == "r2":
         return R2Storage(
-            account_id=_get("storage.r2_account_id"),
-            bucket=_get("storage.r2_bucket") or "dispatch-media",
-            access_key_id=_get("storage.r2_access_key_id"),
-            secret_access_key=_get("storage.r2_secret_access_key"),
-            public_base_url=_get("storage.r2_public_base_url"),
+            account_id=await _get("storage.r2_account_id"),
+            bucket=await _get("storage.r2_bucket") or "dispatch-media",
+            access_key_id=await _get("storage.r2_access_key_id"),
+            secret_access_key=await _get("storage.r2_secret_access_key"),
+            public_base_url=await _get("storage.r2_public_base_url"),
         )
 
     if provider == "s3":
         return S3Storage(
-            endpoint_url=_get("storage.s3_endpoint"),
-            bucket=_get("storage.s3_bucket") or "dispatch-media",
-            access_key_id=_get("storage.s3_access_key_id"),
-            secret_access_key=_get("storage.s3_secret_access_key"),
-            region=_get("storage.s3_region") or "us-east-1",
-            public_base_url=_get("storage.s3_public_base_url"),
+            endpoint_url=await _get("storage.s3_endpoint"),
+            bucket=await _get("storage.s3_bucket") or "dispatch-media",
+            access_key_id=await _get("storage.s3_access_key_id"),
+            secret_access_key=await _get("storage.s3_secret_access_key"),
+            region=await _get("storage.s3_region") or "us-east-1",
+            public_base_url=await _get("storage.s3_public_base_url"),
         )
 
     raise RuntimeError(f"Unknown storage provider: {provider}")
