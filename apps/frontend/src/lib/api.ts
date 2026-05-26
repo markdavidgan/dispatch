@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_DISPATCH_API_URL || "/api";
+const API_BASE = "/api";
 
 async function apiFetch(path: string, init?: RequestInit) {
   const url = `${API_BASE}${path}`;
@@ -41,13 +41,30 @@ export async function fetchProjects() {
   return apiFetch("/projects");
 }
 
-// Podcasts
+// Podcasts (proxied to self-hosted backend)
+async function podcastFetch(path: string, init?: RequestInit) {
+  const url = `${API_BASE}/_proxy/podcasts${path}`;
+  const resp = await fetch(url, {
+    ...init,
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...init?.headers,
+    },
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Podcast API ${path} failed: ${resp.status} ${text}`);
+  }
+  return resp.json();
+}
+
 export async function fetchPodcasts() {
-  return apiFetch("/podcasts");
+  return podcastFetch("/");
 }
 
 export async function fetchPodcastEpisodes(slug: string) {
-  return apiFetch(`/podcasts/${slug}/episodes`);
+  return podcastFetch(`/${slug}/episodes`);
 }
 
 // Audio

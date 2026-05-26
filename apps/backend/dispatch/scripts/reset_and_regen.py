@@ -48,32 +48,8 @@ BRIEF_DATES = [
 # Token refresh helper
 # ------------------------------------------------------------------
 async def _ensure_kimi_fresh() -> None:
-    """Refresh Kimi OAuth token if close to expiry."""
-    try:
-        from kimi_cli.auth.oauth import (
-            refresh_token,
-            _save_to_file,
-            KIMI_CODE_OAUTH_KEY,
-            OAuthToken,
-            _load_from_file,
-        )
-
-        current = _load_from_file(KIMI_CODE_OAUTH_KEY)
-        if current is None:
-            log.warning("No Kimi token found; skipping refresh")
-            return
-
-        # Refresh if expiring within 5 minutes
-        if current.expires_at - time.time() > 300:
-            log.info("Kimi token valid for %.0fs; no refresh needed", current.expires_at - time.time())
-            return
-
-        log.info("Refreshing Kimi token...")
-        new_token = await refresh_token(current.refresh_token)
-        _save_to_file(KIMI_CODE_OAUTH_KEY, new_token)
-        log.info("Kimi token refreshed; valid for %.0fs", new_token.expires_at - time.time())
-    except Exception as exc:
-        log.warning("Kimi token refresh failed: %s", exc)
+    """Kimi removed — synthesis moved to Vercel serverless."""
+    pass
 
 
 # ------------------------------------------------------------------
@@ -175,7 +151,7 @@ async def _generate_briefs(db) -> None:
         log.info("=" * 60)
         log.info("Generating brief for %s", d.isoformat())
 
-        await _ensure_kimi_fresh()
+        # await _ensure_kimi_fresh()  # Kimi removed
 
         try:
             result = await orchestrator.run_synthesis_lead(db, target_date=d)
@@ -191,7 +167,7 @@ async def _generate_briefs(db) -> None:
 
         # Audio (non-blocking failure)
         try:
-            await _ensure_kimi_fresh()
+            # await _ensure_kimi_fresh()  # Kimi removed
             await orchestrator.run_audio(db, kind="lead")
             log.info("Audio done for %s", d.isoformat())
         except Exception as e:
@@ -225,7 +201,7 @@ async def _generate_podcasts(db) -> None:
         log.info("-" * 60)
         log.info("Podcast: %s (%s)", podcast.project_slug, podcast.title)
 
-        await _ensure_kimi_fresh()
+        # await _ensure_kimi_fresh()  # Kimi removed
 
         try:
             await intake.run_episode(db, podcast, week_start)

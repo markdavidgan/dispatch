@@ -1,9 +1,10 @@
-"""AnthropicSynthesizer — REST against /v1/messages, fallback when Kimi fails."""
+"""AnthropicSynthesizer — REST against /v1/messages."""
 import os
 from typing import TypeVar
 import httpx
 from pydantic import BaseModel
-from dispatch.synthesis.kimi import _parse_json_to_schema
+import json
+import re
 
 M = TypeVar("M", bound=BaseModel)
 
@@ -35,3 +36,20 @@ class AnthropicSynthesizer:
             payload = r.json()
         text = "".join(b.get("text", "") for b in payload.get("content", []))
         return _parse_json_to_schema(text, schema)
+
+
+def _parse_json_to_schema(text: str, schema: type[M]) -> M:
+    """Extract JSON from markdown fences and parse into schema."""
+    # Try fenced code block first
+    fence = re.search(r"```(?:json)?\s*\n(.*?)\n```", text, re.DOTALL)
+    if fence:
+        raw = fence.group(1)
+    else:
+        # Try bare JSON object
+        start = text.find("{")
+        end = text.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise ValueError("No JSON object found in response")
+        raw = text[start:end + 1]
+    data = json.loads(raw)
+    return schema(**data)

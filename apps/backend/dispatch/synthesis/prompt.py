@@ -1,9 +1,4 @@
-"""Deterministic prompt assembly for the lead + addendum filings.
-
-The skill itself (creative-writing) is auto-discovered by Kimi from
-/app/skills/. The prompt names the skill + register explicitly so
-the model knows which dial to set.
-"""
+"""Deterministic prompt assembly for the lead + addendum filings."""
 import hashlib
 import json
 

@@ -121,7 +121,7 @@ class SettingsStore:
     # -- Convenience accessors for common settings --
 
     async def ai_provider(self) -> str:
-        return await self.get("ai.provider", "kimi") or "kimi"
+        return await self.get("ai.provider", "anthropic") or "anthropic"
 
     async def ai_model(self) -> str:
         return await self.get("ai.model", "") or ""

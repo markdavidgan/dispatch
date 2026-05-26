@@ -11,4 +11,4 @@ class Synthesizer(Protocol):
 
 
 def select_primary() -> str:
-    return os.environ.get("DISPATCH_AI_PROVIDER", "kimi").lower()
+    return os.environ.get("DISPATCH_AI_PROVIDER", "anthropic").lower()

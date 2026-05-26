@@ -30,7 +30,7 @@ from dispatch.synthesis.schema import ArticleFiling
 from dispatch.synthesis.synthesizer import select_primary
 from dispatch.synthesis.anthropic import AnthropicSynthesizer
 from dispatch.synthesis.critic import two_pass
-from dispatch.synthesis.kimi import KimiCLISynthesizer
+# Kimi removed — synthesis moved to Vercel serverless
 
 DB_PATH = "/data/dispatch.db"
 log = logging.getLogger("backfill_articles")
@@ -38,8 +38,8 @@ log = logging.getLogger("backfill_articles")
 
 async def _synthesize_article(prompt: str) -> tuple[str, str]:
     provider = select_primary()
-    primary = KimiCLISynthesizer() if provider == "kimi" else AnthropicSynthesizer()
-    fallback = AnthropicSynthesizer() if provider == "kimi" else KimiCLISynthesizer()
+    primary = AnthropicSynthesizer()
+    fallback = AnthropicSynthesizer()
     for synth in (primary, fallback):
         try:
             result: ArticleFiling = await two_pass(synth, prompt, ArticleFiling)

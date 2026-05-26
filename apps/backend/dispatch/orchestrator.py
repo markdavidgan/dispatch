@@ -21,7 +21,6 @@ from dispatch.synthesis.prompt import (
 )
 from dispatch.synthesis.schema import ArticleFiling, LeadFiling, AddendumFiling
 from dispatch.synthesis.synthesizer import select_primary
-from dispatch.synthesis.kimi import KimiCLISynthesizer
 from dispatch.synthesis.anthropic import AnthropicSynthesizer
 from dispatch.synthesis.critic import single_pass, two_pass
 from dispatch.synthesis.brief_lint import lint_lead
@@ -305,12 +304,8 @@ async def _synthesize_with_fallback(
 
     Logs failures to the runs table if *db* is provided.
     """
-    if provider == "kimi":
-        primary = KimiCLISynthesizer()
-        fallback = AnthropicSynthesizer()
-    else:
-        primary = AnthropicSynthesizer()
-        fallback = KimiCLISynthesizer()
+    primary = AnthropicSynthesizer()
+    fallback = AnthropicSynthesizer()
 
     synthesizers = [primary, fallback]
     pass_fn = two_pass if _USE_CRITIQUE else single_pass
