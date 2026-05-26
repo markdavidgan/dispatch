@@ -97,6 +97,8 @@ CREATE TABLE IF NOT EXISTS episodes (
 );
 CREATE INDEX IF NOT EXISTS episodes_project_published
   ON episodes(project_slug, published_at DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS episodes_project_week_start
+  ON episodes(project_slug, week_start);
 
 CREATE TABLE IF NOT EXISTS podcast_jobs (
   id INTEGER PRIMARY KEY,

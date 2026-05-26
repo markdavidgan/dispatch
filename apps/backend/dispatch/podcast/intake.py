@@ -89,6 +89,16 @@ async def _probe_notebooklm(storage_state: dict | None) -> str:
 
 async def run_episode(db: Database, podcast: PodcastConfig, week_start: date) -> str | None:
     """Run the full pipeline. Returns episode_id, or None if skipped due to missing NotebookLM session."""
+    # Guard against duplicate episodes for the same week
+    async with db.cursor() as cur:
+        await cur.execute(
+            "SELECT id FROM episodes WHERE project_slug=? AND week_start=?",
+            (podcast.project_slug, week_start.isoformat()),
+        )
+        if await cur.fetchone():
+            log.info("episode already exists for %s week %s — skipping", podcast.project_slug, week_start)
+            return None
+
     episode_id = str(uuid.uuid4())
     episode_no = await _next_episode_no(db, podcast.project_slug)
     project_display = await _project_display_name(db, podcast.project_slug)
