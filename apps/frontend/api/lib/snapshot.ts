@@ -5,9 +5,8 @@ import { uploadBytes } from "./storage";
 const SNAPSHOT_KEY = "dispatch/snapshot.json";
 const ARCHIVE_PREFIX = "dispatch/snapshot-archive";
 
-function signingSecret(): Buffer {
-  const secret = process.env.DISPATCH_SNAPSHOT_SECRET || "dispatch-dev-secret-rotate-me";
-  return Buffer.from(secret);
+function signingSecret(): string {
+  return process.env.DISPATCH_SNAPSHOT_SECRET || "dispatch-dev-secret-rotate-me";
 }
 
 function signPayload(payload: Record<string, any>): string {

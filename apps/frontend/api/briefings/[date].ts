@@ -13,12 +13,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!rows.rows.length) return res.status(404).json({ error: `no briefing filed for ${date}` });
 
-  const lead = rows.rows.find((r) => r.kind === "lead");
+  const lead = rows.rows.find((r: any) => r.kind === "lead");
   if (!lead) return res.status(404).json({ error: `no lead filing for ${date}` });
 
   const addendums = rows.rows
-    .filter((r) => r.kind === "addendum")
-    .map((r) => ({
+    .filter((r: any) => r.kind === "addendum")
+    .map((r: any) => ({
       filed_at: r.generated_at ? (r.generated_at as string).split("T")[1].slice(0, 5) : "",
       label: r.addendum_label || "",
       body: r.addendum_body || "",

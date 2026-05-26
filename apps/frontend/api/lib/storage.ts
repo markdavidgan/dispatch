@@ -54,11 +54,11 @@ export async function downloadBytes(key: string): Promise<Buffer> {
   const resp = await client.send(
     new GetObjectCommand({ Bucket: R2_BUCKET, Key: key })
   );
-  const chunks: Buffer[] = [];
+  const chunks: Uint8Array[] = [];
   for await (const chunk of resp.Body as any) {
     chunks.push(chunk);
   }
-  return Buffer.concat(chunks);
+  return Buffer.concat(chunks as any);
 }
 
 export async function deleteObject(key: string): Promise<void> {
