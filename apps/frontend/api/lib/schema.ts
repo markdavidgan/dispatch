@@ -7,7 +7,7 @@ export const ArticleFilingSchema = z.object({
 export const LeadFilingSchema = z.object({
   lead_headline: z.string().max(160),
   lead_body: z.string().max(600),
-  active_count: z.number().int().min(0),
+  active_count: z.coerce.number().int().min(0),
   project_lines: z.array(
     z.object({
       slug: z.string(),

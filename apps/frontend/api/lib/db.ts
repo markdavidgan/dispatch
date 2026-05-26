@@ -7,9 +7,12 @@ export function getDb(): Client {
     const url = process.env.TURSO_DATABASE_URL;
     const authToken = process.env.TURSO_AUTH_TOKEN;
     if (!url || !authToken) {
-      throw new Error("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN required");
+      // Fallback to local SQLite for development
+      console.warn("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN not set; using local SQLite fallback");
+      _client = createClient({ url: "file:/tmp/dispatch-local.db" });
+    } else {
+      _client = createClient({ url, authToken });
     }
-    _client = createClient({ url, authToken });
   }
   return _client;
 }
