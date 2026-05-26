@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { runSynthesisLead, runAudio, runPublish } from "../../lib/orchestrator";
+import { runSynthesisLead, runAudio, runPublish } from "../../_lib/orchestrator";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.headers["user-agent"] !== "vercel-cron/1.0") {

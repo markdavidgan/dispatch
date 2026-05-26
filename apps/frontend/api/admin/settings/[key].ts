@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getSetting, setSetting } from "../../../lib/settings";
+import { getSetting, setSetting } from "../../../_lib/settings";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = req.query.key as string;
