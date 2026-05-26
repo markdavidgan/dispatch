@@ -1,5 +1,12 @@
 import { audioUrl } from "@/lib/api";
 
+const STATUS_MESSAGE: Record<string, string> = {
+  failed: "Episode generation failed — see backend logs.",
+  failed_auth: "NotebookLM authentication failed — check session in admin / settings.",
+  failed_transient: "Generation failed (transient) — will retry on next schedule.",
+  skipped: "Skipped — NotebookLM session not configured.",
+};
+
 interface Episode {
   id: string;
   episode_no: number;
@@ -55,15 +62,7 @@ export function EpisodeCard({ episode }: Props) {
           </audio>
         ) : (
           <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-mute italic">
-            {episode.status === "failed"
-              ? "Episode generation failed — see backend logs."
-              : episode.status === "failed_auth"
-                ? "NotebookLM authentication failed — check session in admin / settings."
-                : episode.status === "failed_transient"
-                  ? "Generation failed (transient) — will retry on next schedule."
-                  : episode.status === "skipped"
-                    ? "Skipped — NotebookLM session not configured."
-                    : "Audio not yet available."}
+            {STATUS_MESSAGE[episode.status] ?? "Audio not yet available."}
           </p>
         )}
       </div>

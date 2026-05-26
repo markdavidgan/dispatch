@@ -11,6 +11,7 @@ from core.db import Database
 from dispatch.crypto import Crypto
 from dispatch.storage.base import StorageBackend
 from dispatch.storage.local import LocalStorage
+from dispatch.settings_store import SettingsStore
 from dispatch.storage.r2 import R2Storage
 from dispatch.storage.s3 import S3Storage
 
@@ -19,8 +20,6 @@ log = logging.getLogger(__name__)
 
 async def get_storage_backend(db: Database, crypto: Crypto) -> StorageBackend:
     """Instantiate the configured storage backend from DB settings."""
-    from dispatch.settings_store import SettingsStore
-
     store = SettingsStore(db, crypto)
     provider = await store.get("storage.provider", "local") or "local"
 
