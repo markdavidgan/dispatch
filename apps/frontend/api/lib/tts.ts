@@ -11,7 +11,7 @@ export async function generateAudio(text: string): Promise<Buffer> {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ inputs: text }),
+      body: JSON.stringify({ inputs: text, parameters: { voice: "bm_daniel" } }),
     }
   );
 
