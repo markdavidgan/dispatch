@@ -1,27 +1,29 @@
 export async function generateAudio(text: string): Promise<Buffer> {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  if (!apiKey) throw new Error("ELEVENLABS_API_KEY required");
+  const token = process.env.HF_API_TOKEN;
+  if (!token) throw new Error("HF_API_TOKEN required for Kokoro TTS");
 
-  const voiceId = process.env.ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM";
+  // Kokoro-82M via Hugging Face Inference API
   const response = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+    "https://api-inference.huggingface.co/models/hexgrad/Kokoro-82M",
     {
       method: "POST",
       headers: {
-        "xi-api-key": apiKey,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        text,
-        model_id: "eleven_multilingual_v2",
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
-      }),
+      body: JSON.stringify({ inputs: text }),
     }
   );
-  if (!response.ok) throw new Error(`TTS failed: ${response.status}`);
+
+  if (!response.ok) {
+    const err = await response.text().catch(() => "unknown");
+    throw new Error(`Kokoro TTS failed: ${response.status} ${err}`);
+  }
+
   return Buffer.from(await response.arrayBuffer());
 }
 
 export function estimateDuration(text: string): number {
+  // Kokoro runs at ~150 wpm; ~12.5 chars/sec
   return Math.max(1, Math.round(text.length / 12.5));
 }

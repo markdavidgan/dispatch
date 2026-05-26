@@ -112,7 +112,7 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
         lead_duration_s: leadAudioDur,
         addendum_url: publicAddendum,
         addendum_duration_s: addendumAudioDur,
-        voice: process.env.ELEVENLABS_VOICE_NAME || "Ava",
+        voice: "Kokoro-82M",
       };
     }
   }

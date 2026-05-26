@@ -299,7 +299,7 @@ function StepTts({
       <SelectRow
         label="Provider"
         value={values.provider}
-        options={["openai", "elevenlabs"]}
+        options={["openai", "elevenlabs", "kokoro"]}
         onChange={(v) => onChange({ ...values, provider: v })}
       />
       <InputRow
