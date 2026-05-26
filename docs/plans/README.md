@@ -4,7 +4,7 @@ Active implementation plans live here, named `YYYY-MM-DD-<short-desc>.md`. On co
 
 ## Active
 
-_(none — see Completed below)_
+- [2026-05-26 — Move Briefings Pipeline to Vercel Serverless](2026-05-26-briefings-vercel-serverless.md)
 
 ## Completed
 
