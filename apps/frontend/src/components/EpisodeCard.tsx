@@ -57,7 +57,13 @@ export function EpisodeCard({ episode }: Props) {
           <p className="mt-3 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-mute italic">
             {episode.status === "failed"
               ? "Episode generation failed — see backend logs."
-              : "Audio not yet available."}
+              : episode.status === "failed_auth"
+                ? "NotebookLM authentication failed — check session in admin / settings."
+                : episode.status === "failed_transient"
+                  ? "Generation failed (transient) — will retry on next schedule."
+                  : episode.status === "skipped"
+                    ? "Skipped — NotebookLM session not configured."
+                    : "Audio not yet available."}
           </p>
         )}
       </div>
@@ -72,10 +78,13 @@ function StatusTag({ status }: { status: string }) {
     awaiting_nblm: "text-ink-mute",
     downloading: "text-ink-mute",
     failed: "text-ink-mute line-through",
+    failed_auth: "text-ink-mute line-through",
+    failed_transient: "text-ink-mute line-through",
+    skipped: "text-ink-mute line-through",
   };
   return (
     <span className={`font-semibold ${styles[status] ?? "text-ink-mute"}`}>
-      {status.replace("_", " ")}
+      {status.replace(/_/g, " ")}
     </span>
   );
 }

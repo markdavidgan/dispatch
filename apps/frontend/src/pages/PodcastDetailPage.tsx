@@ -106,7 +106,7 @@ export default function PodcastDetailPage() {
           </h2>
           {eps.length === 0 ? (
             <p className="font-disp text-base text-ink-soft italic mt-6">
-              No episodes filed yet. The weekly cron fires Monday 06:00 local.
+              No episodes filed yet. The weekly cron fires Saturday 05:00 local.
             </p>
           ) : (
             <ul>
