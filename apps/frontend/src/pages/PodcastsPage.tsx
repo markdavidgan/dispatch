@@ -93,7 +93,7 @@ export default function PodcastsPage() {
             Podcast
           </h1>
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute mt-2.5">
-            Weekly · NotebookLM composes · GCP narrates
+            Weekly · NotebookLM dialog overviews
           </p>
         </section>
 
