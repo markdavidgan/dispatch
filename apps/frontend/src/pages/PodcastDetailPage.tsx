@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPodcasts, fetchPodcastEpisodes } from "@/lib/api";
+import Seo from "@/components/Seo";
 import { EpisodeCard } from "@/components/EpisodeCard";
 import { PodcastSubscribeBlock } from "@/components/PodcastSubscribeBlock";
 
@@ -32,21 +33,27 @@ export default function PodcastDetailPage() {
 
   if (loading) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Loading…</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Podcast" canonicalPath={`/podcast/${slug}`} />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Loading…</p>
+          </div>
+        </main>
+      </>
     );
   }
 
   if (!meta && (!episodes || episodes.length === 0)) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Podcast not found.</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Podcast not found" canonicalPath={`/podcast/${slug}`} />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Podcast not found.</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -57,7 +64,14 @@ export default function PodcastDetailPage() {
   const ready = eps.filter((e) => e.status === "ready");
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title={title}
+        description={description || `${title} podcast on Dispatch.`}
+        canonicalPath={`/podcast/${slug}`}
+        rss={feedUrl ? { title: `${title} RSS`, url: feedUrl } : undefined}
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
         <section className="pb-6 border-b border-ink mb-8">
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute mb-3">
@@ -120,5 +134,6 @@ export default function PodcastDetailPage() {
         </section>
       </div>
     </main>
+    </>
   );
 }

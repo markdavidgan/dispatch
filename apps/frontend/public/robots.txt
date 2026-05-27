@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /setup/
+Allow: /
+
+Sitemap: https://dispatch-demo.markdavidgan.com/sitemap.xml

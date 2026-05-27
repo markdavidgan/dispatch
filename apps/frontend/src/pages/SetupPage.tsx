@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { bulkUpdateSettings, createAdminProject } from "@/lib/api";
+import Seo from "@/components/Seo";
 import { suggestDisplayName } from "@/lib/projectNames";
 
 const STEPS = [
@@ -12,6 +13,7 @@ const STEPS = [
 ];
 
 export default function SetupPage() {
+  const seo = <Seo title="Setup" noindex canonicalPath="/setup" />;
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -109,7 +111,9 @@ export default function SetupPage() {
   }
 
   return (
-    <main className="max-w-[720px] mx-auto px-4 sm:px-8 py-16">
+    <>
+      {seo}
+      <main className="max-w-[720px] mx-auto px-4 sm:px-8 py-16">
       <div className="mb-10">
         <h1 className="font-disp text-3xl font-bold tracking-[-0.02em] text-ink mb-2">
           Setup
@@ -193,6 +197,7 @@ export default function SetupPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }
 

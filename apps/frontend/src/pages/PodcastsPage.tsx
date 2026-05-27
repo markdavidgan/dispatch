@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchPodcasts, fetchPodcastEpisodes, fetchSetupStatus } from "@/lib/api";
+import Seo from "@/components/Seo";
 import { EpisodeCard } from "@/components/EpisodeCard";
 import { PodcastSubscribeBlock } from "@/components/PodcastSubscribeBlock";
 
@@ -70,11 +71,14 @@ export default function PodcastsPage() {
 
   if (loading) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Loading…</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Podcast" canonicalPath="/podcast" />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Loading…</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -84,7 +88,13 @@ export default function PodcastsPage() {
   const ready = eps.filter((e) => e.status === "ready");
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title="Podcast"
+        description="Weekly AI-generated podcast episodes — cross-project digests and per-repo overviews."
+        canonicalPath="/podcast"
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
         <section className="pb-6 border-b border-ink mb-8">
           <h1 className="font-disp text-[42px] font-extrabold leading-[1.05] tracking-[-0.025em]">
@@ -215,5 +225,6 @@ export default function PodcastsPage() {
         )}
       </div>
     </main>
+    </>
   );
 }

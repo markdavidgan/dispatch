@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchSnapshot, fetchProjects } from "@/lib/api";
+import Seo from "@/components/Seo";
 import FromTheDesk from "@/components/FromTheDesk";
 import MentionedInBriefings from "@/components/MentionedInBriefings";
 import EventStream from "@/components/EventStream";
@@ -32,11 +33,14 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Loading…</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Project" canonicalPath={`/projects/${slug}`} />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Loading…</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -60,11 +64,14 @@ export default function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Project not found.</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Project not found" canonicalPath={`/projects/${slug}`} />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Project not found.</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -72,7 +79,13 @@ export default function ProjectDetailPage() {
   const mentions = project.mentioned_in_briefings ?? [];
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title={project.name}
+        description={`${project.name} on Dispatch — tracked project profile and briefing mentions.`}
+        canonicalPath={`/projects/${slug}`}
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
         <section className="pt-10 pb-8 border-b border-ink grid grid-cols-[1fr_auto] gap-8 items-end">
           <div>
@@ -140,5 +153,6 @@ export default function ProjectDetailPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }

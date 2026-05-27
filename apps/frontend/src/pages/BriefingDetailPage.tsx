@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { fetchBriefing } from "@/lib/api";
+import Seo from "@/components/Seo";
 import { formatTimeLocalShort } from "@/lib/time";
 import Masthead from "@/components/Masthead";
 import Numeral from "@/components/Numeral";
@@ -42,11 +43,14 @@ export default function BriefingDetailPage() {
 
   if (loading) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Loading…</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Briefing" canonicalPath={`/briefings/${date}`} />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Loading…</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -54,12 +58,20 @@ export default function BriefingDetailPage() {
     return <Navigate to="/briefings" replace />;
   }
 
+  const canonical = `/briefings/${brief.date}`;
+
   const projects = brief.projects as Parameters<typeof ProjectList>[0]["projects"];
   const active = projects.filter((p: any) => p.status === "active").length;
   const held = projects.filter((p: any) => p.status === "held").length;
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title={`Issue ${brief.issue_no}`}
+        description={brief.lead_headline}
+        canonicalPath={canonical}
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
         <div className="pt-8 flex items-center justify-between gap-4">
           <Link
@@ -133,5 +145,6 @@ export default function BriefingDetailPage() {
         </main>
       </div>
     </main>
+    </>
   );
 }

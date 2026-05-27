@@ -20,6 +20,7 @@
     "@vercel/node": "^5.8.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-helmet-async": "^3.0.0",
     "react-router-dom": "^7.0.0",
     "zod": "^3.25.0"
   },

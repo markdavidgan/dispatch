@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchBriefings } from "@/lib/api";
+import Seo from "@/components/Seo";
 
 export default function BriefingsPage() {
   const [briefings, setBriefings] = useState<any[]>([]);
@@ -21,7 +22,13 @@ export default function BriefingsPage() {
   }, []);
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title="Briefings"
+        description="Archive of daily editorial briefings — AI-synthesized reports on tracked software projects."
+        canonicalPath="/briefings"
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
         <section className="pb-6 border-b border-ink mb-8">
           <h1 className="font-disp text-[42px] font-extrabold leading-[1.05] tracking-[-0.025em]">Briefings</h1>
@@ -61,5 +68,6 @@ export default function BriefingsPage() {
         )}
       </div>
     </main>
+    </>
   );
 }

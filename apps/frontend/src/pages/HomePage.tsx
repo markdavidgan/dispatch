@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSnapshot, fetchLive } from "@/lib/api";
+import Seo from "@/components/Seo";
 import { formatTimeLocalShort } from "@/lib/time";
 import Masthead from "@/components/Masthead";
 import Numeral from "@/components/Numeral";
@@ -40,9 +41,12 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-        <p className="font-disp text-base text-ink-soft">Loading…</p>
-      </main>
+      <>
+        <Seo title="Today" canonicalPath="/" />
+        <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+          <p className="font-disp text-base text-ink-soft">Loading…</p>
+        </main>
+      </>
     );
   }
 
@@ -50,16 +54,19 @@ export default function HomePage() {
 
   if (!brief) {
     return (
-      <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-        <p className="font-disp text-base text-ink-soft mb-6">
-          The newsroom hasn't filed yet.
-        </p>
-        <RefreshButton
-          variant="button"
-          label="Generate Briefing"
-          onSuccess={() => window.location.reload()}
-        />
-      </main>
+      <>
+        <Seo title="Today" canonicalPath="/" />
+        <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+          <p className="font-disp text-base text-ink-soft mb-6">
+            The newsroom hasn't filed yet.
+          </p>
+          <RefreshButton
+            variant="button"
+            label="Generate Briefing"
+            onSuccess={() => window.location.reload()}
+          />
+        </main>
+      </>
     );
   }
 
@@ -78,6 +85,11 @@ export default function HomePage() {
 
   return (
     <>
+      <Seo
+        title={`Issue ${brief.issue_no}`}
+        description={brief.lead_headline}
+        canonicalPath="/"
+      />
       <div className="lg:pl-24">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
           <Masthead
@@ -172,6 +184,23 @@ export default function HomePage() {
           </main>
         </div>
       </div>
+      {import.meta.env.VITE_SHOW_GITHUB_LINK === "true" && (
+        <footer className="border-t border-ink mt-8">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-6 flex items-center justify-between">
+            <a
+              href="https://github.com/markdavidgan/dispatch"
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute hover:text-ink transition-colors"
+            >
+              Open source on GitHub ↗
+            </a>
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
+              MIT License
+            </span>
+          </div>
+        </footer>
+      )}
     </>
   );
 }

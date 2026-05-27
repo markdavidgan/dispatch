@@ -3,14 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Dispatch — daily briefings and podcasts" />
+    <meta name="description" content="A self-hosted daily editorial brief generator for software projects. AI-synthesized daily reports with audio narration and weekly podcasts." />
     <title>Dispatch</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0b0b0e" />
+
+    <!-- Preconnect -->    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Fallback OpenGraph (overridden per-route by react-helmet-async) -->
+    <meta property="og:site_name" content="Dispatch" />
+    <meta property="og:title" content="Dispatch" />
+    <meta property="og:description" content="A self-hosted daily editorial brief generator for software projects. AI-synthesized daily reports with audio narration and weekly podcasts." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dispatch-demo.markdavidgan.com/" />
+    <meta property="og:image" content="https://dispatch-demo.markdavidgan.com/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dispatch" />
+    <meta name="twitter:description" content="A self-hosted daily editorial brief generator for software projects. AI-synthesized daily reports with audio narration and weekly podcasts." />
+    <meta name="twitter:image" content="https://dispatch-demo.markdavidgan.com/og-image.png" />
   </head>
   <body>
     <div id="root"></div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchSnapshot, fetchProjects } from "@/lib/api";
+import Seo from "@/components/Seo";
 import Masthead from "@/components/Masthead";
 
 export default function ProjectsArchivePage() {
@@ -14,8 +15,14 @@ export default function ProjectsArchivePage() {
   const archived = snapshot?.projects?.filter((p: any) => p.status === "archived") ?? [];
 
   return (
-    <div className="min-h-screen bg-paper">
-      <Masthead />
+    <>
+      <Seo
+        title="Archive"
+        description="Archived projects previously tracked by Dispatch."
+        canonicalPath="/projects/archive"
+      />
+      <div className="min-h-screen bg-paper">
+        <Masthead />
       <main className="max-w-[1080px] mx-auto px-5 pb-20 py-12">
         <h1 className="font-serif text-headline text-ink mb-4" style={{ fontSize: "var(--text-headline)" }}>
           Archive
@@ -60,6 +67,7 @@ export default function ProjectsArchivePage() {
           </div>
         )}
       </main>
-    </div>
+      </div>
+    </>
   );
 }

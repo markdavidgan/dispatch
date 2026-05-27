@@ -25,6 +25,7 @@ from dispatch.api import briefings as briefings_router
 from dispatch.api import snapshot as snapshot_router
 from dispatch.api import audio as audio_router
 from dispatch.api import tts as tts_router
+from dispatch.api import sitemap as sitemap_router
 from dispatch.api.admin import settings as admin_settings_router
 from dispatch.api.admin import projects as admin_projects_router
 from dispatch.api.admin import schedules as admin_schedules_router
@@ -124,6 +125,7 @@ async def cors_middleware(request, call_next):
 
 # Health stays at root (used by Docker healthcheck + Caddy)
 app.include_router(health_router.router)
+app.include_router(sitemap_router.router)
 
 # All other public + admin routers live under /api
 app.include_router(live_router.router, prefix="/api")

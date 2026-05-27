@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchProjects } from "@/lib/api";
+import Seo from "@/components/Seo";
 
 export default function ProjectsPage() {
   const [registry, setRegistry] = useState<any[]>([]);
@@ -23,11 +24,14 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <main className="lg:pl-24">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
-          <p className="font-disp text-base text-ink-soft">Loading…</p>
-        </div>
-      </main>
+      <>
+        <Seo title="Projects" canonicalPath="/projects" />
+        <main className="lg:pl-24">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
+            <p className="font-disp text-base text-ink-soft">Loading…</p>
+          </div>
+        </main>
+      </>
     );
   }
 
@@ -37,7 +41,13 @@ export default function ProjectsPage() {
   const archivedCount = registry.filter((p) => p.status === "archived").length;
 
   return (
-    <main className="lg:pl-24">
+    <>
+      <Seo
+        title="Projects"
+        description="The desk roster — tracked software projects monitored by Dispatch."
+        canonicalPath="/projects"
+      />
+      <main className="lg:pl-24">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
         <section className="pb-6 border-b border-ink mb-8">
           <h1 className="font-disp text-[42px] font-extrabold leading-[1.05] tracking-[-0.025em]">Projects</h1>
@@ -74,6 +84,7 @@ export default function ProjectsPage() {
         )}
       </div>
     </main>
+    </>
   );
 }
 

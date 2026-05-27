@@ -1,8 +1,16 @@
 # Dispatch
 
-> A standalone, self-hosted **daily editorial brief generator** for software projects.
-> Each instance watches a configurable registry of GitHub repositories, synthesizes a
-> daily report with audio narration, and produces weekly podcasts.
+[![License: MIT](https://img.shields.io/badge/License-MIT-0b0b0e.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/Docker-Ready-0b0b0e.svg)](docker-compose.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-dispatch--demo.markdavidgan.com-ff2a2a.svg)](https://dispatch-demo.markdavidgan.com)
+
+> A standalone, self-hosted **daily editorial brief generator** and **AI podcast creator**
+> for software projects. Dispatch watches GitHub repositories, automatically synthesizes
+> a **daily developer digest** with audio narration (TTS), and publishes a **weekly
+> podcast** via NotebookLM — turning repo noise into editorial signal.
+>
+> Think of it as a self-hosted **developer newsletter** or **AI changelog** that reads
+> itself to you.
 
 **Live demo:** [dispatch-demo.markdavidgan.com](https://dispatch-demo.markdavidgan.com) —
 a public instance watching `anthropics/claude-code`, `withastro/astro`,
