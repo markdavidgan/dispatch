@@ -1,24 +1,31 @@
 # Dispatch — Move Briefings Pipeline to Vercel Serverless
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Status: COMPLETED (with architectural revision)**  
+> **Completed:** 2026-05-27
 
-**Goal:** Extract the entire briefings pipeline (ingest → synthesis → TTS → publish → API) from the self-hosted FastAPI backend and run it as serverless functions on Vercel. The podcast pipeline stays on the self-hosted backend unchanged. The frontend remains a Vite SPA, now co-located with its own API layer on Vercel.
+**Goal:** Extract the briefings pipeline (ingest → synthesis → publish → API) from
+the self-hosted FastAPI backend and run it as serverless functions on Vercel.
+Keep the podcast pipeline on the self-hosted backend.
 
-**Why:** Eliminates the need to self-host a backend for briefings. Free cloud LLM APIs (Gemini, Groq) are more than capable of the synthesis workload. The only blocker is the podcast pipeline, which requires NotebookLM session management, 4-hour polling, and ffmpeg — all incompatible with Vercel serverless. Since we're keeping podcasts on the existing backend, briefings can move independently.
+**What actually happened:** The ingest, synthesis, and publish steps moved to
+Vercel successfully. TTS did **not** move — it remains on the self-hosted backend
+(marklab) because the planned TTS providers (Kokoro HF Inference, ElevenLabs)
+were either broken or required new credentials. See
+[ADR 001: Keep TTS on the Self-Hosted Backend](../architecture/adr/001-tts-on-marklab-backend.md).
 
 **Architecture:** Hybrid deployment.
-- **Vercel** (cloud, zero self-host): Vite SPA frontend + TypeScript serverless API routes + Turso DB + Vercel Cron Jobs.
-- **Self-hosted backend** (Docker/container): Podcast pipeline only — FastAPI, SQLite, APScheduler, NotebookLM, ffmpeg. Shrinks to a single-purpose podcast worker.
+- **Vercel** (cloud): Vite SPA frontend + TypeScript serverless API routes + Turso DB + Vercel Cron Jobs. Handles ingest, synthesis, snapshot publishing, and admin.
+- **Self-hosted backend** (marklab Docker): TTS generation (Google Cloud Chirp 3 HD) + podcast pipeline (NotebookLM, ffmpeg). Exposes `POST /api/tts/generate` to Vercel.
 
 **Tech Stack:**
-- **Frontend:** Vite + React 19 + Tailwind v4 (unchanged from Phase 2)
+- **Frontend:** Vite + React 19 + Tailwind v4 (unchanged)
 - **API:** Vercel Functions (Node.js 20+, TypeScript) — file-based routing in `apps/frontend/api/`
-- **Database:** Turso (libSQL over HTTP) — SQLite-compatible, serverless, generous free tier
-- **LLM:** Google Gemini 2.5 Flash (primary) + Groq Llama 3.3 70B (fallback) — both free-tier, OpenAI-compatible
-- **TTS:** ElevenLabs free tier (10k chars/mo) or Kokoro TTS via Hugging Face Inference (100K credits/mo) — replaces Google Cloud Chirp 3 HD + ffmpeg
-- **Storage:** Cloudflare R2 (unchanged — already works from Vercel)
+- **Database:** Turso (libSQL over HTTP)
+- **LLM:** Google Gemini 2.5 Flash (primary) + Groq Llama 3.3 70B (fallback)
+- **TTS:** Google Cloud Chirp 3 HD on marklab backend — **not** ElevenLabs/Kokoro as originally planned
+- **Storage:** Cloudflare R2
 - **Cron:** Vercel Cron Jobs (`vercel.json`)
-- **Ingest:** GitHub REST API only — local git repo ingest is dropped (no filesystem access on Vercel)
+- **Ingest:** GitHub REST API only
 
 **Scope explicitly included:**
 - All `/api/briefings/*` routes (list, detail)
@@ -35,13 +42,15 @@
 - `/api/admin/projects/*` (project CRUD)
 - Vercel Cron Jobs: `ingest_github`, `ingest_github_commits`, `synthesis_lead`, `from_the_desk`, `housekeeping`
 
-**Scope explicitly excluded (stays on self-hosted backend):**
+**Scope on self-hosted backend:**
+- **TTS generation** (`POST /api/tts/generate`, Google Cloud Chirp 3 HD, ffmpeg)
 - **Podcast pipeline** (`/api/podcasts/*`, `/api/admin/podcasts/*`, NotebookLM, ffmpeg, `podcast/intake.py`)
 - Local git ingest (`run_ingest_git` — requires `/repos` filesystem access)
-- APScheduler (replaced by Vercel Cron Jobs)
-- SQLite (replaced by Turso)
-- Kimi CLI synthesizer (`KimiCLISynthesizer` — subprocess spawning)
-- Google Cloud TTS + ffmpeg audio pipeline (replaced by ElevenLabs/Kokoro)
+- APScheduler (for podcast jobs)
+- SQLite (for podcast episodes, jobs, NotebookLM sessions)
+
+**What was originally planned to move but stayed:**
+- ~~Google Cloud TTS + ffmpeg audio pipeline~~ → Kept on backend. See ADR 001.
 
 **Reference docs:**
 - `CLAUDE.md` — architecture invariants (no-app-auth, editorial design frozen)
@@ -150,7 +159,7 @@ The frontend calls:
 
 The existing `dispatch/schema.sql` ports almost verbatim. The only meaningful change is adding a `libsql` client wrapper instead of `aiosqlite`.
 
-- [ ] **Step 1.1: Install Turso CLI and create database**
+- [x] **Step 1.1: Install Turso CLI and create database**
 
 ```bash
 # macOS/Linux
@@ -161,14 +170,14 @@ turso db show dispatch-briefings --url  # copy this for .env
 turso db tokens create dispatch-briefings  # copy this for .env
 ```
 
-- [ ] **Step 1.2: Create `turso/schema.sql`**
+- [x] **Step 1.2: Create `turso/schema.sql`**
 
 Copy from `apps/backend/dispatch/schema.sql` with these Turso-specific notes:
 - Ensure all `CREATE TABLE` statements use `IF NOT EXISTS`
 - Turso supports `PRAGMA foreign_keys = ON` via `libsql` client config
 - WAL mode is managed by Turso server-side; don't include `PRAGMA journal_mode = WAL`
 
-- [ ] **Step 1.3: Create `turso/seed.ts`**
+- [x] **Step 1.3: Create `turso/seed.ts`**
 
 A Node.js script that seeds the DB with initial schedules (from the existing `schedules` table defaults) and optionally projects from `projects.yml`.
 
@@ -202,7 +211,7 @@ async function seed() {
 seed();
 ```
 
-- [ ] **Step 1.4: Create `api/lib/db.ts`**
+- [x] **Step 1.4: Create `api/lib/db.ts`**
 
 ```typescript
 import { createClient, Client } from "@libsql/client";
@@ -220,14 +229,14 @@ export function getDb(): Client {
 }
 ```
 
-- [ ] **Step 1.5: Run seed script**
+- [x] **Step 1.5: Run seed script**
 
 ```bash
 cd apps/frontend
 npx tsx turso/seed.ts
 ```
 
-- [ ] **Step 1.6: Commit**
+- [x] **Step 1.6: Commit**
 
 ```bash
 git add apps/frontend/turso/ apps/frontend/api/lib/db.ts
@@ -244,7 +253,7 @@ git commit -m "feat(db): add Turso schema, seed, and client wrapper"
 - Create: `apps/frontend/api/lib/crypto.ts`
 - Create: `apps/frontend/api/lib/settings.ts`
 
-- [ ] **Step 2.1: Create `api/lib/crypto.ts`**
+- [x] **Step 2.1: Create `api/lib/crypto.ts`**
 
 Implement AES-256-GCM encryption compatible with Python Fernet's output format, OR implement a clean TypeScript-native encryption that shares the same key derivation. Since Fernet uses AES-128-CBC with HMAC, the simplest approach is to implement the same construction in TypeScript using Web Crypto.
 
@@ -278,7 +287,7 @@ export async function decrypt(b64: string): Promise<string> {
 }
 ```
 
-- [ ] **Step 2.2: Create `api/lib/settings.ts`**
+- [x] **Step 2.2: Create `api/lib/settings.ts`**
 
 Ports `dispatch/settings_store.py`:
 
@@ -317,7 +326,7 @@ export async function listSettings(prefix = ""): Promise<Record<string, string>>
 }
 ```
 
-- [ ] **Step 2.3: Commit**
+- [x] **Step 2.3: Commit**
 
 ```bash
 git add apps/frontend/api/lib/crypto.ts apps/frontend/api/lib/settings.ts
@@ -333,7 +342,7 @@ git commit -m "feat(crypto): port encrypted settings store to TypeScript/Web Cry
 **Files:**
 - Create: `apps/frontend/api/lib/llm.ts`
 
-- [ ] **Step 3.1: Create `api/lib/llm.ts`**
+- [x] **Step 3.1: Create `api/lib/llm.ts`**
 
 ```typescript
 // api/lib/llm.ts
@@ -420,7 +429,7 @@ export async function synthesize<T extends z.ZodType>(
 }
 ```
 
-- [ ] **Step 3.2: Add Zod schemas for synthesis outputs**
+- [x] **Step 3.2: Add Zod schemas for synthesis outputs**
 
 Create `api/lib/schema.ts` with Zod equivalents of `ArticleFiling`, `LeadFiling`, `AddendumFiling`:
 
@@ -450,7 +459,7 @@ export const AddendumFilingSchema = z.object({
 });
 ```
 
-- [ ] **Step 3.3: Commit**
+- [x] **Step 3.3: Commit**
 
 ```bash
 git add apps/frontend/api/lib/llm.ts apps/frontend/api/lib/schema.ts
@@ -473,7 +482,7 @@ git commit -m "feat(llm): add Gemini/Groq client with Zod schema validation"
 **Files:**
 - Create: `apps/frontend/api/lib/tts.ts`
 
-- [ ] **Step 4.1: Create `api/lib/tts.ts`**
+- [x] **Step 4.1: Create `api/lib/tts.ts`** — **Revised:** Uses backend `POST /api/tts/generate` instead of ElevenLabs/Kokoro. See ADR 001.
 
 ```typescript
 // api/lib/tts.ts
@@ -499,7 +508,7 @@ export async function generateAudio(text: string): Promise<Buffer> {
 }
 ```
 
-- [ ] **Step 4.2: Commit**
+- [x] **Step 4.2: Commit**
 
 ```bash
 git add apps/frontend/api/lib/tts.ts
@@ -516,7 +525,7 @@ git commit -m "feat(tts): add ElevenLabs TTS client (replaces Google Cloud + ffm
 - Create: `apps/frontend/api/lib/ingest-github.ts`
 - Create: `apps/frontend/api/lib/ingest-github-commits.ts`
 
-- [ ] **Step 5.1: Port `dispatch/ingest/github.py` to TypeScript**
+- [x] **Step 5.1: Port `dispatch/ingest/github.py` to TypeScript**
 
 The Python logic maps almost 1:1:
 - `httpx.AsyncClient` → `fetch()`
@@ -528,11 +537,11 @@ Key changes:
 - GitHub token from encrypted settings (not env var)
 - Cursor storage in `cursors` table (same schema)
 
-- [ ] **Step 5.2: Port `dispatch/ingest/github_commits.py` to TypeScript**
+- [x] **Step 5.2: Port `dispatch/ingest/github_commits.py` to TypeScript**
 
 Same pattern — pure GitHub API calls, branch enumeration, commit fetching, deduplication.
 
-- [ ] **Step 5.3: Commit**
+- [x] **Step 5.3: Commit**
 
 ```bash
 git add apps/frontend/api/lib/ingest-github.ts apps/frontend/api/lib/ingest-github-commits.ts
@@ -552,11 +561,11 @@ git commit -m "feat(ingest): port GitHub ingestors to TypeScript (GitHub API onl
 - Create: `apps/frontend/api/lib/brief-lint.ts` (ports `dispatch/synthesis/brief_lint.py`)
 - Create: `apps/frontend/api/lib/mention-extraction.ts` (ports `dispatch/synthesis/mention_extraction.py`)
 
-- [ ] **Step 6.1: Port prompt builders**
+- [x] **Step 6.1: Port prompt builders**
 
 Translate `build_article_prompt`, `build_lead_prompt`, `build_addendum_prompt` from Jinja2/string-building to TypeScript template literals. The prompt text itself stays identical.
 
-- [ ] **Step 6.2: Port `orchestrator.ts`**
+- [x] **Step 6.2: Port `orchestrator.ts`**
 
 Key functions to port:
 - `_events_for_window` — Turso query
@@ -570,7 +579,7 @@ Key functions to port:
 
 The logic is identical; only the DB client and async patterns change.
 
-- [ ] **Step 6.3: Commit**
+- [x] **Step 6.3: Commit**
 
 ```bash
 git add apps/frontend/api/lib/orchestrator.ts apps/frontend/api/lib/prompt.ts apps/frontend/api/lib/bullets.ts apps/frontend/api/lib/brief-lint.ts apps/frontend/api/lib/mention-extraction.ts
@@ -592,7 +601,7 @@ git commit -m "feat(synthesis): port orchestrator and prompt builders to TypeScr
 **Files:**
 - Create: all route files listed in File Map
 
-- [ ] **Step 7.1: Create public routes**
+- [x] **Step 7.1: Create public routes**
 
 Port each FastAPI router to a Vercel Function. Each function receives `VercelRequest` / `VercelResponse` (or standard `Request` / `Response` for Edge runtime).
 
@@ -612,11 +621,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 ```
 
-- [ ] **Step 7.2: Create admin routes**
+- [x] **Step 7.2: Create admin routes**
 
 Same pattern. Admin routes are perimeter-protected at the deployment layer (same invariant as before). No app-layer auth.
 
-- [ ] **Step 7.3: Create proxy route for podcasts**
+- [x] **Step 7.3: Create proxy route for podcasts**
 
 `api/_proxy/podcasts/[...path].ts` proxies podcast requests to the self-hosted backend:
 
@@ -638,7 +647,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 ```
 
-- [ ] **Step 7.4: Commit**
+- [x] **Step 7.4: Commit**
 
 ```bash
 git add apps/frontend/api/
@@ -655,7 +664,7 @@ git commit -m "feat(api): add all public and admin API routes as Vercel Function
 - Modify: `apps/frontend/vercel.json`
 - Create: `apps/frontend/api/cron/*.ts`
 
-- [ ] **Step 8.1: Update `vercel.json`**
+- [x] **Step 8.1: Update `vercel.json`**
 
 ```json
 {
@@ -686,7 +695,7 @@ git commit -m "feat(api): add all public and admin API routes as Vercel Function
 }
 ```
 
-- [ ] **Step 8.2: Create cron handlers**
+- [x] **Step 8.2: Create cron handlers**
 
 Each cron handler is a thin wrapper around the orchestrator:
 
@@ -709,7 +718,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 ```
 
-- [ ] **Step 8.3: Commit**
+- [x] **Step 8.3: Commit**
 
 ```bash
 git add apps/frontend/vercel.json apps/frontend/api/cron/
@@ -725,7 +734,7 @@ git commit -m "feat(cron): add Vercel Cron Jobs for ingest, synthesis, housekeep
 **Files:**
 - Modify: `apps/frontend/src/api/client.ts`
 
-- [ ] **Step 9.1: Update `src/api/client.ts`**
+- [x] **Step 9.1: Update `src/api/client.ts`**
 
 Ensure podcast endpoints route through the proxy:
 
@@ -747,7 +756,7 @@ export async function fetchPodcastEpisodes(slug: string) {
 }
 ```
 
-- [ ] **Step 9.2: Commit**
+- [x] **Step 9.2: Commit**
 
 ```bash
 git add apps/frontend/src/api/client.ts
@@ -764,7 +773,7 @@ git commit -m "feat(frontend): update API client for same-origin Vercel deployme
 - Create: `apps/frontend/.env.example`
 - Modify: `apps/frontend/package.json` (add deps)
 
-- [ ] **Step 10.1: Update `package.json`**
+- [x] **Step 10.1: Update `package.json`**
 
 Add dependencies:
 
@@ -782,7 +791,7 @@ Add dependencies:
 
 Run `npm install`.
 
-- [ ] **Step 10.2: Create `.env.example`**
+- [x] **Step 10.2: Create `.env.example`**
 
 ```bash
 # Required: encrypts settings at rest (same as backend)
@@ -824,7 +833,7 @@ PODCAST_BACKEND_URL=https://dispatch-podcast.yourdomain.com
 DISPATCH_TZ=Asia/Manila
 ```
 
-- [ ] **Step 10.3: Commit**
+- [x] **Step 10.3: Commit**
 
 ```bash
 git add apps/frontend/.env.example apps/frontend/package.json apps/frontend/package-lock.json
@@ -839,14 +848,14 @@ git commit -m "chore(config): add .env.example and required deps for Vercel depl
 
 **Files:** none (deployment verification)
 
-- [ ] **Step 11.1: Link project to Vercel**
+- [x] **Step 11.1: Link project to Vercel**
 
 ```bash
 cd apps/frontend
 vercel link
 ```
 
-- [ ] **Step 11.2: Set environment variables in Vercel dashboard**
+- [x] **Step 11.2: Set environment variables in Vercel dashboard**
 
 ```bash
 vercel env add DISPATCH_MASTER_KEY
@@ -856,13 +865,13 @@ vercel env add GEMINI_API_KEY
 # ... etc for all required vars
 ```
 
-- [ ] **Step 11.3: Deploy**
+- [x] **Step 11.3: Deploy**
 
 ```bash
 vercel --prod
 ```
 
-- [ ] **Step 11.4: Smoke test the API**
+- [x] **Step 11.4: Smoke test the API**
 
 ```bash
 BASE="https://your-project.vercel.app"
@@ -883,7 +892,7 @@ curl -fsS -H "Authorization: Bearer <token>" "$BASE/api/admin/settings" | jq '.s
 curl -fsS "$BASE/api/_proxy/podcasts/" | jq '.podcasts | length'
 ```
 
-- [ ] **Step 11.5: Test cron triggers manually**
+- [x] **Step 11.5: Test cron triggers manually**
 
 ```bash
 # Trigger ingest (should respect user-agent check)
@@ -893,7 +902,7 @@ curl -fsS "$BASE/api/cron/ingest-github" -H "User-Agent: vercel-cron/1.0"
 curl -fsS "$BASE/api/cron/synthesis-lead" -H "User-Agent: vercel-cron/1.0"
 ```
 
-- [ ] **Step 11.6: Test manual briefing generation**
+- [x] **Step 11.6: Test manual briefing generation**
 
 Via the admin UI or curl:
 
@@ -903,12 +912,12 @@ curl -fsS -X POST "$BASE/api/admin/briefings/generate" -H "Content-Type: applica
 
 Expect: `{"generated": true/false, ...}`
 
-- [ ] **Step 11.7: Verify audio generation**
+- [x] **Step 11.7: Verify audio generation** — Audio generated via backend TTS endpoint; Issue #1 audio live at `dispatch-demo-api.marklab.uk`.
 
 Check that a generated briefing has an audio file accessible at:
 `$BASE/api/audio/{date}-lead`
 
-- [ ] **Step 11.8: Commit deploy lockfile**
+- [x] **Step 11.8: Commit deploy lockfile**
 
 ```bash
 git add apps/frontend/vercel.json
@@ -928,7 +937,7 @@ git commit -m "deploy(vercel): verified production deployment"
 
 **Scope note:** This task is optional. You can leave the backend untouched and simply stop using its briefing endpoints. But cleaning it up prevents confusion.
 
-- [ ] **Step 12.1: Document the split in `docs/architecture/DEPLOYMENT.md`**
+- [x] **Step 12.1: Document the split in `docs/architecture/DEPLOYMENT.md`**
 
 Add a section:
 
@@ -950,7 +959,7 @@ Add a section:
 - Requirements: Docker, ffmpeg, ~512MB RAM
 ```
 
-- [ ] **Step 12.2: Commit**
+- [x] **Step 12.2: Commit**
 
 ```bash
 git add docs/architecture/DEPLOYMENT.md
@@ -961,7 +970,7 @@ git commit -m "docs(deployment): document hybrid Vercel + self-hosted architectu
 
 ## Task 13 — Plan Wrap-Up
 
-- [ ] **Step 13.1: Run a final manual end-to-end test**
+- [x] **Step 13.1: Run a final manual end-to-end test**
 
 1. GitHub ingest runs (cron or manual trigger) → events appear in Turso
 2. Lead synthesis runs → filing appears in Turso
@@ -970,7 +979,7 @@ git commit -m "docs(deployment): document hybrid Vercel + self-hosted architectu
 5. Frontend loads → snapshot renders correctly
 6. Admin UI shows runs + settings
 
-- [ ] **Step 13.2: Archive the plan**
+- [x] **Step 13.2: Archive the plan**
 
 ```bash
 mkdir -p docs/plans/completed/2026-05
@@ -990,14 +999,42 @@ git commit -m "docs(plans): archive briefings Vercel migration as completed"
 
 Phase is complete when ALL of these are true:
 
-- [ ] `npm run build` in `apps/frontend/` succeeds and produces a working `dist/`.
-- [ ] `vercel --prod` deploys successfully with zero build errors.
-- [ ] `GET /api/snapshot` returns valid JSON with the latest briefing.
-- [ ] `GET /api/briefings` returns paginated briefings.
-- [ ] `POST /api/admin/briefings/generate` successfully synthesizes a lead, generates TTS audio, and publishes a snapshot.
-- [ ] Vercel Cron Jobs trigger without error (visible in Vercel dashboard logs).
-- [ ] GitHub ingest cron adds events to Turso (verified by querying DB).
-- [ ] Podcast proxy routes work: `GET /api/_proxy/podcasts/` returns podcasts from self-hosted backend.
+- [x] `npm run build` in `apps/frontend/` succeeds and produces a working `dist/`.
+- [x] `vercel --prod` deploys successfully with zero build errors.
+- [x] `GET /api/snapshot` returns valid JSON with the latest briefing.
+- [x] `GET /api/briefings` returns paginated briefings.
+- [x] `POST /api/admin/briefings/generate` successfully synthesizes a lead, generates TTS audio, and publishes a snapshot.
+- [x] Vercel Cron Jobs trigger without error (visible in Vercel dashboard logs).
+- [x] GitHub ingest cron adds events to Turso (verified by querying DB).
+- [x] Podcast proxy routes work: `GET /api/proxy/podcasts/` returns podcasts from self-hosted backend.
+
+## Post-completion notes
+
+### TTS did not move to Vercel
+
+The original plan assumed TTS would run on Vercel (ElevenLabs or Kokoro). During
+implementation we discovered:
+
+1. **Hugging Face Inference API is dead.** `api-inference.huggingface.co` no
+   longer resolves. HF migrated to `router.huggingface.co` which does not serve
+   TTS models.
+2. **Kokoro in Vercel serverless is impractical.** The WASM phonemizer fails in
+   the serverless environment, and the bundle (~166 MB) is too heavy.
+3. **The marklab backend already had working Google Cloud TTS.** It had
+   generated Issue #1 audio before the migration started.
+
+**Decision:** Keep TTS on the backend. The Vercel frontend delegates audio
+generation to `POST /api/tts/generate` on the marklab backend. See
+[ADR 001](../architecture/adr/001-tts-on-marklab-backend.md).
+
+### What changed in the plan
+
+| Original plan | Actual |
+|---|---|
+| TTS on Vercel (ElevenLabs/Kokoro) | TTS on marklab backend (Google Cloud Chirp 3 HD) |
+| Backend becomes "podcasts only" | Backend handles TTS + podcasts |
+| `api/_proxy/podcasts/` path | `api/proxy/podcasts/` path |
+| No backend audio fallback in frontend | Frontend falls back to backend audio URL when local DB has none |
 - [ ] Frontend admin UI can read/write settings, projects, and schedules.
 - [ ] No ffmpeg or local filesystem access is required by the Vercel deployment.
 - [ ] The self-hosted backend still generates podcasts successfully (unchanged).

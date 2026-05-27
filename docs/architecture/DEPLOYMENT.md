@@ -1,116 +1,87 @@
 # Deployment
 
-Dispatch is deliberately deployment-agnostic. The same backend image and the
-same SPA bundle can run as a one-command all-in-one container, or split with
-the SPA on a CDN and the backend on a homelab box. Auth is always provided by
-the surrounding perimeter.
+Dispatch is deployed as a **hybrid**: the SPA and briefings API run on Vercel
+(serverless), while TTS and podcasts run on a self-hosted backend in Docker
+(marklab). Auth is provided by the surrounding perimeter (Cloudflare Access).
 
-## Topology 1 — All-in-one Docker (default)
+## Topology — Hybrid: Vercel + marklab backend (production)
 
-The fastest path. One `docker compose up`, one host, one container per service.
-
-```mermaid
-flowchart LR
-    user["Reader / Operator"]
-    perimeter["Perimeter<br/>(Caddy basicauth · Cloudflare Access · Tailscale)"]
-
-    subgraph host["Single host"]
-        subgraph fe["dispatch-frontend container"]
-            caddy["Caddy"]
-            spa["Vite SPA<br/>(static files)"]
-        end
-        subgraph be["dispatch-backend container"]
-            api["FastAPI :10060"]
-            sched["APScheduler"]
-        end
-        vol1[("dispatch-data volume<br/>SQLite + audio")]
-        vol2[("dispatch-kimi-cache<br/>(optional)")]
-    end
-
-    user --> perimeter --> caddy
-    caddy -->|"/*"| spa
-    caddy -->|"/api/* · /health"| api
-    api -.-> vol1
-    api -.-> vol2
-    sched -.-> api
-```
-
-`docker-compose.yml` defines two services:
-
-- **`dispatch-backend`** — FastAPI on internal port 10060 (not published).
-  Mounts `dispatch-data:/data` for the SQLite DB and audio artifacts. Reads
-  `DISPATCH_MASTER_KEY`, `DISPATCH_TZ`, `DB_PATH` from the environment.
-- **`dispatch-frontend`** — Caddy + the built SPA. Publishes
-  `${DISPATCH_HTTP_PORT:-8080}:80` and depends on the backend being healthy.
-
-The Caddyfile sends `/api/*` and `/health` to `dispatch-backend:10060` and
-serves everything else as a static SPA with a `try_files {path} /index.html`
-fallback for React Router.
-
-**Crucially, the backend has no published port.** It lives entirely inside the
-Docker network. Caddy is the *gateway*: the single entry point for all external
-traffic. The SPA in the browser calls `/api/...` relative to the same origin,
-which Caddy routes to the backend. The backend is never exposed directly.
-
-### One-command bring-up
-
-```bash
-export DISPATCH_MASTER_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))")
-docker compose up --build
-```
-
-Visit `http://localhost:8080/` for the SPA, `/health` for liveness,
-`/api/projects` for a sample API response.
-
-## Topology 2 — Split: static frontend + self-hosted backend
-
-For when the operator wants the SPA on a CDN/Vercel and the backend on a
-homelab box, VPS, or cloud VM.
+This is the current production deployment.
 
 ```mermaid
 flowchart LR
     user["Reader / Operator"]
 
-    subgraph access["Cloudflare Access (shared apex)"]
-        cfa["Access application<br/>*.example.com"]
+    subgraph access["Cloudflare Access"]
+        cfa["*.markdavidgan.com"]
     end
 
-    subgraph cdn["Static host (Vercel · Netlify · S3+CDN)"]
-        spa["Vite SPA<br/>dispatch.example.com"]
+    subgraph vercel["Vercel (serverless)"]
+        spa["Vite SPA<br/>dispatch-demo.markdavidgan.com"]
+        api["Vercel Functions<br/>ingest · synthesis · admin"]
+        cron["Vercel Cron Jobs"]
+        turso[("Turso DB")]
+        r2[("Cloudflare R2")]
     end
 
-    subgraph back["Self-hosted backend"]
-        caddy["Caddy (optional)"]
-        api["FastAPI :10060"]
-        sched["APScheduler"]
-        db[("SQLite WAL")]
+    subgraph marklab["marklab (self-hosted Docker)"]
+        be["FastAPI :10060<br/>dispatch-demo-api.marklab.uk"]
+        gcp["Google Cloud TTS"]
+        nlm["NotebookLM + ffmpeg"]
+        sqlite[("SQLite WAL")]
     end
-
-    storage[("R2 or S3 bucket")]
 
     user --> cfa
     cfa --> spa
-    cfa --> caddy
-    spa -.fetch.-> api
-    caddy --> api
-    api <--> db
-    api <--> storage
-    sched -.-> api
+    cfa --> be
+    spa -->|"/api/*"| api
+    api <--> turso
+    api -->|"POST /api/tts/generate"| be
+    api -->|"R2 upload"| r2
+    cron --> api
+    be --> gcp
+    be --> nlm
+    be <--> sqlite
 ```
 
-Key configuration differences vs. all-in-one:
+### Vercel tier
 
-- Build the SPA with `VITE_DISPATCH_API_URL=https://api.example.com` so the
-  bundle calls the right backend.
-- Put both subdomains behind the **same** Cloudflare Access application so
-  the auth cookie covers both. The SPA then calls the backend with
-  `credentials: "include"`.
-- Use R2 or S3 as the storage backend so audio and snapshots are served from
-  a CDN-cached URL rather than a `FileResponse` on the backend host.
+- **SPA** — Built Vite bundle served from Vercel's edge CDN.
+- **API Functions** — File-based routing in `apps/frontend/api/`. Each `.ts`
+  file becomes a serverless function.
+- **Cron Jobs** — Defined in `vercel.json`. Triggers ingest, synthesis, audio
+  retry, and housekeeping.
+- **Turso** — Serverless SQLite over HTTP. Stores projects, events, filings,
+  settings (encrypted), runs, and schedules.
+- **R2** — Cloudflare R2 bucket for snapshots and audio MP3s. Public base URL
+  configured via `R2_PUBLIC_BASE_URL`.
 
-`apps/frontend/vercel.json` ships with **no hardcoded backend rewrite** — set
-`VITE_DISPATCH_API_URL` at build time to point the SPA at your backend, or add
-a `rewrites` block locally if you want to proxy through Vercel.
+### marklab backend tier
+
+- **Container** — Docker Compose on a local Linux box.
+- **Port** — `10060` published to the host (`0.0.0.0:10060`) so the Cloudflare
+  Tunnel can reach it.
+- **TTS** — Google Cloud Chirp 3 HD via `GOOGLE_APPLICATION_CREDENTIALS`.
+  Exposed as `POST /api/tts/generate`.
+- **Podcasts** — NotebookLM session management, 4-hour polling, ffmpeg DASH→MP3
+  conversion, RSS feed generation.
+- **Storage** — Local filesystem (`./dispatch-media`) for audio files; R2 for
+  snapshots if configured.
+- **Database** — Local SQLite (`/data/dispatch.db`) for podcast episodes, jobs,
+  and NotebookLM sessions.
+
+### Why the split?
+
+| Concern | Vercel | marklab |
+|---|---|---|
+| **GitHub ingest** | ✅ Pure HTTP, stateless | — |
+| **AI synthesis** | ✅ Gemini/Groq API calls | — |
+| **TTS** | ❌ No ffmpeg; HF Inference API dead | ✅ Google Cloud TTS + ffmpeg |
+| **Podcasts** | ❌ No long polling; no ffmpeg | ✅ NotebookLM + ffmpeg |
+| **Audio serving** | ⚠️ R2 (cold cache) | ✅ Local FileResponse (fast) |
+
+The backend shrunk from "full API + scheduler" to "TTS + podcast worker", but
+it remains essential. The Vercel frontend delegates to it over HTTPS.
 
 ## Perimeter patterns
 
@@ -149,22 +120,39 @@ All three are interchangeable at runtime — switch by editing settings and
 restarting. Existing audio paths are not migrated automatically; plan an
 out-of-band copy if you switch backends after publishing content.
 
-## Required and optional environment
+## Required environment variables
 
-| Variable | Required | Default | Notes |
-| --- | --- | --- | --- |
-| `DISPATCH_MASTER_KEY` | **Yes** | — | Refuses to boot without it. Derives the Fernet key for settings encryption. |
-| `DISPATCH_TZ` | No | `UTC` | IANA timezone for scheduler cron expressions |
-| `HOST` | No | `0.0.0.0` | uvicorn bind address |
-| `PORT` | No | `10060` | uvicorn port |
-| `DB_PATH` | No | `/data/dispatch.db` | SQLite file path |
-| `VITE_DISPATCH_API_URL` | No | `/api` (relative) | Build-time override for the SPA |
-| `DISPATCH_HTTP_PORT` | No | `8080` | Host port published by `dispatch-frontend` |
+### Vercel (frontend + API)
 
-Every other credential — AI keys, TTS keys, GitHub PAT, storage credentials,
-NotebookLM session — is set through the admin Settings page and stored
-Fernet-encrypted in the `settings` table. There is no `.env`-based parallel
-config for those; the admin UI is the single writer.
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `DISPATCH_MASTER_KEY` | **Yes** | Encrypts settings at rest. Same key as backend. |
+| `TURSO_DATABASE_URL` | **Yes** | `libsql://...turso.io` |
+| `TURSO_AUTH_TOKEN` | **Yes** | Turso DB auth token |
+| `GEMINI_API_KEY` | **Yes** | Primary LLM (Gemini 2.5 Flash) |
+| `R2_ACCOUNT_ID` | **Yes** | Cloudflare R2 account |
+| `R2_ACCESS_KEY_ID` | **Yes** | R2 access key |
+| `R2_SECRET_ACCESS_KEY` | **Yes** | R2 secret key |
+| `R2_BUCKET` | **Yes** | R2 bucket name |
+| `R2_PUBLIC_BASE_URL` | **Yes** | Public URL for R2 objects |
+| `GITHUB_TOKEN` | **Yes** | GitHub PAT for ingest |
+| `BACKEND_URL` | No | Defaults to `https://dispatch-demo-api.marklab.uk` |
+| `DISPATCH_TZ` | No | Timezone for cron scheduling (default `UTC`) |
+
+### marklab backend (Docker)
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `DISPATCH_MASTER_KEY` | **Yes** | Same key as Vercel. |
+| `GOOGLE_APPLICATION_CREDENTIALS` | **Yes** | Path to GCP service account JSON |
+| `DB_PATH` | No | SQLite file path (default `/data/dispatch.db`) |
+| `DISPATCH_TZ` | No | Timezone (default `UTC`) |
+| `HOST` | No | uvicorn bind (default `0.0.0.0`) |
+| `PORT` | No | uvicorn port (default `10060`) |
+
+The backend also stores encrypted credentials (AI keys, storage, NotebookLM
+session) in its local SQLite `settings` table. These are independent from the
+Vercel settings store.
 
 ## Backups
 

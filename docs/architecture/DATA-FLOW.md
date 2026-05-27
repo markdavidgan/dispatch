@@ -28,7 +28,8 @@ flowchart LR
 
     filings[("filings table<br/>lead / addendum / desk")]
 
-    subgraph audio["Audio"]
+    subgraph audio["Audio (marklab backend)"]
+        tts_api["POST /api/tts/generate"]
         chunk["chunk text<br/>at sentence boundaries"]
         gtts["Google Chirp 3 HD<br/>(per chunk)"]
         ffmpeg["ffmpeg<br/>loudnorm + concat"]
@@ -52,7 +53,7 @@ flowchart LR
     events --> sl --> filings
     events --> sd --> filings
     events --> sr --> filings
-    filings --> chunk --> gtts --> ffmpeg --> mp3
+    filings --> tts_api --> chunk --> gtts --> ffmpeg --> mp3
     filings --> snap --> store --> archive
     mp3 --> store
     events --> nlm --> rss --> store
@@ -70,10 +71,10 @@ sequenceDiagram
     participant GH as GitHub REST
     participant DB as SQLite
     participant AI as AI provider
-    participant TTS as Google TTS
+    participant TTS as Backend TTS
     participant ST as Storage backend
 
-    Note over Sched: 00:15, 00:30, ... — every 30 min
+    Note over Sched: every 30 min
     Sched->>Orch: ingest_github()
     Orch->>DB: load per-project cursors
     Orch->>GH: list events since cursor
@@ -81,16 +82,15 @@ sequenceDiagram
     Orch->>DB: insert events (dedup by external_id)
     Orch->>DB: update cursor
 
-    Note over Sched: 02:00 local time
+    Note over Sched: 01:00 UTC (Vercel cron)
     Sched->>Orch: synthesis_lead()
     Orch->>DB: select events from yesterday
-    Orch->>AI: compose lead brief (Pydantic schema)
+    Orch->>AI: compose lead brief (JSON schema)
     AI-->>Orch: { headline, body, project_lines }
     Orch->>DB: insert filing (kind='lead')
 
-    Orch->>TTS: synthesize per chunk
-    TTS-->>Orch: mp3 chunks
-    Orch->>Orch: ffmpeg loudnorm + concat
+    Orch->>TTS: POST /api/tts/generate
+    TTS-->>Orch: MP3 bytes
     Orch->>ST: upload brief.mp3
     Orch->>ST: upload snapshot.json
     Orch->>DB: write run record
@@ -159,6 +159,18 @@ sequenceDiagram
 The snapshot pattern keeps the read path independent of the synthesis path:
 publishes are atomic file uploads, and the SPA only ever reads the current
 snapshot plus any archived briefings the reader navigates to.
+
+## Audio fallback chain
+
+When a filing has no `audio_url` in the Turso DB (e.g., TTS failed or the
+backend was down), the frontend falls back in this order:
+
+1. **`audio_url` from Turso DB** — the canonical URL written by `runAudio()`.
+2. **Backend deterministic URL** — `https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/{date}-lead.mp3`. The backend may have generated audio independently.
+3. **R2 deterministic URL** — `{R2_PUBLIC_BASE_URL}/dispatch/audio/{date}-lead.mp3`. Used when the frontend successfully uploaded to R2 but failed to write the DB row.
+
+The `<audio>` element handles 404s gracefully, so a missing fallback is a silent
+no-op rather than a broken UI.
 
 ## State machines
 

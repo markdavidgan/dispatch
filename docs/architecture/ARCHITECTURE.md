@@ -2,32 +2,35 @@
 
 ## System overview
 
-Dispatch is a two-tier application — a Vite SPA frontend and a FastAPI backend —
-designed to run behind any HTTP-level authentication perimeter. The backend is
-self-contained: it holds its data in a single SQLite file, runs its own
-scheduler in-process, and talks to swappable storage and AI/TTS providers via
-narrow adapters.
+Dispatch is a hybrid application — a Vite SPA frontend on Vercel and a FastAPI
+backend on a self-hosted box — designed to run behind any HTTP-level
+authentication perimeter.
 
-### Caddy as the gateway
+- **Vercel (frontend + briefings API)** — handles the SPA, GitHub ingest, AI
+  synthesis, snapshot publishing, and admin APIs. Runs on Turso (serverless SQLite)
+  and Vercel Cron Jobs.
+- **Self-hosted backend (marklab)** — handles TTS generation (Google Cloud Chirp 3
+  HD), podcast pipeline (NotebookLM + ffmpeg), and audio file serving. Runs in
+  Docker with a local SQLite database.
 
-In the default all-in-one deployment, **Caddy is the sole gateway** — the only
-service reachable from outside the Docker network. Every external request flows
-through it:
+The two tiers communicate over HTTPS: the Vercel API tier calls the backend for
+audio generation (`POST /api/tts/generate`) and proxies podcast requests.
 
-- **`/api/*` and `/health`** → proxied to the backend container (`dispatch-backend:10060`)
-- **Everything else (`/*`)** → served as static files from the built Vite SPA
+### Gateway patterns
 
-The backend container has **no published ports**. It is only `expose`d internally
-inside the Docker network. This means the backend is completely invisible to the
-outside world unless traffic passes through Caddy first. The frontend SPA, running
-in the browser, also reaches the backend by sending requests back to Caddy, which
-forwards them onward.
+**Vercel deployment (production)** — Vercel is the edge gateway. The SPA and API
+functions share the same origin (`dispatch-demo.markdavidgan.com`). API routes
+are file-based Vercel Functions; static assets are served from Vercel's CDN.
 
-This gateway pattern is why switching the frontend framework (e.g. to Next.js)
-does not remove the need for request routing — it only changes *which* process
-performs it. Either Next.js takes over the proxying role (via rewrites or API
-routes), or the backend must be published directly, breaking the single-entry-point
-model.
+**Self-hosted backend (marklab)** — Exposed via a Cloudflare Tunnel at
+`dispatch-demo-api.marklab.uk`. It serves:
+- `POST /api/tts/generate` — called by Vercel functions for audio generation
+- `GET /api/audio/{key}` — serves MP3 files (local storage or R2 presigned)
+- `GET/POST /api/podcasts/*` — podcast feeds and episodes
+- `GET/POST /api/admin/podcasts/*` — podcast admin
+
+The backend container **publishes port 10060** on the host so the Cloudflare
+Tunnel can reach it via `localhost:10060`.
 
 ```mermaid
 flowchart TB
@@ -63,9 +66,9 @@ flowchart TB
 
     subgraph external["External services"]
         gh[("GitHub<br/>REST API")]
-        ai["AI synthesis<br/>Kimi · Anthropic · OpenAI"]
-        tts["Google Chirp 3 HD<br/>TTS"]
-        nlm["NotebookLM<br/>podcasts"]
+        ai["AI synthesis<br/>Gemini · Groq"]
+        tts["Google Chirp 3 HD<br/>TTS (via marklab backend)"]
+        nlm["NotebookLM<br/>podcasts (via marklab backend)"]
     end
 
     perimeter --> caddy
@@ -74,10 +77,16 @@ flowchart TB
     spa -->|fetch JSON| api
     api <--> db
     api <--> media
+    api -->|"POST /api/tts/generate"| tts_be
     sched --> gh
     sched --> ai
-    sched --> tts
     sched --> nlm
+    tts_be --> tts_ext
+
+    subgraph backend["Backend (marklab)"]
+        tts_be["FastAPI :10060\nTTS endpoint"]
+        tts_ext["Google Cloud TTS"]
+    end
 ```
 
 ## Components
@@ -98,12 +107,28 @@ gates the matching `/api/admin/*` backend routes. If the perimeter is
 misconfigured, the SPA loads but the API calls fail — there is no second-line
 defense inside the app.
 
+### Frontend API — `apps/frontend/api/_lib/`
+
+| Module | Responsibility |
+| --- | --- |
+| `db.ts` | Turso (`@libsql/client`) wrapper |
+| `crypto.ts` | AES-GCM encryption from `DISPATCH_MASTER_KEY` |
+| `settings.ts` | Encrypted DB-backed settings store |
+| `storage.ts` | R2 upload / download |
+| `ingest-github.ts` | GitHub REST API event ingestion |
+| `ingest-github-commits.ts` | Branch-aware commit ingestion |
+| `synthesis/` | Prompt builders, schema definitions, mention extraction |
+| `orchestrator.ts` | Composes ingest → synthesis → audio → publish |
+| `snapshot.ts` | Snapshot builder + signer |
+| `tts.ts` | Delegates to backend `POST /api/tts/generate` |
+
 ### Backend — `apps/backend/dispatch/`
 
 | Module | Responsibility |
 | --- | --- |
 | `main.py` | FastAPI app + lifespan; bootstraps DB, settings, storage, scheduler |
 | `api/` | Public and admin route handlers |
+| `api/tts.py` | **TTS generation endpoint** — called by Vercel frontend |
 | `crypto.py` | Fernet key derivation from `DISPATCH_MASTER_KEY` |
 | `settings_store.py` | Encrypted DB-backed settings (read/write/upsert) |
 | `storage/` | Pluggable storage backends (`base.py` + `local.py` / `r2.py` / `s3.py`) |
@@ -129,7 +154,7 @@ schema is intentionally small enough to be hand-rolled and idempotent.
 | `projects` | Project registry (slug PK, status, kind, podcast config) |
 | `events` | Ingested commits, PRs, issues, releases (deduped by `external_id`) |
 | `cursors` | Per-project ingest state (GitHub, local-git) |
-| `filings` | Daily and weekly briefs (lead body, addendum, audio URLs) |
+| `filings` | Daily and weekly briefs (lead body, addendum, audio URLs) — **duplicated across Turso (Vercel) and SQLite (backend)** |
 | `runs` | Job execution history (status, duration, error) |
 | `episodes` | Podcast episodes (per project, weekly cadence) |
 | `settings` | **Encrypted** credentials and config (key PK, value Fernet-encrypted) |
@@ -188,6 +213,7 @@ calling; the perimeter does.
 | GET | `/api/podcasts/{slug}/episodes` | Episodes for one podcast |
 | GET | `/api/audio/{key}` | MP3 stream (presigned R2/S3 URL or local FileResponse) |
 | POST | `/api/brief/refresh` | On-demand addendum synthesis (timeout 25 s) |
+| POST | `/api/tts/generate` | Generate MP3 from text (delegates to Google Cloud TTS) |
 
 ### Admin — `/api/admin/*` (must be perimeter-gated)
 
@@ -255,8 +281,18 @@ operators can adjust cron expressions from the admin UI without redeploying.
 | --- | --- | --- |
 | `ingest_git` | every 15 min | Poll local git clones for new commits |
 | `ingest_github` | every 30 min | Poll GitHub REST API for PRs, issues, releases |
-| `synthesis_lead` | daily 02:00 | Compose the lead brief for yesterday's activity |
-| `synthesis_from_the_desk` | weekly Sun 23:00 | Compose the weekly editor's memo |
+| `ingest_github` | every 30 min | Poll GitHub REST API for PRs, issues, releases |
+| `synthesis_lead` | daily 01:00 | Compose the lead brief for yesterday's activity |
+| `audio` | daily 01:15 | Retry audio generation for any lead missing audio |
+| `from_the_desk` | weekly Sun 23:00 | Compose the weekly editor's memo |
+| `housekeeping` | daily 02:00 | Cleanup and backup tasks |
+
+**Backend scheduler (marklab):**
+
+| Job | Default cadence | Purpose |
+| --- | --- | --- |
+| `ingest_github` | every 30 min | Poll GitHub REST API |
+| `synthesis_lead` | daily 02:00 | Compose lead brief (legacy; now runs on Vercel) |
 | `podcast_intake` | weekly (per project) | NotebookLM episode composition |
 | `housekeeping` | daily 03:30 | Cleanup and backup tasks |
 
@@ -269,15 +305,16 @@ adapters — but that is not on the current roadmap.
 | Concern | How it is set | Where it lives |
 | --- | --- | --- |
 | Master encryption key | `DISPATCH_MASTER_KEY` env var (required) | Environment only — never persisted |
-| AI provider + key | Admin UI → `/admin/settings` | `settings` table (Fernet-encrypted) |
-| TTS provider + key | Admin UI → `/admin/settings` | `settings` table |
-| GitHub PAT | Admin UI or `.env` (legacy) | `settings` table |
-| Storage backend + creds | Admin UI → `/admin/settings` | `settings` table |
-| Project registry | `projects.yml` (bootstrap) + admin UI | `projects` table |
-| Job schedules | Admin UI → `/admin/schedules` | `schedules` table |
-| Timezone | `DISPATCH_TZ` env var | Environment (default `UTC`) |
-| DB path | `DB_PATH` env var | Environment (default `/data/dispatch.db`) |
-| Allowed CORS origins | Admin UI → `web.allowed_origins` | `settings` table |
+| AI provider + key | Vercel env var (`GEMINI_API_KEY`, `GROQ_API_KEY`) | Vercel Environment |
+| TTS provider + key | Backend env var (`GOOGLE_APPLICATION_CREDENTIALS`) | marklab host filesystem |
+| GitHub PAT | Vercel env var (`GITHUB_TOKEN`) | Vercel Environment |
+| Storage backend + creds | Vercel env var (`R2_*`) | Vercel Environment |
+| Project registry | `projects.yml` (bootstrap) + admin UI | Turso `projects` table |
+| Job schedules | `vercel.json` crons + `/api/admin/schedules` | Turso `schedules` table |
+| Timezone | `DISPATCH_TZ` env var | Vercel Environment (default `UTC`) |
+| Turso DB | `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` | Vercel Environment |
+| Backend URL | `BACKEND_URL` env var | Vercel Environment (default `https://dispatch-demo-api.marklab.uk`) |
+| Allowed CORS origins | Admin UI → `web.allowed_origins` | Turso `settings` table |
 
 ## What is intentionally absent
 
