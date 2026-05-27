@@ -147,5 +147,5 @@ export async function refreshBriefing() {
 
 // Admin — Generate briefing (lead if none exists, addendum if lead exists)
 export async function generateBriefing() {
-  return apiFetch("/api/admin/briefings/generate", { method: "POST" });
+  return apiFetch("/admin/briefings/generate", { method: "POST" });
 }

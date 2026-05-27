@@ -77,8 +77,9 @@ export default function AdminSettingsPage() {
         map[s.key] = s.value ?? "";
       });
       setDraft(map);
-    } catch (e) {
-      setError("Failed to load settings.");
+    } catch (e: any) {
+      console.error("Failed to load settings:", e);
+      setError(e.message || "Failed to load settings.");
     } finally {
       setLoading(false);
     }

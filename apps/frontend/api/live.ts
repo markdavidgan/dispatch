@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "./_lib/db.js";
+import { getDb, ensureSchema } from "./_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
   const db = getDb();
+  await ensureSchema(db);
 
   // Count commits in last 7 days
   const since = new Date();

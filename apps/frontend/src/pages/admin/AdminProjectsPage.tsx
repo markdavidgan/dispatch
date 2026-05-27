@@ -42,8 +42,9 @@ export default function AdminProjectsPage() {
     try {
       const data = await listAdminProjects();
       setProjects(data.projects ?? data ?? []);
-    } catch (e) {
-      setError("Failed to load projects.");
+    } catch (e: any) {
+      console.error("Failed to load projects:", e);
+      setError(e.message || "Failed to load projects.");
     } finally {
       setLoading(false);
     }

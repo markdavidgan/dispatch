@@ -1,8 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../../_lib/db.js";
+import { getDb, ensureSchema } from "../../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const db = getDb();
+  await ensureSchema(db);
   if (req.method === "GET") {
     const rows = await db.execute({
       sql: "SELECT slug, display_name, status, kind, color_hint, summary, sort_order, github_repo, podcast_config, from_the_desk, from_the_desk_generated_at FROM projects ORDER BY sort_order, slug",

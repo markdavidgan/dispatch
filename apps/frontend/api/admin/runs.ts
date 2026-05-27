@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../../_lib/db.js";
+import { getDb, ensureSchema } from "../../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
   const db = getDb();
+  await ensureSchema(db);
   const limit = Math.min(200, Math.max(1, parseInt(req.query.limit as string) || 50));
   const offset = Math.max(0, parseInt(req.query.offset as string) || 0);
   const job = (req.query.job as string) || "";
