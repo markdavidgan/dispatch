@@ -88,10 +88,6 @@ export default function HomePage() {
           />
           <FilingTicker rows={tickerRows} />
           <div className="flex items-center justify-end gap-3 py-2">
-            <AudioPlayer
-              leadUrl={brief.audio?.lead_url}
-              addendumUrl={brief.audio?.addendum_url}
-            />
             <RefreshButton />
           </div>
 
@@ -105,6 +101,12 @@ export default function HomePage() {
                 eventsToday={snapshot?.recent_events?.length ?? 0}
                 weekNo={isoWeek(brief.date)}
               />
+              <div className="-mt-6 mb-10">
+                <AudioPlayer
+                  leadUrl={brief.audio?.lead_url}
+                  addendumUrl={brief.audio?.addendum_url}
+                />
+              </div>
               <LeadHero headline={brief.lead_headline} body={brief.lead_body} />
               {brief.addendums?.map((a: any, i: number) => (
                 <Addendum key={`${a.filed_at}-${i}`} label={a.label} body={a.body} />
