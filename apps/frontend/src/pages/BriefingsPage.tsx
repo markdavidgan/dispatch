@@ -42,13 +42,11 @@ export default function BriefingsPage() {
               <li key={b.date}>
                 <Link
                   to={`/briefings/${b.date}`}
-                  className="grid grid-cols-[72px_1fr] sm:grid-cols-[120px_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-0 items-start sm:items-baseline py-5 border-b border-hair hover:bg-paper-deep"
+                  className="grid grid-cols-[72px_1fr] sm:grid-cols-[120px_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-1 sm:gap-y-0 items-center py-5 border-b border-hair hover:bg-paper-deep"
                 >
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal font-semibold tabular-nums row-start-1 col-start-1">
-                    #{String(b.issue_no).padStart(3, "0")}
-                    <span className="block text-[9.5px] tracking-[0.18em] text-ink-mute uppercase mt-1 font-normal">
-                      {b.date}
-                    </span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal font-semibold tabular-nums row-start-1 col-start-1 flex flex-col">
+                    <span>#{String(b.issue_no).padStart(3, "0")}</span>
+                    <span className="text-[9.5px] tracking-[0.18em] text-ink-mute uppercase mt-1 font-normal">{b.date}</span>
                   </span>
                   <span className="font-disp text-lg leading-[1.35] font-medium tracking-[-0.005em] text-ink row-start-1 col-start-2">
                     {b.lead_headline}
