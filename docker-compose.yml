@@ -9,12 +9,14 @@ services:
     volumes:
       - dispatch-data:/data
       - dispatch-kimi-cache:/home/dispatch/.kimi
+      - /opt/dispatch-demo/gcp-sa.json:/etc/dispatch/gcp-sa.json:ro
     environment:
       - HOST=0.0.0.0
       - PORT=10060
       - DB_PATH=/data/dispatch.db
       - DISPATCH_TZ=Asia/Manila
       - DISPATCH_MASTER_KEY=${DISPATCH_MASTER_KEY:?DISPATCH_MASTER_KEY must be set}
+      - GOOGLE_APPLICATION_CREDENTIALS=/etc/dispatch/gcp-sa.json
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:10060/health"]
       interval: 30s
