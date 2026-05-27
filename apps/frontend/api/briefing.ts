@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getDb, ensureSchema } from "./_lib/db.js";
+import { resolveAudioUrl } from "./_lib/audio-url.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
@@ -33,19 +34,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const metaSlugs = new Set(metaRows.rows.map((r: any) => r.slug as string));
   const filteredProjects = JSON.parse((lead.project_lines as string) || "[]").filter((p: any) => !metaSlugs.has(p.slug));
 
-  const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
-  const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, "") || "https://dispatch-demo-api.marklab.uk";
-
-  // Prefer DB audio_url, then backend fallback, then R2 deterministic URL
   const dbAudioLead = lead.audio_url as string | null;
   const dbAudioAddendum = rows.rows.find((r: any) => r.kind === "addendum")?.audio_url as string | null;
 
-  const audioLeadUrl = dbAudioLead
-    || `${backendUrl}/api/audio/dispatch/audio/${date}-lead.mp3`
-    || (base ? `${base}/dispatch/audio/${date}-lead.mp3` : null);
-  const audioAddendumUrl = dbAudioAddendum
-    || (addendums.length ? `${backendUrl}/api/audio/dispatch/audio/${date}-addendum.mp3` : null)
-    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.mp3` : null);
+  const audioLeadUrl = resolveAudioUrl(dbAudioLead, date, "lead");
+  const audioAddendumUrl = resolveAudioUrl(dbAudioAddendum, date, "addendum");
 
   res.status(200).json({
     date: lead.date,
@@ -57,7 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     projects: filteredProjects,
     audio_lead_url: audioLeadUrl,
     audio_addendum_url: audioAddendumUrl,
-    audio_duration_s: lead.audio_duration_s || null,
+    audio_duration_s: (lead.audio_duration_s as number | null | undefined) ?? null,
     active_count: lead.active_count || 0,
     filed_at: lead.generated_at ? (lead.generated_at as string).split("T")[1].slice(0, 5) : "",
     recent_events: (await db.execute({
