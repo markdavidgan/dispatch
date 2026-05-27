@@ -36,16 +36,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
   const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, "") || "https://dispatch-demo-api.marklab.uk";
 
-  // Prefer DB audio_url, then R2 deterministic URL, then backend fallback
+  // Prefer DB audio_url, then backend fallback, then R2 deterministic URL
   const dbAudioLead = lead.audio_url as string | null;
   const dbAudioAddendum = rows.rows.find((r: any) => r.kind === "addendum")?.audio_url as string | null;
 
   const audioLeadUrl = dbAudioLead
-    || (base ? `${base}/dispatch/audio/${date}-lead.wav` : null)
-    || `${backendUrl}/api/audio/dispatch/audio/${date}-lead.mp3`;
+    || `${backendUrl}/api/audio/dispatch/audio/${date}-lead.mp3`
+    || (base ? `${base}/dispatch/audio/${date}-lead.wav` : null);
   const audioAddendumUrl = dbAudioAddendum
-    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null)
-    || (addendums.length ? `${backendUrl}/api/audio/dispatch/audio/${date}-addendum.mp3` : null);
+    || (addendums.length ? `${backendUrl}/api/audio/dispatch/audio/${date}-addendum.mp3` : null)
+    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null);
 
   res.status(200).json({
     date: lead.date,
