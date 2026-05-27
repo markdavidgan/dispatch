@@ -1,27 +1,5 @@
 # Dispatch project registry — order matters.
 # Active projects render first, held next, archived hidden from home.
-#
-# This file ships with three showcase projects. After your first boot, edit
-# this file (and restart) or use the admin Projects page to add your own.
-#
-# Display-name resolution order (see apps/backend/dispatch/registry/resolve.py):
-#   1. Explicit `display_name` here (this file is the override layer)
-#   2. First H1 of `<local_path>/README.md` (auto-discovered if local_path is set)
-#   3. Titleize slug, respecting acronyms in registry/acronyms.yml
-#
-# Schema reference for each project entry:
-#   slug          (required, kebab-case, primary key)
-#   display_name  (optional, overrides H1/titleize)
-#   github        (optional, "owner/repo" — required if you want GitHub ingest)
-#   local_path    (optional, absolute path to a local clone for git-log ingest)
-#   status        active | held | archived
-#   kind          app | tool | service | site | agents | meta | library
-#   summary       (optional, one-paragraph project description)
-#   podcast       (optional, per-project podcast configuration)
-#     title, description, author, itunes_category, cover_art (path, optional)
-#     cron          (when to compose, in classic cron syntax)
-#     compose_window_days  (lookback for episode content)
-#     enabled       (bool)
 
 version: 1
 timezone: UTC
@@ -40,6 +18,27 @@ projects:
     status: active
     kind: app
     summary: All-in-one web framework for content-driven sites. Steady weekly cadence with a healthy mix of feature PRs, releases, and docs work.
+
+  - slug: hydrogen
+    display_name: Hydrogen
+    github: Shopify/hydrogen
+    status: active
+    kind: app
+    summary: Shopify's React-based framework for building custom storefronts. Powers headless commerce with tight Remix integration.
+
+  - slug: zuul
+    display_name: Zuul
+    github: Netflix/zuul
+    status: active
+    kind: service
+    summary: Netflix's edge gateway service that provides dynamic routing, load balancing, and resilience for microservices at scale.
+
+  - slug: gemma-cpp
+    display_name: Gemma.cpp
+    github: google/gemma.cpp
+    status: active
+    kind: tool
+    summary: Google's lightweight C++ inference engine for the Gemma open models. Runs LLMs efficiently on CPU with minimal dependencies.
 
   - slug: dispatch
     display_name: Dispatch

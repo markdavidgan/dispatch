@@ -1,9 +1,11 @@
 import { createHash, randomBytes } from "crypto";
 
 const MASTER_KEY = process.env.DISPATCH_MASTER_KEY;
-if (!MASTER_KEY) throw new Error("DISPATCH_MASTER_KEY required");
 
-const KEY = new Uint8Array(createHash("sha256").update(MASTER_KEY).digest());
+function getKey(): Uint8Array {
+  if (!MASTER_KEY) throw new Error("DISPATCH_MASTER_KEY required");
+  return new Uint8Array(createHash("sha256").update(MASTER_KEY).digest());
+}
 
 function bufToU8(buf: Buffer): Uint8Array {
   return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
@@ -14,7 +16,7 @@ export async function encrypt(plaintext: string): Promise<string> {
   const encoder = new TextEncoder();
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    KEY,
+    getKey(),
     { name: "AES-GCM" },
     false,
     ["encrypt"]
@@ -34,7 +36,7 @@ export async function decrypt(b64: string): Promise<string> {
   const ciphertext = bufToU8(combined.subarray(12));
   const cryptoKey = await crypto.subtle.importKey(
     "raw",
-    KEY,
+    getKey(),
     { name: "AES-GCM" },
     false,
     ["decrypt"]

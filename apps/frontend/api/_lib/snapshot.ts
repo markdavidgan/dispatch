@@ -18,9 +18,16 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
   const db = getDb();
   const now = new Date().toISOString();
 
+  // Meta slugs for filtering
+  const metaRows = await db.execute({
+    sql: "SELECT slug FROM projects WHERE kind = 'meta'",
+    args: [],
+  });
+  const metaSlugs = new Set(metaRows.rows.map((r) => r.slug as string));
+
   // Projects
   const projectRows = await db.execute({
-    sql: "SELECT slug, display_name, status, kind, color_hint, from_the_desk, from_the_desk_generated_at FROM projects ORDER BY status DESC, slug",
+    sql: "SELECT slug, display_name, status, kind, color_hint, from_the_desk, from_the_desk_generated_at FROM projects WHERE kind != 'meta' ORDER BY status DESC, slug",
     args: [],
   });
 
@@ -73,6 +80,8 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
 
       if (kind === "lead") {
         const projectLines = JSON.parse((row.project_lines as string) || "[]");
+        // Filter out meta projects that may have been included in synthesis
+        const filteredProjectLines = projectLines.filter((p: any) => !metaSlugs.has(p.slug));
         lead = {
           date: row.date,
           issue_no: row.issue_no,
@@ -80,7 +89,7 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
           active_count: `${(row.active_count as number) || 0}`.padStart(2, "0"),
           lead_headline: row.lead_headline || "",
           lead_body: row.lead_body || "",
-          projects: projectLines,
+          projects: filteredProjectLines,
           addendums: [],
           audio: null,
         };
