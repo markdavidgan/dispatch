@@ -92,10 +92,6 @@ export async function bulkUpdateSettings(settings: Record<string, string>) {
 }
 
 // Admin — Projects
-export async function listAdminProjects() {
-  return apiFetch("/admin/projects");
-}
-
 export async function createAdminProject(body: object) {
   return apiFetch("/admin/projects", {
     method: "POST",

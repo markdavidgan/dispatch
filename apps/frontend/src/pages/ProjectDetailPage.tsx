@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { fetchSnapshot, fetchProjects } from "@/lib/api";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { fetchSnapshot, fetchProjects, updateAdminProject, deleteAdminProject } from "@/lib/api";
+import { suggestDisplayName } from "@/lib/projectNames";
 import Seo from "@/components/Seo";
 import FromTheDesk from "@/components/FromTheDesk";
 import MentionedInBriefings from "@/components/MentionedInBriefings";
@@ -8,24 +9,83 @@ import EventStream from "@/components/EventStream";
 
 export default function ProjectDetailPage() {
   const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
   const [snapshot, setSnapshot] = useState<any>(null);
   const [registry, setRegistry] = useState<any[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [editForm, setEditForm] = useState<{
+    display_name: string;
+    github_repo: string;
+    status: string;
+    kind: string;
+  } | null>(null);
+
+  async function load() {
+    setLoading(true);
+    try {
+      const [snap, reg] = await Promise.all([fetchSnapshot(), fetchProjects()]);
+      setSnapshot(snap);
+      setRegistry(reg);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function load() {
-      try {
-        const [snap, reg] = await Promise.all([fetchSnapshot(), fetchProjects()]);
-        setSnapshot(snap);
-        setRegistry(reg);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
     load();
-  }, []);
+  }, [slug]);
+
+  function startEdit(project: any) {
+    setEditForm({
+      display_name: project.name ?? project.display_name ?? "",
+      github_repo: project.github_repo ?? "",
+      status: project.status ?? "active",
+      kind: project.kind ?? "app",
+    });
+    setIsEditing(true);
+    setError("");
+  }
+
+  function cancelEdit() {
+    setIsEditing(false);
+    setEditForm(null);
+    setError("");
+  }
+
+  async function handleSave() {
+    if (!editForm || !slug) return;
+    setSaving(true);
+    setError("");
+    try {
+      await updateAdminProject(slug, editForm);
+      setIsEditing(false);
+      setEditForm(null);
+      await load();
+    } catch (e: any) {
+      setError(e.message || "Failed to save project.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!slug) return;
+    if (!confirm(`Delete project "${slug}"? This cannot be undone.`)) return;
+    setSaving(true);
+    setError("");
+    try {
+      await deleteAdminProject(slug);
+      navigate("/projects");
+    } catch (e: any) {
+      setError(e.message || "Failed to delete project.");
+      setSaving(false);
+    }
+  }
 
   // Check if project is in the latest briefing (covers the window where
   // briefing_mentions table hasn't been populated yet after a new filing)
@@ -133,8 +193,109 @@ export default function ProjectDetailPage() {
                   GitHub ↗
                 </a>
               )}
+              {!isEditing && (
+                <button
+                  onClick={() => startEdit(registryProject ?? project)}
+                  className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute border border-ink hover:bg-paper-deep px-3.5 py-2.5 font-medium transition-colors"
+                >
+                  Edit project
+                </button>
+              )}
             </div>
           </section>
+
+          {isEditing && editForm && (
+            <section className="mb-10 border border-ink p-5 bg-paper-deep">
+              {error && (
+                <div className="mb-4 px-4 py-3 border border-signal text-signal font-mono text-[11px]">
+                  {error}
+                </div>
+              )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute font-semibold mb-1">
+                    Display Name
+                  </label>
+                  <input
+                    className="w-full px-2.5 py-2 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
+                    value={editForm.display_name}
+                    onChange={(e) => setEditForm({ ...editForm, display_name: e.target.value })}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute font-semibold mb-1">
+                    GitHub Repo
+                  </label>
+                  <input
+                    className="w-full px-2.5 py-2 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
+                    value={editForm.github_repo}
+                    onChange={(e) => {
+                      const suggested = suggestDisplayName(e.target.value);
+                      setEditForm({
+                        ...editForm,
+                        github_repo: e.target.value,
+                        display_name: editForm.display_name || suggested || editForm.display_name,
+                      });
+                    }}
+                    placeholder="owner/repo"
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute font-semibold mb-1">
+                    Status
+                  </label>
+                  <select
+                    className="w-full px-2.5 py-2 border border-ink bg-paper font-mono text-[11px] text-ink focus:outline-none focus:border-signal"
+                    value={editForm.status}
+                    onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
+                  >
+                    <option value="active">active</option>
+                    <option value="held">held</option>
+                    <option value="archived">archived</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute font-semibold mb-1">
+                    Kind
+                  </label>
+                  <select
+                    className="w-full px-2.5 py-2 border border-ink bg-paper font-mono text-[11px] text-ink focus:outline-none focus:border-signal"
+                    value={editForm.kind}
+                    onChange={(e) => setEditForm({ ...editForm, kind: e.target.value })}
+                  >
+                    <option value="app">app</option>
+                    <option value="lib">lib</option>
+                    <option value="infra">infra</option>
+                    <option value="other">other</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 bg-signal text-paper hover:bg-ink transition-colors disabled:opacity-50"
+                >
+                  {saving ? "Saving…" : "Save"}
+                </button>
+                <button
+                  onClick={cancelEdit}
+                  disabled={saving}
+                  className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-ink text-ink hover:bg-paper-deep transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={saving}
+                  className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-signal text-signal hover:bg-signal hover:text-paper transition-colors disabled:opacity-50"
+                >
+                  Delete
+                </button>
+              </div>
+            </section>
+          )}
 
           <div className="pt-12 pb-24 grid grid-cols-1 lg:grid-cols-[minmax(0,8fr)_minmax(0,3fr)] gap-16">
             <article>

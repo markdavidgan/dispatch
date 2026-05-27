@@ -9,7 +9,6 @@ import ProjectsArchivePage from "./pages/ProjectsArchivePage";
 import PodcastsPage from "./pages/PodcastsPage";
 import PodcastDetailPage from "./pages/PodcastDetailPage";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
-import AdminProjectsPage from "./pages/admin/AdminProjectsPage";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage";
 import AdminRunsPage from "./pages/admin/AdminRunsPage";
 import SetupPage from "./pages/SetupPage";
@@ -34,7 +33,6 @@ export default function App() {
 
         {/* Admin routes */}
         <Route path="/admin" element={<AdminDashboardPage />} />
-        <Route path="/admin/projects" element={<AdminProjectsPage />} />
         <Route path="/admin/settings" element={<AdminSettingsPage />} />
         <Route path="/admin/runs" element={<AdminRunsPage />} />
 

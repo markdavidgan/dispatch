@@ -117,12 +117,6 @@ export default function AdminDashboardPage() {
             Dashboard
           </Link>
           <Link
-            to="/admin/projects"
-            className="text-[11px] uppercase tracking-[var(--tracking-nav)] px-3 py-2.5 font-medium text-ink-mute hover:text-ink transition-colors"
-          >
-            Projects
-          </Link>
-          <Link
             to="/admin/settings"
             className="text-[11px] uppercase tracking-[var(--tracking-nav)] px-3 py-2.5 font-medium text-ink-mute hover:text-ink transition-colors"
           >
