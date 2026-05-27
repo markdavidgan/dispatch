@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { listSettings } from "../../_lib/settings.js";
-import { ensureSchema } from "../../_lib/db.js";
+import { listSettings } from "../_lib/settings.js";
+import { ensureSchema } from "../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
