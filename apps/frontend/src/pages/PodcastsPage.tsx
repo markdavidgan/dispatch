@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchPodcasts, fetchPodcastEpisodes, fetchSetupStatus } from "@/lib/api";
+import { EpisodeCard } from "@/components/EpisodeCard";
 import { PodcastSubscribeBlock } from "@/components/PodcastSubscribeBlock";
 
 interface Podcast {
@@ -11,6 +12,7 @@ interface Podcast {
   feed_url: string;
   episode_count?: number;
   last_published_at?: string | null;
+  auth?: { username: string; password: string } | null;
 }
 
 interface Status {
@@ -29,7 +31,7 @@ const STATUS_ROWS: { key: keyof Status; label: string; need: string }[] = [
 
 export default function PodcastsPage() {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
-  const [episodesBySlug, setEpisodesBySlug] = useState<Record<string, any[]>>({});
+  const [episodes, setEpisodes] = useState<any[] | null>(null);
   const [status, setStatus] = useState<Status>({});
   const [loading, setLoading] = useState(true);
 
@@ -43,18 +45,12 @@ export default function PodcastsPage() {
           a.project_slug === "dispatch-weekly" ? -1 : b.project_slug === "dispatch-weekly" ? 1 : 0,
         );
         setPodcasts(list);
-        const eps: Record<string, any[]> = {};
-        await Promise.all(
-          list.map(async (p) => {
-            try {
-              const r = await fetchPodcastEpisodes(p.project_slug);
-              eps[p.project_slug] = r.episodes ?? [];
-            } catch {
-              eps[p.project_slug] = [];
-            }
-          }),
-        );
-        setEpisodesBySlug(eps);
+
+        const featured = list.find((p) => p.project_slug === "dispatch-weekly") ?? list[0];
+        if (featured) {
+          const r = await fetchPodcastEpisodes(featured.project_slug);
+          setEpisodes(r.episodes ?? []);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -84,6 +80,8 @@ export default function PodcastsPage() {
 
   const featured = podcasts.find((p) => p.project_slug === "dispatch-weekly") ?? podcasts[0];
   const others = podcasts.filter((p) => p.project_slug !== featured?.project_slug);
+  const eps = episodes ?? [];
+  const ready = eps.filter((e) => e.status === "ready");
 
   return (
     <main className="lg:pl-24">
@@ -93,7 +91,7 @@ export default function PodcastsPage() {
             Podcast
           </h1>
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute mt-2.5">
-            Weekly · NotebookLM dialog overviews
+            Weekly · NotebookLM composes · GCP narrates
           </p>
         </section>
 
@@ -106,12 +104,9 @@ export default function PodcastsPage() {
           <>
             <article className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 pb-12 border-b border-hair-strong">
               <div>
-                <Link
-                  to={`/podcast/${featured.project_slug}`}
-                  className="font-disp text-[36px] font-extrabold leading-tight tracking-[-0.025em] text-ink hover:text-signal block"
-                >
+                <h2 className="font-disp text-[36px] font-extrabold leading-tight tracking-[-0.025em] text-ink">
                   {featured.title}
-                </Link>
+                </h2>
                 {featured.description && (
                   <p className="font-disp text-lg leading-[1.5] text-ink-soft mt-3 max-w-[680px]">
                     {featured.description}
@@ -119,9 +114,8 @@ export default function PodcastsPage() {
                 )}
                 <div className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink-mute mt-4 flex gap-3 flex-wrap">
                   <span>
-                    <span className="text-ink font-semibold">
-                      {episodesBySlug[featured.project_slug]?.filter((e) => e.status === "ready").length ?? 0}
-                    </span>{" "}episodes
+                    <span className="text-ink font-semibold">{ready.length}</span>{" "}
+                    {ready.length === 1 ? "episode" : "episodes"}
                   </span>
                   {featured.last_published_at && (
                     <>
@@ -129,19 +123,39 @@ export default function PodcastsPage() {
                       <span>Latest filed {featured.last_published_at.slice(0, 10)}</span>
                     </>
                   )}
-                  <span className="text-hair-strong">·</span>
-                  <Link
-                    to={`/podcast/${featured.project_slug}`}
-                    className="text-ink hover:text-signal font-semibold"
-                  >
-                    Episodes →
-                  </Link>
                 </div>
-                <PodcastSubscribeBlock feedUrl={featured.feed_url} title={featured.title} />
+                <PodcastSubscribeBlock
+                  feedUrl={featured.feed_url}
+                  title={featured.title}
+                  auth={featured.auth ?? undefined}
+                />
+
+                {/* Episodes list */}
+                <section className="mt-12">
+                  <h3 className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink pb-3.5 border-b border-ink font-semibold mb-2 flex justify-between">
+                    Episodes
+                    <span className="text-ink-mute font-normal">
+                      {eps.length} total
+                    </span>
+                  </h3>
+                  {eps.length === 0 ? (
+                    <p className="font-disp text-base text-ink-soft italic mt-6">
+                      No episodes filed yet. The weekly cron fires Saturday 05:00 local.
+                    </p>
+                  ) : (
+                    <ul>
+                      {eps.map((e) => (
+                        <li key={e.id}>
+                          <EpisodeCard episode={e} />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
               </div>
 
               {/* Credentials / backend services panel */}
-              <aside className="border border-ink p-5">
+              <aside className="border border-ink p-5 h-fit">
                 <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink font-semibold pb-3 mb-3 border-b border-hair-strong">
                   Backend services
                 </h3>

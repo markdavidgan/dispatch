@@ -30,6 +30,13 @@ async def list_podcasts(request: Request) -> dict:
         for row in await cur.fetchall():
             stats[row[0]] = {"episode_count": row[1], "last_published_at": row[2]}
 
+    store = request.app.state.settings_store
+    feed_user = await store.feed_username()
+    feed_pass = await store.feed_password()
+    auth = None
+    if feed_user and feed_pass:
+        auth = {"username": feed_user, "password": feed_pass}
+
     return {
         "podcasts": [
             {
@@ -40,6 +47,7 @@ async def list_podcasts(request: Request) -> dict:
                 "feed_url": c.feed_url,
                 "episode_count": stats.get(c.project_slug, {}).get("episode_count", 0),
                 "last_published_at": stats.get(c.project_slug, {}).get("last_published_at"),
+                "auth": auth,
             }
             for c in casts
         ]

@@ -133,7 +133,7 @@ export async function listRuns(params = "") {
 
 // Admin — System
 export async function fetchSetupStatus() {
-  return apiFetch("/admin/system/setup-status");
+  return apiFetch("/proxy/setup-status");
 }
 
 export async function triggerBackup() {

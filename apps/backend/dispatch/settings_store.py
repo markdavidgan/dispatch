@@ -144,6 +144,12 @@ class SettingsStore:
     async def notebooklm_status(self) -> str:
         return await self.get("podcast.notebooklm_status", "") or ""
 
+    async def feed_username(self) -> str | None:
+        return await self.get("podcast.feed_username")
+
+    async def feed_password(self) -> str | None:
+        return await self.get("podcast.feed_password")
+
     async def web_allowed_origins(self) -> list[str]:
         raw = await self.get("web.allowed_origins")
         if raw:
