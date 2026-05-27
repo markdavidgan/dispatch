@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Check, Copy } from "@phosphor-icons/react";
 
 interface Props {
   feedUrl: string;
@@ -101,22 +102,23 @@ function Field({
   const [revealed, setRevealed] = useState(!secret);
   const display = secret && !revealed ? "•".repeat(Math.max(value.length, 8)) : value;
   return (
-    <div className="flex flex-col sm:grid sm:grid-cols-[88px_1fr_auto] gap-2 sm:gap-3 items-start sm:items-center">
+    <div className="flex flex-col gap-1 sm:grid sm:grid-cols-[88px_1fr_auto] sm:gap-3 sm:items-center">
       <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">
         {label}
       </span>
       <code
-        className={`px-2.5 py-1.5 bg-paper-deep border border-hair text-ink overflow-x-auto whitespace-nowrap min-w-0 ${
+        className={`block w-full px-2.5 py-1.5 bg-paper-deep border border-hair text-ink text-ellipsis overflow-hidden whitespace-nowrap ${
           mono ? "font-mono text-xs" : "text-xs"
         }`}
+        title={display}
       >
         {display}
       </code>
-      <div className="flex gap-2 font-mono text-[10px] uppercase tracking-[0.18em] font-medium">
+      <div className="flex gap-2 items-center">
         {secret && (
           <button
             onClick={() => setRevealed((r) => !r)}
-            className="text-ink-mute hover:text-ink px-1"
+            className="text-ink-mute hover:text-ink px-1 font-mono text-[10px] uppercase tracking-[0.18em] font-medium"
           >
             {revealed ? "Hide" : "Show"}
           </button>
@@ -124,8 +126,10 @@ function Field({
         <button
           onClick={onCopy}
           className={copied ? "text-signal" : "text-ink hover:text-signal"}
+          title={copied ? "Copied" : "Copy"}
+          aria-label={copied ? "Copied" : "Copy"}
         >
-          {copied ? "Copied" : "Copy"}
+          {copied ? <Check size={16} weight="bold" /> : <Copy size={16} weight="bold" />}
         </button>
       </div>
     </div>
