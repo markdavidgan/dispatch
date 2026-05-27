@@ -17,6 +17,17 @@ services:
       - DISPATCH_TZ=Asia/Manila
       - DISPATCH_MASTER_KEY=${DISPATCH_MASTER_KEY:?DISPATCH_MASTER_KEY must be set}
       - GOOGLE_APPLICATION_CREDENTIALS=/etc/dispatch/gcp-sa.json
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - R2_PUBLIC_BASE_URL=${R2_PUBLIC_BASE_URL:-}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}
+      - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY:-}
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL:-}
+      - GCP_PROJECT_ID=${GCP_PROJECT_ID:-}
+      - GCP_TTS_LANGUAGE_CODE=${GCP_TTS_LANGUAGE_CODE:-}
+      - GCP_TTS_VOICE=${GCP_TTS_VOICE:-}
+      - KIMI_OAUTH_JSON=${KIMI_OAUTH_JSON:-}
+      - PODCAST_BASE_URL=${PODCAST_BASE_URL:-}
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:10060/health"]
       interval: 30s

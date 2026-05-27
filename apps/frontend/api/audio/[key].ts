@@ -21,7 +21,7 @@ function getClient(): S3Client {
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
   const key = req.query.key as string;
-  const fullKey = `dispatch/audio/${key}.wav`;
+  const fullKey = key.startsWith("podcast/") ? key : `dispatch/audio/${key}.wav`;
 
   const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
   if (base) {
