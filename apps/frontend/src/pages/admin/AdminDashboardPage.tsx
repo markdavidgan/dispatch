@@ -71,6 +71,7 @@ export default function AdminDashboardPage() {
   }
 
   if (error) {
+    const isCfAccess = error.toLowerCase().includes("failed to fetch");
     return (
       <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
         <header className="mb-10">
@@ -79,6 +80,24 @@ export default function AdminDashboardPage() {
         <div className="border border-signal p-5">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal font-semibold">Error</p>
           <p className="font-disp text-sm text-ink mt-2">{error}</p>
+          {isCfAccess && (
+            <div className="mt-4 pt-4 border-t border-hair">
+              <p className="font-disp text-sm text-ink-soft mb-3">
+                Admin routes are protected by Cloudflare Access. If you are not authenticated, API requests will be blocked.
+              </p>
+              <a
+                href="/api/admin/system/setup-status"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 bg-signal text-paper hover:bg-ink transition-colors"
+              >
+                Authenticate via Cloudflare Access →
+              </a>
+              <p className="font-mono text-[10px] text-ink-mute mt-2">
+                After logging in, close the tab and refresh this page.
+              </p>
+            </div>
+          )}
         </div>
       </main>
     );
