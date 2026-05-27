@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../../_lib/db.js";
-import { synthesize } from "../../_lib/llm.js";
+import { getDb } from "../_lib/db.js";
+import { synthesize } from "../_lib/llm.js";
 import { z } from "zod";
 
 const SummarySchema = z.object({ body: z.string() });
