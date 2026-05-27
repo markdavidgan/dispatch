@@ -81,7 +81,7 @@ function Row({
   p,
   dimmed,
 }: {
-  p: { slug: string; display_name: string; kind: string | null; status: string };
+  p: { slug: string; display_name: string; kind: string | null; status: string; github_repo?: string | null };
   dimmed?: boolean;
 }) {
   return (
@@ -96,6 +96,19 @@ function Row({
         <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">{p.kind ?? ""}</span>
         <span className="font-mono text-sm text-ink-mute text-right">→</span>
       </Link>
+      {p.github_repo && (
+        <div className="pl-0 pb-3 -mt-2">
+          <a
+            href={`https://github.com/${p.github_repo}`}
+            target="_blank"
+            rel="noreferrer"
+            className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute hover:text-ink transition-colors"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {p.github_repo} ↗
+          </a>
+        </div>
+      )}
     </li>
   );
 }

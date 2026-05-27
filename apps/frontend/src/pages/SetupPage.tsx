@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { bulkUpdateSettings, createAdminProject } from "@/lib/api";
+import { suggestDisplayName } from "@/lib/projectNames";
 
 const STEPS = [
   { key: "storage", label: "Storage" },
@@ -367,7 +368,14 @@ function StepProject({
       <InputRow
         label="GitHub Repo"
         value={values.github_repo}
-        onChange={(v) => onChange({ ...values, github_repo: v })}
+        onChange={(v) => {
+          const suggested = suggestDisplayName(v);
+          onChange({
+            ...values,
+            github_repo: v,
+            display_name: values.display_name || suggested || values.display_name,
+          });
+        }}
         placeholder="owner/repo"
       />
       <SelectRow

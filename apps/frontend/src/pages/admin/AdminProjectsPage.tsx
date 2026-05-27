@@ -6,6 +6,7 @@ import {
   updateAdminProject,
   deleteAdminProject,
 } from "@/lib/api";
+import { suggestDisplayName } from "@/lib/projectNames";
 
 interface Project {
   slug: string;
@@ -190,7 +191,14 @@ export default function AdminProjectsPage() {
             <Field
               label="GitHub Repo"
               value={form.github_repo}
-              onChange={(v) => setForm({ ...form, github_repo: v })}
+              onChange={(v) => {
+                const suggested = suggestDisplayName(v);
+                setForm((prev) => ({
+                  ...prev,
+                  github_repo: v,
+                  display_name: prev.display_name || suggested || prev.display_name,
+                }));
+              }}
               placeholder="owner/repo"
             />
             <SelectField
