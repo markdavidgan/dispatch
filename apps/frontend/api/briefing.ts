@@ -42,10 +42,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const audioLeadUrl = dbAudioLead
     || `${backendUrl}/api/audio/dispatch/audio/${date}-lead.mp3`
-    || (base ? `${base}/dispatch/audio/${date}-lead.wav` : null);
+    || (base ? `${base}/dispatch/audio/${date}-lead.mp3` : null);
   const audioAddendumUrl = dbAudioAddendum
     || (addendums.length ? `${backendUrl}/api/audio/dispatch/audio/${date}-addendum.mp3` : null)
-    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null);
+    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.mp3` : null);
 
   res.status(200).json({
     date: lead.date,

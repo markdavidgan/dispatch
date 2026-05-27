@@ -14,7 +14,21 @@ export async function generateAudio(text: string): Promise<Buffer> {
     throw new Error(`Backend TTS failed: ${response.status} ${err}`);
   }
 
-  return Buffer.from(await response.arrayBuffer());
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("audio/")) {
+    const preview = await response.text().catch(() => "");
+    throw new Error(
+      `Backend TTS returned unexpected content-type "${contentType}" (expected audio/*). ` +
+      `Preview: ${preview.slice(0, 200)}`
+    );
+  }
+
+  const data = Buffer.from(await response.arrayBuffer());
+  if (data.length === 0) {
+    throw new Error("Backend TTS returned empty audio (0 bytes)");
+  }
+
+  return data;
 }
 
 export function estimateDuration(text: string): number {

@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = (req.query.key as string) || "";
   if (!key) return res.status(400).json({ error: "Missing key" });
 
-  const fullKey = key.startsWith("podcast/") ? key : `dispatch/audio/${key}.wav`;
+  const fullKey = key.startsWith("podcast/") ? key : `dispatch/audio/${key}.mp3`;
 
   const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
   if (base) {

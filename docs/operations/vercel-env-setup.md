@@ -143,8 +143,8 @@ TURSO_AUTH_TOKEN=<create via turso CLI>
 GEMINI_API_KEY=<create at aistudio.google.com>
 GROQ_API_KEY=<create at console.groq.com>
 
-# TTS
-HF_API_TOKEN=<create at huggingface.co>
+# TTS (delegated to backend — no HF token needed)
+BACKEND_URL=https://dispatch-demo-api.marklab.uk
 
 # Storage
 R2_ACCOUNT_ID=7f5bbe163c03ce3b41590ff227ff6842

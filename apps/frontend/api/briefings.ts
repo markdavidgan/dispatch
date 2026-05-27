@@ -22,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     date: r.date,
     issue_no: r.issue_no,
     lead_headline: r.lead_headline || "",
-    audio_url: base ? `${base}/dispatch/audio/${r.date}-lead.wav` : null,
+    audio_url: base ? `${base}/dispatch/audio/${r.date}-lead.mp3` : null,
     active_count: r.active_count || 0,
     filed_at: r.generated_at ? (r.generated_at as string).split("T")[1].slice(0, 5) : "",
   }));
