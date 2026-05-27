@@ -18,7 +18,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   args.push(limit, offset);
 
   const rows = await db.execute({ sql, args });
-  const totalRow = await db.execute({ sql: "SELECT COUNT(*) FROM runs", args: [] });
+
+  let countSql = "SELECT COUNT(*) FROM runs WHERE 1=1";
+  const countArgs: any[] = [];
+  if (job) { countSql += " AND job = ?"; countArgs.push(job); }
+  if (status) { countSql += " AND status = ?"; countArgs.push(status); }
+  const totalRow = await db.execute({ sql: countSql, args: countArgs });
 
   res.status(200).json({
     runs: rows.rows.map((r) => ({

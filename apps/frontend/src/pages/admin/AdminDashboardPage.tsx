@@ -24,6 +24,7 @@ export default function AdminDashboardPage() {
   const [status, setStatus] = useState<SetupStatus | null>(null);
   const [runs, setRuns] = useState<Run[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [backingUp, setBackingUp] = useState(false);
   const [backupMsg, setBackupMsg] = useState("");
 
@@ -36,8 +37,9 @@ export default function AdminDashboardPage() {
         ]);
         setStatus(s);
         setRuns(r.runs ?? r ?? []);
-      } catch (e) {
+      } catch (e: any) {
         console.error(e);
+        setError(e.message || "Failed to load dashboard data.");
       } finally {
         setLoading(false);
       }
@@ -64,6 +66,20 @@ export default function AdminDashboardPage() {
     return (
       <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-24 text-center">
         <p className="font-disp text-base text-ink-soft">Loading…</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-8 py-12">
+        <header className="mb-10">
+          <h1 className="font-disp text-2xl font-bold tracking-[-0.02em] text-ink">Admin</h1>
+        </header>
+        <div className="border border-signal p-5">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal font-semibold">Error</p>
+          <p className="font-disp text-sm text-ink mt-2">{error}</p>
+        </div>
       </main>
     );
   }

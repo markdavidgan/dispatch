@@ -33,7 +33,7 @@ export async function fetchBriefings(limit = 50, offset = 0) {
 }
 
 export async function fetchBriefing(date: string) {
-  return apiFetch(`/briefings/${date}`);
+  return apiFetch(`/briefing?date=${encodeURIComponent(date)}`);
 }
 
 // Projects

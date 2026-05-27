@@ -6,7 +6,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
   await ensureSchema();
   const prefix = (req.query.prefix as string) || "";
-  const settingsMap = await listSettings(prefix);
-  const settings = Object.entries(settingsMap).map(([key, value]) => ({ key, value }));
-  res.status(200).json({ settings });
+  try {
+    const settingsMap = await listSettings(prefix);
+    const settings = Object.entries(settingsMap).map(([key, value]) => ({ key, value }));
+    res.status(200).json({ settings });
+  } catch (e: any) {
+    if (e.message?.includes("DISPATCH_MASTER_KEY")) {
+      return res.status(503).json({ error: "DISPATCH_MASTER_KEY not configured" });
+    }
+    throw e;
+  }
 }

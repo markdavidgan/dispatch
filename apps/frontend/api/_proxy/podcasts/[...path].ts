@@ -16,6 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: req.method !== "GET" && req.method !== "HEAD" ? JSON.stringify(req.body) : undefined,
     });
     const data = await response.text();
+    res.setHeader("Content-Type", response.headers.get("content-type") || "application/json");
     res.status(response.status).send(data);
   } catch (e) {
     res.status(502).json({ error: String(e) });

@@ -1,11 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../../_lib/db.js";
+import { getDb, ensureSchema } from "../../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "PATCH") return res.status(405).end();
   const jobName = req.query.jobName as string;
   const body = req.body || {};
   const db = getDb();
+  await ensureSchema(db);
 
   const sets: string[] = [];
   const args: any[] = [];

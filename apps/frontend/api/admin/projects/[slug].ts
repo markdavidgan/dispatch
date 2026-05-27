@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../../_lib/db.js";
+import { getDb, ensureSchema } from "../../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const slug = req.query.slug as string;
   const db = getDb();
+  await ensureSchema(db);
 
   if (req.method === "PATCH") {
     const body = req.body || {};

@@ -1,9 +1,10 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getDb } from "../_lib/db.js";
+import { getDb, ensureSchema } from "../_lib/db.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") return res.status(405).end();
   const db = getDb();
+  await ensureSchema(db);
   const rows = await db.execute({
     sql: "SELECT job_name, cron_expression, timezone, is_enabled, last_run_at, next_run_at FROM schedules ORDER BY job_name",
     args: [],
