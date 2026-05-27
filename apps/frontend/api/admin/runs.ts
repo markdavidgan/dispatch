@@ -23,7 +23,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.status(200).json({
     runs: rows.rows.map((r) => ({
       id: r.id,
-      job: r.job,
+      job_name: r.job,
       status: r.status,
       started_at: r.started_at,
       finished_at: r.finished_at,
