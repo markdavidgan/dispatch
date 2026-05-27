@@ -20,5 +20,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     sort_order: r.sort_order,
   }));
 
-  res.status(200).json({ projects });
+  res.status(200).json(projects);
 }
