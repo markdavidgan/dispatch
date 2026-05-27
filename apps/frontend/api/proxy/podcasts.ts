@@ -6,8 +6,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!PODCAST_BACKEND) {
     return res.status(503).json({ error: "PODCAST_BACKEND_URL not configured" });
   }
-  const path = (req.query.path as string[]) || [];
-  const target = `${PODCAST_BACKEND}/api/podcasts/${path.join("/")}`;
+  const path = ((req.query.path as string) || "").replace(/^\//, "");
+  const target = `${PODCAST_BACKEND}/api/podcasts/${path}`;
 
   try {
     const response = await fetch(target, {
