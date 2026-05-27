@@ -7,7 +7,7 @@
 **Live demo:** [dispatch-demo.markdavidgan.com](https://dispatch-demo.markdavidgan.com) —
 a public instance watching `anthropics/claude-code`, `withastro/astro`,
 `Shopify/hydrogen`, `Netflix/metaflow`, `Netflix/mantis`, `vercel/ai`,
-`vercel/workflow`, and `google/gemma.cpp`.
+`vercel/workflow`, `google/gemma.cpp`, and this repo itself (`markdavidgan/dispatch`).
 
 ![Today page](docs/screenshot-today.png)
 
@@ -24,7 +24,7 @@ is configured through the admin UI and encrypted at rest.
 | Layer       | Stack                                                                   |
 | ----------- | ----------------------------------------------------------------------- |
 | Frontend    | Vite + React 19 + Tailwind CSS v4 + React Router (static SPA build)     |
-| Backend     | FastAPI + Python 3.12 + aiosqlite (SQLite in WAL mode)                  |
+| Backend     | FastAPI + Python 3.13 + aiosqlite (SQLite in WAL mode)                  |
 | Scheduler   | In-process APScheduler — no Redis, no Celery                            |
 | Storage     | Pluggable: local filesystem, Cloudflare R2, or S3-compatible            |
 | AI          | Configurable providers — Kimi, Anthropic, OpenAI                        |
@@ -257,7 +257,7 @@ immediately (e.g. right after `bootstrap.sh`), hit:
 
 ```
 POST /api/admin/system/backfill
-{ "max_days": 30, "ingest": true }
+{ "look_back_days": 30, "ingest": true }
 ```
 
 The endpoint ingests fresh events, then loops the look-back synthesis until

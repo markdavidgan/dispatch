@@ -20,11 +20,7 @@ application policy gates both, and the auth cookie covers all subdomains.
 3. Deploy the frontend to Vercel (or any static host) on `dispatch.example.com`.
 4. Deploy the backend to a VPS / homelab box on `api.example.com`, also behind
    the same Access application.
-5. Set `VITE_DISPATCH_API_URL=https://api.example.com` in the frontend build.
-
-The Access cookie issued at the apex covers both subdomains, so the SPA can
-`fetch(backend, { credentials: "include" })` and Cloudflare transparently
-authenticates the call.
+5. Set `VITE_DISPATCH_API_URL=https://api.example.com` in the frontend build **only if** you need the podcast proxy fallback to reach the self-hosted backend directly. In normal operation the Vercel tier serves `/api/*` itself; the SPA's main API client uses same-origin `/api`.
 
 **CORS bootstrap for split deployments**
 
@@ -42,8 +38,8 @@ deployment.)
 
 If you serve podcast episodes through the backend (local-filesystem storage
 rather than R2/S3 presigned URLs), episode `<audio>` elements will also need
-the Access cookie. The frontend already sends `credentials: "include"` and
-sets `crossOrigin="use-credentials"` on podcast audio tags.
+the Access cookie. The frontend already sends `credentials: "include"` on
+API calls.
 
 ### Cloudflare Access — Public demo with gated admin routes
 

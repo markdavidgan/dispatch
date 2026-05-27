@@ -27,7 +27,7 @@ flowchart LR
     perimeter["Perimeter<br/>(Cloudflare Access · Tailscale · Caddy auth)"]
     caddy["Caddy<br/>gateway / reverse proxy"]
     spa["Vite SPA<br/>React 19 + Tailwind"]
-    api["FastAPI backend<br/>Python 3.12 + SQLite"]
+    api["FastAPI backend<br/>Python 3.13 + SQLite"]
     db[("SQLite WAL<br/>/data/dispatch.db")]
     sched["APScheduler<br/>in-process"]
     storage[("Storage backend<br/>local · R2 · S3")]
@@ -223,9 +223,11 @@ POST /api/admin/system/rotate-key
 { "old_key": "...", "new_key": "..." }
 ```
 
-The same encryption scheme is used in both deployment modes. In the hybrid
-mode, the Vercel tier uses AES-GCM (Node.js `crypto`) instead of Fernet, but
-the key derivation from `DISPATCH_MASTER_KEY` is identical.
+Both deployment modes derive encryption keys from `DISPATCH_MASTER_KEY`
+using SHA-256, but the algorithms differ: Docker uses Fernet (Python
+`cryptography`) and the Vercel tier uses AES-GCM (Node.js `crypto`). The
+ciphertext formats are **not interoperable** — each settings store is
+independent.
 
 ---
 
@@ -267,6 +269,10 @@ calling; the perimeter does.
 | GET | `/api/admin/system/setup-status` | First-boot wizard status |
 | POST | `/api/admin/system/rotate-key` | Re-encrypt every setting under a new master key |
 | POST | `/api/admin/system/backup-now` | Trigger an immediate SQLite backup |
+| POST | `/api/admin/system/backfill` | First-install ingest + synthesis backfill |
+| POST | `/api/admin/briefings/generate` | Manually trigger a lead briefing |
+| POST | `/api/admin/podcasts/{slug}/compose` | Trigger podcast compose for *slug* |
+| GET | `/api/admin/podcasts/{slug}/preview-source` | Preview NotebookLM source markdown |
 
 ---
 
@@ -365,7 +371,7 @@ The self-hosted backend runs its own APScheduler for podcast jobs:
 | Storage backend + creds | Admin UI → `storage.provider` + `storage.*` | Encrypted in SQLite `settings` |
 | Project registry | `projects.yml` (bootstrap) + admin UI | SQLite `projects` table |
 | Job schedules | Admin UI → `/api/admin/schedules` | SQLite `schedules` table |
-| Timezone | `DISPATCH_TZ` env var | Environment (default `UTC`) |
+| Timezone | `DISPATCH_TZ` env var | Environment (default `Asia/Manila`) |
 | Database | `DB_PATH` env var | Environment (default `/data/dispatch.db`) |
 | CORS origins | `DISPATCH_CORS_ORIGINS` env var or `web.allowed_origins` setting | Environment / encrypted settings |
 

@@ -192,22 +192,6 @@ no-op rather than a broken UI.
 
 ## State machines
 
-### Briefing filings
-
-```mermaid
-stateDiagram-v2
-    [*] --> draft : synthesis writes filing
-    draft --> narrated : TTS chunks + concat succeed
-    narrated --> published : snapshot + audio uploaded
-    draft --> failed : synthesis or schema validation error
-    narrated --> failed : TTS or ffmpeg error
-    published --> [*]
-    failed --> [*]
-```
-
-Failures are recorded in the `runs` table with the error message, visible in
-the admin Runs page.
-
 ### Podcast episodes
 
 ```mermaid

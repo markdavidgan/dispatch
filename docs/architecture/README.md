@@ -41,7 +41,7 @@ flowchart LR
     perimeter["Perimeter<br/>(Cloudflare Access · Tailscale · Caddy auth)"]
     caddy["Caddy<br/>gateway / reverse proxy"]
     spa["Vite SPA<br/>React 19 + Tailwind"]
-    api["FastAPI backend<br/>Python 3.12 + SQLite"]
+    api["FastAPI backend<br/>Python 3.13 + SQLite"]
     db[("SQLite WAL<br/>/data/dispatch.db")]
     sched["APScheduler<br/>in-process"]
     storage[("Storage backend<br/>local · R2 · S3")]

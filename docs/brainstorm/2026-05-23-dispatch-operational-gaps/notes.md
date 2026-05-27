@@ -166,22 +166,20 @@ Recovery: operator runs `notebooklm login` locally, pastes the new `storage_stat
 ```sql
 CREATE TABLE runs (
   id INTEGER PRIMARY KEY,
-  job_name TEXT NOT NULL,         -- "ingest_github" | "synthesize_lead" | "publish_podcast" | "publish_snapshot" | "backup_db" | ...
-  status TEXT NOT NULL,           -- "running" | "succeeded" | "failed" | "failed_transient" | "failed_auth" | "failed_quota" | "skipped"
+  job TEXT NOT NULL,              -- "ingest_github" | "ingest_git" | "synthesis:lead" | "audio" | "housekeeping" | ...
+  status TEXT NOT NULL,           -- "ok" | "partial" | "error"
   started_at TEXT NOT NULL,
   finished_at TEXT,
-  duration_ms INTEGER,
-  error_message TEXT,
-  metadata TEXT,                  -- JSON: { project_slug, event_count, rate_limit_remaining, ... }
-  log_excerpt TEXT                -- last ~100 lines of structured log output for quick debug
+  events_added INTEGER,
+  error TEXT
 );
-CREATE INDEX idx_runs_job_started ON runs(job_name, started_at DESC);
+CREATE INDEX idx_runs_job_started ON runs(job, started_at DESC);
 CREATE INDEX idx_runs_status ON runs(status);
 ```
 
-Retention: daily housekeeping job (Gap 10) prunes runs older than 30 days. Failed runs in the last 30 days always retained.
+Retention: daily housekeeping job (Gap 10) prunes runs older than 30 days.
 
-`/admin/runs` UI: filterable by job_name + status, sortable by started_at. Click → detail view shows full metadata JSON, log excerpt, and a link to the produced artifact (briefing slug, podcast episode, snapshot URL) parsed from metadata.
+`/admin/runs` UI: filterable by job + status, sortable by started_at.
 
 ---
 

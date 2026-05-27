@@ -1,4 +1,4 @@
-# Pinned for container reproducibility (target: Python 3.12 container).
+# Pinned for container reproducibility (target: Python 3.13 container).
 # Local Python 3.14 dev: install without pins — see Task 1.5 Dockerfile.
 # No aiobotocore/botocore — R2 access uses Cloudflare REST API (Task 4.2).
 fastapi==0.115.6

@@ -117,7 +117,7 @@ key: ## Print a fresh DISPATCH_MASTER_KEY (does not write to .env)
 backfill: ## Trigger a 30-day ingest + look-back backfill against the running stack
 	@curl -fsS -X POST "http://localhost:$(HOST_PORT)/api/admin/system/backfill" \
 	  -H "Content-Type: application/json" \
-	  -d '{"max_days": 30, "ingest": true}' | python3 -m json.tool
+	  -d '{"look_back_days": 30, "ingest": true}' | python3 -m json.tool
 
 .PHONY: clean
 clean: ## Remove venv, node_modules, and build artifacts

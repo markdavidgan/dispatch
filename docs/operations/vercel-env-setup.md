@@ -63,9 +63,9 @@ Turso provides serverless SQLite over HTTP — perfect for Vercel's stateless fu
    TURSO_AUTH_TOKEN=<token>
    ```
 
-> **Note:** After creating the DB, run the schema migration. The schema is in `apps/backend/dispatch/db/schema.sql` (or create a Turso-specific migration). You can apply it with:
+> **Note:** After creating the DB, run the schema migration. The schema is in `apps/backend/dispatch/schema.sql` (or create a Turso-specific migration). You can apply it with:
 > ```bash
-> turso db shell dispatch < apps/backend/dispatch/db/schema.sql
+> turso db shell dispatch < apps/backend/dispatch/schema.sql
 > ```
 
 ---
@@ -107,23 +107,9 @@ Fallback LLM when Gemini hits rate limits or is unavailable.
 
 ---
 
-### 5. Hugging Face API Token (Free)
+### 5. Hugging Face API Token (Not Required)
 
-Required for Kokoro TTS via the Hugging Face Inference API.
-
-**Steps:**
-1. Go to [Hugging Face Settings → Access Tokens](https://huggingface.co/settings/tokens)
-2. Click **New Token**
-3. Set:
-   - **Name**: `dispatch-tts`
-   - **Role**: `read`
-4. Copy the token
-5. Save to Doppler dispatch/prd:
-   ```
-   HF_API_TOKEN=<token>
-   ```
-
-> **Note:** The Inference API is free with rate limits. For production, consider self-hosting Kokoro or using a paid inference endpoint.
+TTS is delegated to the self-hosted backend (Google Cloud Chirp 3 HD). No Hugging Face token is needed for the Vercel tier.
 
 ---
 

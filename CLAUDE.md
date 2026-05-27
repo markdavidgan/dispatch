@@ -19,7 +19,7 @@ Do NOT write planning docs to `docs/superpowers/`, `.superpowers/`, or repo root
 
 ## Phase ordering
 
-Each phase has its own plan in `docs/plans/`. Current: **Phase 2–5** — Vite SPA frontend, encrypted DB-backed settings, admin APIs, and pluggable storage backends.
+Each phase has its own plan in `docs/plans/`. Phases 2–7 are **complete** (Vite SPA frontend, encrypted DB-backed settings, admin APIs, pluggable storage, enhanced ingest, and Vercel serverless hybrid mode).
 
 ## When in doubt
 

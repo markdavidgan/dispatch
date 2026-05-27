@@ -69,7 +69,7 @@ See the root [`README.md`](../../README.md) for day-to-day `make` targets
 | `DISPATCH_MASTER_KEY` | **Yes** | Encrypts settings at rest. Generate with `make key`. |
 | `GOOGLE_APPLICATION_CREDENTIALS` | **Yes** (for TTS) | Path to GCP service account JSON inside the container. Mount via `docker-compose.yml`. |
 | `DB_PATH` | No | SQLite file path (default `/data/dispatch.db`) |
-| `DISPATCH_TZ` | No | Timezone for scheduler (default `UTC`) |
+| `DISPATCH_TZ` | No | Timezone for scheduler (default `Asia/Manila`) |
 | `HOST` | No | uvicorn bind (default `0.0.0.0`) |
 | `PORT` | No | uvicorn port (default `10060`) |
 | `DISPATCH_CORS_ORIGINS` | No | Comma-separated allowed origins for CORS |
@@ -231,7 +231,7 @@ HTTPS. See [ADR-001](adr/001-tts-on-marklab-backend.md).
 | `R2_PUBLIC_BASE_URL` | **Yes** | Public URL for R2 objects |
 | `GITHUB_TOKEN` | **Yes** | GitHub PAT for ingest |
 | `BACKEND_URL` | No | URL of the self-hosted backend (e.g. `https://api.example.com`) |
-| `DISPATCH_TZ` | No | Timezone for cron scheduling (default `UTC`) |
+| `DISPATCH_TZ` | No | Timezone for cron scheduling (default `Asia/Manila`) |
 
 #### Self-hosted backend (Docker)
 
@@ -240,7 +240,7 @@ HTTPS. See [ADR-001](adr/001-tts-on-marklab-backend.md).
 | `DISPATCH_MASTER_KEY` | **Yes** | Same key as Vercel. |
 | `GOOGLE_APPLICATION_CREDENTIALS` | **Yes** | Path to GCP service account JSON |
 | `DB_PATH` | No | SQLite file path (default `/data/dispatch.db`) |
-| `DISPATCH_TZ` | No | Timezone (default `UTC`) |
+| `DISPATCH_TZ` | No | Timezone (default `Asia/Manila`) |
 | `HOST` | No | uvicorn bind (default `0.0.0.0`) |
 | `PORT` | No | uvicorn port (default `10060`) |
 
