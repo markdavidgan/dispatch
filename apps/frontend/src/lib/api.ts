@@ -69,7 +69,7 @@ export async function fetchPodcastEpisodes(slug: string) {
 
 // Audio
 export function audioUrl(key: string) {
-  return `${API_BASE}/audio/${key}`;
+  return `${API_BASE}/audio?key=${encodeURIComponent(key)}`;
 }
 
 // Admin — Settings
