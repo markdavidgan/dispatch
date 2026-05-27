@@ -36,14 +36,13 @@ export default function PodcastsPage() {
   useEffect(() => {
     async function load() {
       try {
-        const [pData, sData] = await Promise.all([fetchPodcasts(), fetchSetupStatus()]);
+        const pData = await fetchPodcasts();
         const list: Podcast[] = (pData.podcasts ?? []).filter((p: Podcast) => p.enabled);
         // dispatch-weekly first
         list.sort((a, b) =>
           a.project_slug === "dispatch-weekly" ? -1 : b.project_slug === "dispatch-weekly" ? 1 : 0,
         );
         setPodcasts(list);
-        setStatus(sData ?? {});
         const eps: Record<string, any[]> = {};
         await Promise.all(
           list.map(async (p) => {
@@ -61,9 +60,17 @@ export default function PodcastsPage() {
       } finally {
         setLoading(false);
       }
+
+      // Backend status panel is best-effort; don't block podcast display
+      try {
+        const sData = await fetchSetupStatus();
+        setStatus(sData ?? {});
+      } catch {
+        setStatus({});
+      }
     }
     load();
-  }, []);
+  }, [])
 
   if (loading) {
     return (
