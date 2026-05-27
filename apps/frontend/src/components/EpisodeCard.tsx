@@ -52,8 +52,7 @@ export function EpisodeCard({ episode }: Props) {
         {ready ? (
           <audio
             controls
-            preload="none"
-            crossOrigin="use-credentials"
+            preload="metadata"
             className="mt-3.5 w-full max-w-[520px] block"
             aria-label={`Play ${episode.title}`}
           >
