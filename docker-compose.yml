@@ -4,8 +4,8 @@ services:
       context: apps/backend
       dockerfile: Dockerfile
     container_name: dispatch-backend
-    expose:
-      - "10060"
+    ports:
+      - "10060:10060"
     volumes:
       - dispatch-data:/data
       - dispatch-kimi-cache:/home/dispatch/.kimi

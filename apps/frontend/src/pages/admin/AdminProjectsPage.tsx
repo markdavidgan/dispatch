@@ -272,13 +272,13 @@ export default function AdminProjectsPage() {
             <form
               key={p.slug}
               onSubmit={handleSaveEdit}
-              className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_140px_100px_120px] gap-0 border-b border-hair bg-paper-deep px-3 py-3 items-center"
+              className="grid grid-cols-[1fr_1fr_120px_80px_100px] sm:grid-cols-[1fr_1fr_140px_100px_120px] gap-0 border-b border-hair bg-paper-deep items-center"
             >
-              <span className="font-mono text-[11px] text-ink-mute py-1.5 truncate">
+              <span className="font-mono text-[11px] text-ink-mute px-3 py-2.5 truncate">
                 {p.slug}
               </span>
               <input
-                className="w-full px-2 py-1.5 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
+                className="w-full px-3 py-2 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
                 value={editForm.display_name}
                 onChange={(e) =>
                   setEditForm({ ...editForm, display_name: e.target.value })
@@ -286,14 +286,14 @@ export default function AdminProjectsPage() {
                 required
               />
               <input
-                className="w-full px-2 py-1.5 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
+                className="w-full px-3 py-2 border border-ink bg-paper font-disp text-sm text-ink focus:outline-none focus:border-signal"
                 value={editForm.github_repo}
                 onChange={(e) =>
                   setEditForm({ ...editForm, github_repo: e.target.value })
                 }
               />
               <select
-                className="w-full px-2 py-1.5 border border-ink bg-paper font-mono text-[11px] text-ink focus:outline-none focus:border-signal"
+                className="w-full px-3 py-2 border border-ink bg-paper font-mono text-[11px] text-ink focus:outline-none focus:border-signal"
                 value={editForm.status}
                 onChange={(e) =>
                   setEditForm({ ...editForm, status: e.target.value })
@@ -303,17 +303,17 @@ export default function AdminProjectsPage() {
                 <option value="held">held</option>
                 <option value="archived">archived</option>
               </select>
-              <div className="flex gap-2 justify-end">
+              <div className="flex gap-2 justify-end px-3 py-2">
                 <button
                   type="submit"
-                  className="font-mono text-[10px] uppercase tracking-[0.12em] font-semibold px-3 py-1.5 bg-signal text-paper hover:bg-ink transition-colors"
+                  className="font-mono text-[10px] uppercase tracking-[0.12em] font-semibold px-2.5 py-1 bg-signal text-paper hover:bg-ink transition-colors"
                 >
                   Save
                 </button>
                 <button
                   type="button"
                   onClick={cancelEdit}
-                  className="font-mono text-[10px] uppercase tracking-[0.12em] font-semibold px-3 py-1.5 border border-ink text-ink hover:bg-paper-deep transition-colors"
+                  className="font-mono text-[10px] uppercase tracking-[0.12em] font-semibold px-2.5 py-1 border border-ink text-ink hover:bg-paper-deep transition-colors"
                 >
                   Cancel
                 </button>

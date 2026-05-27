@@ -31,6 +31,8 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
     args: [],
   });
 
+  const displayNameMap = new Map(projectRows.rows.map((r) => [r.slug as string, r.display_name as string]));
+
   const projects: Array<Record<string, any>> = [];
   for (const row of projectRows.rows) {
     const slug = row.slug as string;
@@ -82,6 +84,11 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
         const projectLines = JSON.parse((row.project_lines as string) || "[]");
         // Filter out meta projects that may have been included in synthesis
         const filteredProjectLines = projectLines.filter((p: any) => !metaSlugs.has(p.slug));
+        // Override names with current display_name from DB
+        const hydratedProjectLines = filteredProjectLines.map((p: any) => ({
+          ...p,
+          name: displayNameMap.get(p.slug) || p.name,
+        }));
         lead = {
           date: row.date,
           issue_no: row.issue_no,
@@ -89,7 +96,7 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
           active_count: `${(row.active_count as number) || 0}`.padStart(2, "0"),
           lead_headline: row.lead_headline || "",
           lead_body: row.lead_body || "",
-          projects: filteredProjectLines,
+          projects: hydratedProjectLines,
           addendums: [],
           audio: null,
         };
