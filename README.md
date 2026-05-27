@@ -5,7 +5,11 @@
 > daily report with audio narration, and produces weekly podcasts.
 
 **Live demo:** [dispatch-demo.markdavidgan.com](https://dispatch-demo.markdavidgan.com) —
-a public instance watching `anthropics/claude-code`, `withastro/astro`, and this repo.
+a public instance watching `anthropics/claude-code`, `withastro/astro`,
+`Shopify/hydrogen`, `Netflix/metaflow`, `Netflix/mantis`, `vercel/ai`,
+`vercel/workflow`, and `google/gemma.cpp`.
+
+![Today page](docs/screenshot-today.png)
 
 Dispatch is deliberately built as a **single-admin per instance, perimeter-trusting**
 application — no users table, no login page, no JWTs. Authentication lives at the
@@ -84,9 +88,8 @@ make bootstrap
 
 That generates a `DISPATCH_MASTER_KEY` into `.env` if you don't have one,
 brings up the docker compose stack, waits for the backend to report healthy,
-then triggers an ingest + look-back synthesis backfill against the three
-example projects shipped in `apps/backend/dispatch/projects.yml`
-(`anthropics/claude-code`, `withastro/astro`, and `markdavidgan/dispatch`).
+then triggers an ingest + look-back synthesis backfill against the example
+projects shipped in `apps/backend/dispatch/projects.yml`.
 
 Visit:
 
@@ -202,10 +205,10 @@ Recipes for the common perimeter patterns live in
 
 ## Configuring your own projects
 
-The shipped `apps/backend/dispatch/projects.yml` registers three showcase
-projects — `anthropics/claude-code`, `withastro/astro`, and this repository
-(`markdavidgan/dispatch`) — so a fresh clone has something to summarize. After
-your first boot, either:
+The shipped `apps/backend/dispatch/projects.yml` registers several showcase
+projects (including `anthropics/claude-code`, `withastro/astro`, and this
+repository, `markdavidgan/dispatch`) so a fresh clone has something to summarize.
+After your first boot, either:
 
 - Edit `projects.yml` directly and restart, **or**
 - Use the admin UI at `/admin/projects` to CRUD projects at runtime.
