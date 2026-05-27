@@ -91,11 +91,6 @@ export default function HomePage() {
             <AudioPlayer
               leadUrl={brief.audio?.lead_url}
               addendumUrl={brief.audio?.addendum_url}
-              durationLabel={
-                brief.audio?.lead_duration_s
-                  ? `${brief.audio.lead_duration_s}s`
-                  : undefined
-              }
             />
             <RefreshButton />
           </div>

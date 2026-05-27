@@ -26,6 +26,10 @@ export default function ProjectDetailPage() {
     load();
   }, []);
 
+  // Check if project is in the latest briefing (covers the window where
+  // briefing_mentions table hasn't been populated yet after a new filing)
+  const isInLatestBrief = snapshot?.brief?.projects?.some((p: any) => p.slug === slug) ?? false;
+
   if (loading) {
     return (
       <main className="lg:pl-24">
@@ -122,7 +126,7 @@ export default function ProjectDetailPage() {
         <div className="pt-12 pb-24 grid grid-cols-1 lg:grid-cols-[minmax(0,8fr)_minmax(0,3fr)] gap-16">
           <article>
             <FromTheDesk body={project.from_the_desk ?? null} generatedAt={project.from_the_desk_generated_at ?? null} />
-            <MentionedInBriefings mentions={mentions} />
+            <MentionedInBriefings mentions={mentions} isInLatestBrief={isInLatestBrief} />
             <EventStream events={events} limit={20} />
           </article>
           <aside className="font-disp text-sm">

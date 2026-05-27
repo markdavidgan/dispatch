@@ -9,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await ensureSchema(db);
 
   const rows = await db.execute({
-    sql: `SELECT date, kind, issue_no, lead_headline, lead_body, active_count, project_lines, generated_at, addendum_label, addendum_body, lead_article FROM filings WHERE date = ? ORDER BY kind`,
+    sql: `SELECT date, kind, issue_no, lead_headline, lead_body, active_count, project_lines, generated_at, addendum_label, addendum_body, lead_article, audio_duration_s FROM filings WHERE date = ? ORDER BY kind`,
     args: [date],
   });
 
@@ -45,6 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     projects: filteredProjects,
     audio_lead_url: base ? `${base}/dispatch/audio/${date}-lead.wav` : null,
     audio_addendum_url: addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null,
+    audio_duration_s: lead.audio_duration_s || null,
     active_count: lead.active_count || 0,
     filed_at: lead.generated_at ? (lead.generated_at as string).split("T")[1].slice(0, 5) : "",
     recent_events: (await db.execute({

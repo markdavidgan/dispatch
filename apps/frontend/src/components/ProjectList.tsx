@@ -76,7 +76,7 @@ function ProjectRow({
   return (
     <Link
       to={`/projects/${project.slug}`}
-      className={`grid grid-cols-[18px_1fr_90px_100px_24px] gap-4 items-center py-3 border-b border-hair hover:bg-paper-deep transition-colors duration-[120ms] ${dimmed ? "opacity-55" : ""}`}
+      className={`grid grid-cols-[18px_1fr_90px_auto_24px] gap-4 items-center py-3 border-b border-hair hover:bg-paper-deep transition-colors duration-[120ms] ${dimmed ? "opacity-55" : ""}`}
     >
       <Bullet color={project.bullet} />
       <span className="font-disp text-[17px] font-semibold tracking-[-0.01em] text-ink">
@@ -85,7 +85,7 @@ function ProjectRow({
       <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">
         {project.kind ?? ""}
       </span>
-      <span className="font-mono text-xs text-ink text-right tabular-nums">
+      <span className="font-mono text-xs text-ink text-right tabular-nums whitespace-nowrap">
         {live ? `${live.commits_7d}c · ${live.open_prs}p` : project.stat}
       </span>
       <span className="font-mono text-sm text-ink-mute text-right">→</span>

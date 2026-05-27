@@ -15,7 +15,7 @@ export default function Masthead({ issueNo, date, filedAt, durationSec }: Props)
       <div className="flex gap-4 flex-wrap items-center">
         <span>
           <span className="uppercase tracking-[0.14em] text-ink-mute mr-1.5">Filed</span>{" "}
-          <span className="text-ink font-semibold">{filedAt} ⏵ AVA</span>
+          <span className="text-ink font-semibold">{filedAt}</span>
         </span>
         {date && (
           <span>

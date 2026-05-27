@@ -9,9 +9,10 @@ interface Mention {
 
 interface Props {
   mentions: Mention[];
+  isInLatestBrief?: boolean;
 }
 
-export default function MentionedInBriefings({ mentions }: Props) {
+export default function MentionedInBriefings({ mentions, isInLatestBrief }: Props) {
   return (
     <section className="mb-14">
       <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink pb-3.5 border-b border-ink font-semibold mb-6 flex justify-between">
@@ -19,7 +20,9 @@ export default function MentionedInBriefings({ mentions }: Props) {
       </h2>
       {mentions.length === 0 ? (
         <p className="font-disp text-base text-ink-soft italic">
-          This project hasn&apos;t appeared in any briefing yet.
+          {isInLatestBrief
+            ? "Mentioned in today's briefing. Mention history will appear here shortly."
+            : "This project hasn't appeared in any briefing yet."}
         </p>
       ) : (
         <ul>
