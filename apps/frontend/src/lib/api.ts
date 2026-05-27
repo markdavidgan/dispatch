@@ -43,7 +43,7 @@ export async function fetchProjects() {
 
 // Podcasts (proxied to self-hosted backend)
 async function podcastFetch(path: string, init?: RequestInit) {
-  const url = `${API_BASE}/_proxy/podcasts${path}`;
+  const url = `${API_BASE}/proxy/podcasts${path}`;
   const resp = await fetch(url, {
     ...init,
     credentials: "include",
