@@ -12,12 +12,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const projects = rows.rows.map((r) => ({
     slug: r.slug,
-    name: r.display_name,
+    display_name: r.display_name,
     status: r.status,
     kind: r.kind,
     color_hint: r.color_hint,
     summary: r.summary,
     sort_order: r.sort_order,
+    github_repo: r.github_repo,
   }));
 
   res.status(200).json(projects);
