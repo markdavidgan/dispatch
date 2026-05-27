@@ -26,12 +26,33 @@ projects:
     kind: app
     summary: Shopify's React-based framework for building custom storefronts. Powers headless commerce with tight Remix integration.
 
-  - slug: zuul
-    display_name: Zuul
-    github: Netflix/zuul
+  - slug: metaflow
+    display_name: Metaflow
+    github: Netflix/metaflow
+    status: active
+    kind: tool
+    summary: Netflix's human-centric framework for building and managing real-life AI and ML systems. Covers the full lifecycle from notebook prototyping to production deployments.
+
+  - slug: mantis
+    display_name: Mantis
+    github: Netflix/mantis
     status: active
     kind: service
-    summary: Netflix's edge gateway service that provides dynamic routing, load balancing, and resilience for microservices at scale.
+    summary: Netflix's platform for building realtime, cost-effective, operations-focused stream processing applications.
+
+  - slug: ai-sdk
+    display_name: AI SDK
+    github: vercel/ai
+    status: active
+    kind: tool
+    summary: Vercel's provider-agnostic TypeScript toolkit for building AI-powered applications and agents. Supports Next.js, React, Svelte, Vue, and Node.js.
+
+  - slug: workflow-sdk
+    display_name: Workflow SDK
+    github: vercel/workflow
+    status: active
+    kind: tool
+    summary: Vercel's SDK for building durable, reliable, and observable apps and AI agents in TypeScript.
 
   - slug: gemma-cpp
     display_name: Gemma.cpp
