@@ -20,7 +20,7 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
   const src = addendumUrl || leadUrl;
-  if (!src) return null;
+  const hasAudio = Boolean(src);
 
   const pct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
@@ -44,10 +44,12 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
   };
 
   const handleBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hasAudio) return;
     seekTo(e.clientX);
   };
 
   const handleBarMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hasAudio) return;
     const bar = barRef.current;
     if (!bar) return;
     const rect = bar.getBoundingClientRect();
@@ -60,16 +62,19 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
   };
 
   return (
-    <div className="flex items-center gap-4 w-full max-w-[520px]">
+    <div className={`flex items-center gap-4 w-full max-w-[520px] ${!hasAudio ? "opacity-40" : ""}`}>
       {/* Play / Pause */}
       <button
         type="button"
-        onClick={toggle}
+        onClick={hasAudio ? toggle : undefined}
+        disabled={!hasAudio}
         aria-label={playing ? "Pause" : "Play"}
         className={`shrink-0 inline-flex items-center justify-center w-9 h-9 border transition-colors ${
           playing
             ? "bg-signal border-signal text-paper"
-            : "border-ink text-ink hover:bg-ink hover:text-paper"
+            : hasAudio
+              ? "border-ink text-ink hover:bg-ink hover:text-paper cursor-pointer"
+              : "border-ink text-ink cursor-not-allowed"
         }`}
       >
         {playing ? (
@@ -87,7 +92,7 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
       {/* Scrubber */}
       <div
         ref={barRef}
-        className="group relative flex-1 h-6 flex items-center cursor-pointer"
+        className={`group relative flex-1 h-6 flex items-center ${hasAudio ? "cursor-pointer" : "cursor-default"}`}
         onClick={handleBarClick}
         onMouseMove={handleBarMouseMove}
         onMouseLeave={handleBarMouseLeave}
@@ -97,8 +102,9 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
         aria-valuemax={duration ? Math.round(duration) : 0}
         aria-valuenow={currentTime ? Math.round(currentTime) : 0}
         aria-valuetext={`${fmtTime(currentTime)} of ${fmtTime(duration)}`}
-        tabIndex={0}
+        tabIndex={hasAudio ? 0 : -1}
         onKeyDown={(e) => {
+          if (!hasAudio) return;
           const audio = audioRef.current;
           if (!audio || !duration) return;
           if (e.key === "ArrowLeft") {
@@ -132,7 +138,7 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
         />
 
         {/* Hover preview time */}
-        {hoverPct !== null && (
+        {hoverPct !== null && hasAudio && (
           <div
             className="absolute -top-5 pointer-events-none font-mono text-[10px] text-ink-mute tabular-nums"
             style={{ left: `calc(${hoverPct}% - 12px)` }}
@@ -144,25 +150,27 @@ export default function AudioPlayer({ leadUrl, addendumUrl }: Props) {
 
       {/* Time */}
       <span className="shrink-0 font-mono text-[11px] tabular-nums text-ink-mute tracking-[0.04em] w-[80px] text-right">
-        {fmtTime(currentTime)}{" "}
+        {hasAudio ? fmtTime(currentTime) : "--:--"}{" "}
         <span className="text-hair-strong">/</span>{" "}
-        {fmtTime(duration)}
+        {hasAudio ? fmtTime(duration) : "--:--"}
       </span>
 
-      <audio
-        ref={audioRef}
-        src={src}
-        preload="metadata"
-        onLoadedMetadata={() => {
-          if (audioRef.current) setDuration(audioRef.current.duration || 0);
-        }}
-        onTimeUpdate={() => {
-          if (audioRef.current) setCurrentTime(audioRef.current.currentTime || 0);
-        }}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onEnded={() => setPlaying(false)}
-      />
+      {hasAudio && (
+        <audio
+          ref={audioRef}
+          src={src || undefined}
+          preload="metadata"
+          onLoadedMetadata={() => {
+            if (audioRef.current) setDuration(audioRef.current.duration || 0);
+          }}
+          onTimeUpdate={() => {
+            if (audioRef.current) setCurrentTime(audioRef.current.currentTime || 0);
+          }}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => setPlaying(false)}
+        />
+      )}
     </div>
   );
 }
