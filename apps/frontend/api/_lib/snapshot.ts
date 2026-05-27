@@ -112,8 +112,19 @@ export async function buildSnapshot(): Promise<Record<string, any>> {
   if (lead) {
     lead.addendums = addendums;
     const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
-    const publicLead = leadAudioUrl && !leadAudioUrl.startsWith("local://") ? leadAudioUrl : (leadAudioUrl?.startsWith("local://") && base ? `${base}/${leadAudioUrl.slice(8)}` : null);
-    const publicAddendum = addendumAudioUrl && !addendumAudioUrl.startsWith("local://") ? addendumAudioUrl : (addendumAudioUrl?.startsWith("local://") && base ? `${base}/${addendumAudioUrl.slice(8)}` : null);
+    const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, "") || "https://dispatch-demo-api.marklab.uk";
+
+    let publicLead = leadAudioUrl && !leadAudioUrl.startsWith("local://") ? leadAudioUrl : (leadAudioUrl?.startsWith("local://") && base ? `${base}/${leadAudioUrl.slice(8)}` : null);
+    let publicAddendum = addendumAudioUrl && !addendumAudioUrl.startsWith("local://") ? addendumAudioUrl : (addendumAudioUrl?.startsWith("local://") && base ? `${base}/${addendumAudioUrl.slice(8)}` : null);
+
+    // Fallback to backend audio if none found locally
+    if (!publicLead && latestDate) {
+      publicLead = `${backendUrl}/api/audio/dispatch/audio/${latestDate}-lead.mp3`;
+    }
+    if (!publicAddendum && latestDate && addendums.length) {
+      publicAddendum = `${backendUrl}/api/audio/dispatch/audio/${latestDate}-addendum.mp3`;
+    }
+
     if (publicLead || publicAddendum) {
       lead.audio = {
         lead_url: publicLead,

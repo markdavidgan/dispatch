@@ -320,10 +320,10 @@ export async function runAudio(kind: "lead" | "addendum" = "lead", targetDate?: 
     }
   }
 
-  const wav = await generateAudio(text);
+  const mp3 = await generateAudio(text);
   const duration = estimateDuration(text);
-  const r2Key = `dispatch/audio/${filingDate}-${kind}.wav`;
-  const url = await uploadBytes(wav, r2Key, "audio/wav");
+  const r2Key = `dispatch/audio/${filingDate}-${kind}.mp3`;
+  const url = await uploadBytes(mp3, r2Key, "audio/mpeg");
 
   await db.execute({
     sql: "UPDATE filings SET audio_url=?, audio_duration_s=? WHERE date=? AND kind=?",

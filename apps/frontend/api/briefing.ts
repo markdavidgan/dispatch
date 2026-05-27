@@ -9,7 +9,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await ensureSchema(db);
 
   const rows = await db.execute({
-    sql: `SELECT date, kind, issue_no, lead_headline, lead_body, active_count, project_lines, generated_at, addendum_label, addendum_body, lead_article, audio_duration_s FROM filings WHERE date = ? ORDER BY kind`,
+    sql: `SELECT date, kind, issue_no, lead_headline, lead_body, active_count, project_lines, generated_at, addendum_label, addendum_body, lead_article, audio_url, audio_duration_s FROM filings WHERE date = ? ORDER BY kind`,
     args: [date],
   });
 
@@ -34,6 +34,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const filteredProjects = JSON.parse((lead.project_lines as string) || "[]").filter((p: any) => !metaSlugs.has(p.slug));
 
   const base = process.env.R2_PUBLIC_BASE_URL?.replace(/\/$/, "") || "";
+  const backendUrl = process.env.BACKEND_URL?.replace(/\/$/, "") || "https://dispatch-demo-api.marklab.uk";
+
+  // Prefer DB audio_url, then R2 deterministic URL, then backend fallback
+  const dbAudioLead = lead.audio_url as string | null;
+  const dbAudioAddendum = rows.rows.find((r: any) => r.kind === "addendum")?.audio_url as string | null;
+
+  const audioLeadUrl = dbAudioLead
+    || (base ? `${base}/dispatch/audio/${date}-lead.wav` : null)
+    || `${backendUrl}/api/audio/dispatch/audio/${date}-lead.mp3`;
+  const audioAddendumUrl = dbAudioAddendum
+    || (addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null)
+    || (addendums.length ? `${backendUrl}/api/audio/dispatch/audio/${date}-addendum.mp3` : null);
 
   res.status(200).json({
     date: lead.date,
@@ -43,8 +55,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     lead_article: lead.lead_article || "",
     addendums,
     projects: filteredProjects,
-    audio_lead_url: base ? `${base}/dispatch/audio/${date}-lead.wav` : null,
-    audio_addendum_url: addendums.length && base ? `${base}/dispatch/audio/${date}-addendum.wav` : null,
+    audio_lead_url: audioLeadUrl,
+    audio_addendum_url: audioAddendumUrl,
     audio_duration_s: lead.audio_duration_s || null,
     active_count: lead.active_count || 0,
     filed_at: lead.generated_at ? (lead.generated_at as string).split("T")[1].slice(0, 5) : "",

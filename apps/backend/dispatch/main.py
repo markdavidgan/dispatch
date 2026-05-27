@@ -24,6 +24,7 @@ from dispatch.api import podcast as podcast_router
 from dispatch.api import briefings as briefings_router
 from dispatch.api import snapshot as snapshot_router
 from dispatch.api import audio as audio_router
+from dispatch.api import tts as tts_router
 from dispatch.api.admin import settings as admin_settings_router
 from dispatch.api.admin import projects as admin_projects_router
 from dispatch.api.admin import schedules as admin_schedules_router
