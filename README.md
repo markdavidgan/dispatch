@@ -28,6 +28,16 @@ is configured through the admin UI and encrypted at rest.
 | Reverse proxy | Caddy (ships in `docker-compose.yml`); any HTTP proxy works           |
 | Perimeter   | Deployment-layer auth — see `docs/operations/perimeter-recipes.md`      |
 
+**Two deployment modes:**
+
+- **All-in-One Docker** (recommended for self-hosting) — everything in a single
+  `docker compose up`. Caddy serves the SPA and reverse-proxies to the FastAPI
+  backend. SQLite + APScheduler run in-process.
+- **Hybrid** — Vercel serverless for the SPA, ingest, synthesis, and admin APIs;
+  self-hosted backend for TTS and podcasts. See
+  [`docs/architecture/DEPLOYMENT.md`](docs/architecture/DEPLOYMENT.md) for the
+  full split.
+
 For full diagrams and a layer-by-layer walkthrough, see **[docs/architecture/](docs/architecture/)**.
 
 ---
@@ -49,6 +59,7 @@ For full diagrams and a layer-by-layer walkthrough, see **[docs/architecture/](d
 dispatch/
 ├── apps/
 │   ├── frontend/      # Vite SPA — static build
+│   │   └── api/       # Vercel serverless API routes (hybrid mode only)
 │   └── backend/       # FastAPI app — Docker, encrypted settings, pluggable storage
 ├── caddy/             # Default reverse-proxy config (used by docker-compose)
 ├── docker-compose.yml # All-in-one stack (backend + caddy-served SPA)
@@ -120,9 +131,15 @@ Vite dev server runs on `http://localhost:5173` and proxies `/api/*` and
 make test       # backend pytest suite
 make test-e2e   # frontend Playwright e2e
 make lint       # frontend Biome
-make typecheck  # frontend tsc
+make format     # frontend Biome format
+make typecheck  # frontend TypeScript
 make build      # production SPA build
 ```
+
+> The backend currently uses pytest for tests. Python linting and type-checking
+> tooling (e.g. Ruff, mypy) are not yet configured — see
+> [`docs/architecture/ARCHITECTURE.md`](docs/architecture/ARCHITECTURE.md) for
+> the current code-quality setup.
 
 ### Manual Docker bring-up
 

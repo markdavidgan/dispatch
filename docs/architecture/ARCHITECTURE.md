@@ -1,97 +1,107 @@
 # Architecture
 
-## System overview
+Dispatch is a single-admin, perimeter-trusting daily editorial brief generator.
+It can run as an all-in-one Docker stack or be split across a serverless edge
+(Vercel) and a self-hosted backend.
 
-Dispatch is a hybrid application — a Vite SPA frontend on Vercel and a FastAPI
-backend on a self-hosted box — designed to run behind any HTTP-level
-authentication perimeter.
+---
 
-- **Vercel (frontend + briefings API)** — handles the SPA, GitHub ingest, AI
-  synthesis, snapshot publishing, and admin APIs. Runs on Turso (serverless SQLite)
-  and Vercel Cron Jobs.
-- **Self-hosted backend (marklab)** — handles TTS generation (Google Cloud Chirp 3
-  HD), podcast pipeline (NotebookLM + ffmpeg), and audio file serving. Runs in
-  Docker with a local SQLite database.
+## Deployment modes
 
-The two tiers communicate over HTTPS: the Vercel API tier calls the backend for
-audio generation (`POST /api/tts/generate`) and proxies podcast requests.
+The same codebase supports two topologies. Choose based on your infrastructure
+preferences.
 
-### Gateway patterns
+### Mode A: All-in-One Docker (recommended for self-hosting)
 
-**Vercel deployment (production)** — Vercel is the edge gateway. The SPA and API
-functions share the same origin (`dispatch-demo.markdavidgan.com`). API routes
-are file-based Vercel Functions; static assets are served from Vercel's CDN.
+A single `docker compose up` brings up the full stack:
 
-**Self-hosted backend (marklab)** — Exposed via a Cloudflare Tunnel at
-`dispatch-demo-api.marklab.uk`. It serves:
-- `POST /api/tts/generate` — called by Vercel functions for audio generation
-- `GET /api/audio/{key}` — serves MP3 files (local storage or R2 presigned)
-- `GET/POST /api/podcasts/*` — podcast feeds and episodes
-- `GET/POST /api/admin/podcasts/*` — podcast admin
-
-The backend container **publishes port 10060** on the host so the Cloudflare
-Tunnel can reach it via `localhost:10060`.
+- **Frontend** — Vite SPA served by Caddy
+- **Backend** — FastAPI with SQLite (WAL mode) and APScheduler
+- **Storage** — Local filesystem or S3-compatible (R2, MinIO, etc.)
+- **TTS** — Google Cloud Chirp 3 HD (via backend)
+- **Podcasts** — NotebookLM pipeline (via backend)
 
 ```mermaid
-flowchart TB
-    subgraph perimeter["Deployment perimeter (operator's choice)"]
-        direction LR
-        cf["Cloudflare<br/>Access"]
-        ts["Tailscale"]
-        ba["Caddy<br/>basic auth"]
-        au["Authelia"]
-    end
+flowchart LR
+    user["Reader / Operator"]
+    perimeter["Perimeter<br/>(Cloudflare Access · Tailscale · Caddy auth)"]
+    caddy["Caddy<br/>gateway / reverse proxy"]
+    spa["Vite SPA<br/>React 19 + Tailwind"]
+    api["FastAPI backend<br/>Python 3.12 + SQLite"]
+    db[("SQLite WAL<br/>/data/dispatch.db")]
+    sched["APScheduler<br/>in-process"]
+    storage[("Storage backend<br/>local · R2 · S3")]
+    github[("GitHub<br/>REST API")]
+    ai["AI providers<br/>Kimi · Anthropic · OpenAI"]
+    tts["Google Chirp 3 HD<br/>TTS"]
 
-    subgraph edge["Edge"]
-        caddy["Caddy reverse proxy<br/>gzip · zstd · TLS"]
-    end
-
-    subgraph frontend["Frontend (apps/frontend)"]
-        spa["Vite SPA<br/>React 19 · Tailwind v4 · React Router"]
-    end
-
-    subgraph backend["Backend (apps/backend/dispatch)"]
-        direction TB
-        api["FastAPI app<br/>uvicorn · async"]
-        sched["APScheduler"]
-        store["SettingsStore<br/>(Fernet-encrypted)"]
-        api -.-> store
-        sched -.-> api
-    end
-
-    subgraph data["State"]
-        db[("SQLite WAL<br/>/data/dispatch.db")]
-        media[("Storage backend<br/>local · R2 · S3")]
-    end
-
-    subgraph external["External services"]
-        gh[("GitHub<br/>REST API")]
-        ai["AI synthesis<br/>Gemini · Groq"]
-        tts["Google Chirp 3 HD<br/>TTS (via marklab backend)"]
-        nlm["NotebookLM<br/>podcasts (via marklab backend)"]
-    end
-
-    perimeter --> caddy
+    user --> perimeter --> caddy
     caddy -->|"/*"| spa
     caddy -->|"/api/* · /health"| api
-    spa -->|fetch JSON| api
     api <--> db
-    api <--> media
-    api -->|"POST /api/tts/generate"| tts_be
-    sched --> gh
+    api <--> storage
+    sched --> api
+    sched --> github
     sched --> ai
-    sched --> nlm
-    tts_be --> tts_ext
-
-    subgraph backend["Backend (marklab)"]
-        tts_be["FastAPI :10060\nTTS endpoint"]
-        tts_ext["Google Cloud TTS"]
-    end
+    api --> tts
 ```
+
+**Why this mode:** Simplest to operate. One container, one database, one
+backup target. No external platform lock-in.
+
+### Mode B: Hybrid — Vercel + Self-Hosted Backend
+
+The frontend and briefings API run on Vercel (serverless), while TTS and
+podcasts run on a self-hosted backend. Auth is provided by the surrounding
+perimeter (e.g. Cloudflare Access).
+
+```mermaid
+flowchart LR
+    user["Reader / Operator"]
+    perimeter["Perimeter<br/>(Cloudflare Access)"]
+
+    subgraph vercel["Vercel (serverless)"]
+        spa["Vite SPA"]
+        vapi["Vercel Functions<br/>ingest · synthesis · admin"]
+        cron["Vercel Cron Jobs"]
+        turso[("Turso DB<br/>serverless SQLite")]
+        r2[("Cloudflare R2")]
+    end
+
+    subgraph backend["Self-hosted backend (Docker)"]
+        be["FastAPI :10060<br/>TTS + podcasts"]
+        sqlite[("SQLite WAL<br/>local")]
+    end
+
+    user --> perimeter
+    perimeter --> spa
+    perimeter --> be
+    spa -->|"/api/*"| vapi
+    vapi <--> turso
+    vapi -->|"R2 upload"| r2
+    vapi -->|"POST /api/tts/generate"| be
+    cron --> vapi
+    be --> tts["Google Cloud TTS"]
+    be --> nlm["NotebookLM + ffmpeg"]
+    be <--> sqlite
+```
+
+**Why this mode:** The Vercel edge handles ingest and synthesis (stateless HTTP
+calls to GitHub and AI providers), while the self-hosted box handles
+long-running, resource-heavy work: TTS chunking, ffmpeg, and NotebookLM's
+4-hour episode polling. The backend shrinks to "TTS + podcast worker" — the
+Vercel tier owns the rest.
+
+**Why the split exists:** Vercel serverless has no ffmpeg, no long-polling,
+and tight execution limits. TTS and podcast pipelines need both. Rather than
+find a new TTS provider that works serverless, Dispatch delegates audio work to
+the self-hosted backend over HTTPS. See [ADR-001](adr/001-tts-on-marklab-backend.md).
+
+---
 
 ## Components
 
-### Frontend — `apps/frontend/`
+### Frontend — `apps/frontend/src/`
 
 | Concern | Choice | Notes |
 | --- | --- | --- |
@@ -107,7 +117,12 @@ gates the matching `/api/admin/*` backend routes. If the perimeter is
 misconfigured, the SPA loads but the API calls fail — there is no second-line
 defense inside the app.
 
-### Frontend API — `apps/frontend/api/_lib/`
+### Serverless API — `apps/frontend/api/` (Mode B only)
+
+In the hybrid deployment, Vercel file-based API routes provide a serverless
+backend that mirrors the Docker backend's public and admin surfaces. This is a
+deployment-specific extraction: the same orchestration, ingest, synthesis, and
+storage logic implemented as Vercel Functions.
 
 | Module | Responsibility |
 | --- | --- |
@@ -122,13 +137,20 @@ defense inside the app.
 | `snapshot.ts` | Snapshot builder + signer |
 | `tts.ts` | Delegates to backend `POST /api/tts/generate` |
 
+> **Design note:** The Vercel serverless API duplicates the backend's
+> orchestration and ingest logic because Vercel Cron Jobs must invoke
+> serverless functions. The Python backend remains the canonical
+> implementation; the TypeScript API is a deployment adapter for serverless
+> hosting. See [DEPLOYMENT.md](DEPLOYMENT.md) for how to avoid this entirely
+> by running in all-in-one Docker mode.
+
 ### Backend — `apps/backend/dispatch/`
 
 | Module | Responsibility |
 | --- | --- |
 | `main.py` | FastAPI app + lifespan; bootstraps DB, settings, storage, scheduler |
 | `api/` | Public and admin route handlers |
-| `api/tts.py` | **TTS generation endpoint** — called by Vercel frontend |
+| `api/tts.py` | TTS generation endpoint — serves the Vercel tier in hybrid mode |
 | `crypto.py` | Fernet key derivation from `DISPATCH_MASTER_KEY` |
 | `settings_store.py` | Encrypted DB-backed settings (read/write/upsert) |
 | `storage/` | Pluggable storage backends (`base.py` + `local.py` / `r2.py` / `s3.py`) |
@@ -143,23 +165,31 @@ defense inside the app.
 | `orchestrator.py` | Composes ingest → synthesis → publish for a single cycle |
 | `schema.sql` | Idempotent SQLite schema |
 
-### Persistence
+---
 
-Single SQLite file (`/data/dispatch.db` by default), opened in WAL mode via
-`aiosqlite`. No ORM — handlers run raw SQL through `Database.cursor()`. The
-schema is intentionally small enough to be hand-rolled and idempotent.
+## Persistence
+
+Single SQLite file (`/data/dispatch.db` by default in Docker; `./dispatch.db` in
+dev), opened in WAL mode via `aiosqlite`. No ORM — handlers run raw SQL through
+`Database.cursor()`. The schema is intentionally small enough to be hand-rolled
+and idempotent.
+
+In the hybrid deployment, the Vercel tier uses **Turso** (serverless SQLite over
+HTTP) instead of local SQLite.
 
 | Table | Purpose |
 | --- | --- |
 | `projects` | Project registry (slug PK, status, kind, podcast config) |
 | `events` | Ingested commits, PRs, issues, releases (deduped by `external_id`) |
 | `cursors` | Per-project ingest state (GitHub, local-git) |
-| `filings` | Daily and weekly briefs (lead body, addendum, audio URLs) — **duplicated across Turso (Vercel) and SQLite (backend)** |
+| `filings` | Daily and weekly briefs (lead body, addendum, audio URLs) |
 | `runs` | Job execution history (status, duration, error) |
 | `episodes` | Podcast episodes (per project, weekly cadence) |
 | `settings` | **Encrypted** credentials and config (key PK, value Fernet-encrypted) |
 | `schedules` | Cron-style job schedules (editable at runtime) |
 | `system` | Key canary for master-key validation on boot |
+
+---
 
 ## Settings encryption
 
@@ -192,6 +222,12 @@ canary. The endpoint:
 POST /api/admin/system/rotate-key
 { "old_key": "...", "new_key": "..." }
 ```
+
+The same encryption scheme is used in both deployment modes. In the hybrid
+mode, the Vercel tier uses AES-GCM (Node.js `crypto`) instead of Fernet, but
+the key derivation from `DISPATCH_MASTER_KEY` is identical.
+
+---
 
 ## Route map
 
@@ -232,6 +268,8 @@ calling; the perimeter does.
 | POST | `/api/admin/system/rotate-key` | Re-encrypt every setting under a new master key |
 | POST | `/api/admin/system/backup-now` | Trigger an immediate SQLite backup |
 
+---
+
 ## Pluggable storage
 
 ```mermaid
@@ -271,59 +309,90 @@ edit + a restart — no code changes.
 | `r2` | Yes | Cloudflare account, bucket, access keys, public base URL |
 | `s3` | Yes | Endpoint, bucket, access keys, region, public base URL |
 
+---
+
 ## Scheduler
 
-APScheduler runs in-process. Jobs are started in the FastAPI lifespan and
-stopped on shutdown. Schedules are read from the `schedules` table on boot, so
-operators can adjust cron expressions from the admin UI without redeploying.
+### Mode A (Docker): APScheduler in-process
+
+APScheduler runs inside the FastAPI container. Jobs are started in the lifespan
+and stopped on shutdown. Schedules are read from the `schedules` table on boot,
+so operators can adjust cron expressions from the admin UI without redeploying.
 
 | Job | Default cadence | Purpose |
 | --- | --- | --- |
 | `ingest_git` | every 15 min | Poll local git clones for new commits |
-| `ingest_github` | every 30 min | Poll GitHub REST API for PRs, issues, releases |
 | `ingest_github` | every 30 min | Poll GitHub REST API for PRs, issues, releases |
 | `synthesis_lead` | daily 01:00 | Compose the lead brief for yesterday's activity |
 | `audio` | daily 01:15 | Retry audio generation for any lead missing audio |
 | `from_the_desk` | weekly Sun 23:00 | Compose the weekly editor's memo |
 | `housekeeping` | daily 02:00 | Cleanup and backup tasks |
 
-**Backend scheduler (marklab):**
-
-| Job | Default cadence | Purpose |
-| --- | --- | --- |
-| `ingest_github` | every 30 min | Poll GitHub REST API |
-| `synthesis_lead` | daily 02:00 | Compose lead brief (legacy; now runs on Vercel) |
-| `podcast_intake` | weekly (per project) | NotebookLM episode composition |
-| `housekeeping` | daily 03:30 | Cleanup and backup tasks |
-
 Single-process scheduling is sufficient for the single-admin use case. If load
 ever justified it, jobs could be lifted into Celery or RQ behind the same
 adapters — but that is not on the current roadmap.
 
+### Mode B (Hybrid): Vercel Cron Jobs
+
+Vercel Cron Jobs (defined in `vercel.json`) trigger the serverless API routes:
+
+| Job | Default cadence | Purpose |
+| --- | --- | --- |
+| `ingest_github` | every 30 min | Poll GitHub REST API |
+| `synthesis_lead` | daily 01:00 | Compose lead brief |
+| `audio` | daily 01:15 | Retry audio generation (delegates to backend) |
+| `housekeeping` | daily 02:00 | Cleanup tasks |
+
+The self-hosted backend runs its own APScheduler for podcast jobs:
+
+| Job | Default cadence | Purpose |
+| --- | --- | --- |
+| `podcast_intake` | weekly (per project) | NotebookLM episode composition |
+| `housekeeping` | daily 03:30 | Cleanup and backup tasks |
+
+---
+
 ## Configuration matrix
+
+### Mode A: All-in-One Docker
 
 | Concern | How it is set | Where it lives |
 | --- | --- | --- |
-| Master encryption key | `DISPATCH_MASTER_KEY` env var (required) | Environment only — never persisted |
-| AI provider + key | Vercel env var (`GEMINI_API_KEY`, `GROQ_API_KEY`) | Vercel Environment |
-| TTS provider + key | Backend env var (`GOOGLE_APPLICATION_CREDENTIALS`) | marklab host filesystem |
-| GitHub PAT | Vercel env var (`GITHUB_TOKEN`) | Vercel Environment |
-| Storage backend + creds | Vercel env var (`R2_*`) | Vercel Environment |
-| Project registry | `projects.yml` (bootstrap) + admin UI | Turso `projects` table |
-| Job schedules | `vercel.json` crons + `/api/admin/schedules` | Turso `schedules` table |
-| Timezone | `DISPATCH_TZ` env var | Vercel Environment (default `UTC`) |
-| Turso DB | `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN` | Vercel Environment |
-| Backend URL | `BACKEND_URL` env var | Vercel Environment (default `https://dispatch-demo-api.marklab.uk`) |
-| Allowed CORS origins | Admin UI → `web.allowed_origins` | Turso `settings` table |
+| Master encryption key | `DISPATCH_MASTER_KEY` env var (required) | Environment only |
+| AI provider + key | Admin UI → `ai.provider` + `ai.*_api_key` | Encrypted in SQLite `settings` |
+| TTS credentials | `GOOGLE_APPLICATION_CREDENTIALS` env var (path to GCP SA JSON) | Host filesystem |
+| GitHub PAT | Admin UI → `github.token` | Encrypted in SQLite `settings` |
+| Storage backend + creds | Admin UI → `storage.provider` + `storage.*` | Encrypted in SQLite `settings` |
+| Project registry | `projects.yml` (bootstrap) + admin UI | SQLite `projects` table |
+| Job schedules | Admin UI → `/api/admin/schedules` | SQLite `schedules` table |
+| Timezone | `DISPATCH_TZ` env var | Environment (default `UTC`) |
+| Database | `DB_PATH` env var | Environment (default `/data/dispatch.db`) |
+| CORS origins | `DISPATCH_CORS_ORIGINS` env var or `web.allowed_origins` setting | Environment / encrypted settings |
+
+### Mode B: Hybrid — Vercel + Self-Hosted Backend
+
+| Concern | Vercel tier | Self-hosted backend |
+| --- | --- | --- |
+| Master encryption key | `DISPATCH_MASTER_KEY` env var | `DISPATCH_MASTER_KEY` env var (same key) |
+| AI provider + key | `GEMINI_API_KEY` / `GROQ_API_KEY` env var | Admin UI → encrypted settings |
+| GitHub PAT | `GITHUB_TOKEN` env var | — |
+| Storage | `R2_*` env vars (R2 bucket) | Admin UI → encrypted settings |
+| Database | `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` | `DB_PATH` (local SQLite) |
+| TTS | Delegates to backend | `GOOGLE_APPLICATION_CREDENTIALS` |
+| Podcasts | — | NotebookLM session in encrypted settings |
+| Timezone | `DISPATCH_TZ` env var | `DISPATCH_TZ` env var |
+| Backend URL | `BACKEND_URL` env var | — |
+
+---
 
 ## What is intentionally absent
 
-- **No users / sessions / JWT.** Auth is at the perimeter.
+- **No app-layer authentication.** Auth is at the perimeter.
 - **No ORM.** Raw SQL through `aiosqlite`.
-- **No Redis or Celery.** APScheduler in-process is enough.
-- **No SSR / Next.js.** The reader pages render a JSON snapshot; the admin
-  pages are perimeter-gated. Neither needs server rendering.
+- **No Redis or Celery.** APScheduler in-process is enough for single-admin.
+- **No SSR / Next.js.** Reader pages render from JSON snapshots; admin pages
+  are perimeter-gated. Neither needs server rendering.
 - **No multi-tenancy.** One instance, one operator.
-- **No formal migration framework.** `schema.sql` is idempotent (CREATE TABLE
-  IF NOT EXISTS). Schema changes that need data migration would warrant
-  adding one.
+- **No formal migration framework.** `schema.sql` is idempotent (`CREATE TABLE
+  IF NOT EXISTS`). Schema changes that need data migration would warrant adding
+  one.

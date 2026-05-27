@@ -4,6 +4,14 @@ Dispatch's job is to turn upstream development activity into a daily editorial
 brief with audio, plus weekly podcast episodes. This document traces what
 happens between a `git push` upstream and a reader opening the briefing page.
 
+The pipeline is the same in both deployment modes; only the scheduler and
+database differ:
+
+- **All-in-One Docker:** APScheduler in-process + local SQLite
+- **Hybrid (Vercel):** Vercel Cron Jobs + Turso (serverless SQLite over HTTP)
+
+---
+
 ## End-to-end pipeline
 
 ```mermaid
@@ -14,21 +22,21 @@ flowchart LR
     end
 
     subgraph ingest["Ingest"]
-        ig["ingest_github<br/>(30 min)"]
-        igit["ingest_git<br/>(15 min)"]
+        ig["ingest_github<br/>(every 30 min)"]
+        igit["ingest_git<br/>(every 15 min)"]
     end
 
     events[("events table<br/>deduped by external_id")]
 
     subgraph synth["Synthesis"]
-        sl["synthesis_lead<br/>(daily 02:00)"]
-        sd["synthesis_from_the_desk<br/>(weekly Sun 23:00)"]
+        sl["synthesis_lead<br/>(daily ~01:00)"]
+        sd["synthesis_from_the_desk<br/>(weekly Sun ~23:00)"]
         sr["/api/brief/refresh<br/>(on demand)"]
     end
 
     filings[("filings table<br/>lead / addendum / desk")]
 
-    subgraph audio["Audio (marklab backend)"]
+    subgraph audio["Audio generation"]
         tts_api["POST /api/tts/generate"]
         chunk["chunk text<br/>at sentence boundaries"]
         gtts["Google Chirp 3 HD<br/>(per chunk)"]
@@ -59,6 +67,8 @@ flowchart LR
     events --> nlm --> rss --> store
 ```
 
+---
+
 ## Daily cycle
 
 Default cadence in UTC; adjust per-instance under `/admin/schedules`.
@@ -66,12 +76,12 @@ Default cadence in UTC; adjust per-instance under `/admin/schedules`.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Sched as APScheduler
+    participant Sched as Scheduler<br/>(APScheduler or Vercel Cron)
     participant Orch as orchestrator
     participant GH as GitHub REST
-    participant DB as SQLite
+    participant DB as Database<br/>(SQLite or Turso)
     participant AI as AI provider
-    participant TTS as Backend TTS
+    participant TTS as TTS backend
     participant ST as Storage backend
 
     Note over Sched: every 30 min
@@ -82,7 +92,7 @@ sequenceDiagram
     Orch->>DB: insert events (dedup by external_id)
     Orch->>DB: update cursor
 
-    Note over Sched: 01:00 UTC (Vercel cron)
+    Note over Sched: daily ~01:00 UTC
     Sched->>Orch: synthesis_lead()
     Orch->>DB: select events from yesterday
     Orch->>AI: compose lead brief (JSON schema)
@@ -103,11 +113,13 @@ through `POST /api/brief/refresh`. The handler runs a compressed version of the
 same pipeline with a 25-second timeout — synthesize, narrate, publish — and
 attaches the result as an addendum filing to the day's brief.
 
+---
+
 ## Weekly cycle
 
 ```mermaid
 flowchart TB
-    sun["Sunday 23:00<br/>synthesis_from_the_desk"] --> desk["compose editor's memo"]
+    sun["Sunday ~23:00<br/>synthesis_from_the_desk"] --> desk["compose editor's memo"]
     desk --> filing["filings row<br/>(kind='desk')"]
 
     weekly_pod["Per-project weekly cron<br/>(podcast_intake job)"] --> nlm["NotebookLM<br/>episode composition"]
@@ -124,6 +136,8 @@ Weekly outputs:
   audio episode from the week's briefings touching that project. The RSS feed
   for the project is regenerated and re-uploaded.
 
+---
+
 ## Reader read-path
 
 Static SPA, hydrated from JSON snapshots written by the publish step:
@@ -132,11 +146,11 @@ Static SPA, hydrated from JSON snapshots written by the publish step:
 sequenceDiagram
     autonumber
     participant Reader
-    participant Edge as Perimeter + Caddy
+    participant Edge as Perimeter + Gateway
     participant SPA as Vite SPA
-    participant API as FastAPI
+    participant API as API tier<br/>(FastAPI or Vercel Function)
     participant ST as Storage backend
-    participant DB as SQLite
+    participant DB as Database
 
     Reader->>Edge: GET /
     Edge->>SPA: index.html + bundle
@@ -160,17 +174,21 @@ The snapshot pattern keeps the read path independent of the synthesis path:
 publishes are atomic file uploads, and the SPA only ever reads the current
 snapshot plus any archived briefings the reader navigates to.
 
+---
+
 ## Audio fallback chain
 
-When a filing has no `audio_url` in the Turso DB (e.g., TTS failed or the
+When a filing has no `audio_url` in the database (e.g., TTS failed or the
 backend was down), the frontend falls back in this order:
 
-1. **`audio_url` from Turso DB** — the canonical URL written by `runAudio()`.
-2. **Backend deterministic URL** — `https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/{date}-lead.mp3`. The backend may have generated audio independently.
-3. **R2 deterministic URL** — `{R2_PUBLIC_BASE_URL}/dispatch/audio/{date}-lead.mp3`. Used when the frontend successfully uploaded to R2 but failed to write the DB row.
+1. **`audio_url` from database** — the canonical URL written by the audio step.
+2. **Backend deterministic URL** — `https://<backend-host>/api/audio/dispatch/audio/{date}-lead.mp3`. The backend may have generated audio independently.
+3. **Storage deterministic URL** — `{STORAGE_PUBLIC_BASE_URL}/dispatch/audio/{date}-lead.mp3`. Used when the frontend successfully uploaded to storage but failed to write the DB row.
 
 The `<audio>` element handles 404s gracefully, so a missing fallback is a silent
 no-op rather than a broken UI.
+
+---
 
 ## State machines
 
@@ -202,6 +220,8 @@ stateDiagram-v2
     failed --> [*]
     published --> [*]
 ```
+
+---
 
 ## Failure modes worth knowing
 

@@ -31,7 +31,9 @@ These docs describe the system as it exists in this repository.
 5. **Editorial design is immutable.** See [`../../DESIGN.md`](../../DESIGN.md).
    Framework can change; the look cannot.
 
-## TL;DR diagram
+## Deployment modes
+
+### All-in-One Docker (default)
 
 ```mermaid
 flowchart LR
@@ -39,10 +41,10 @@ flowchart LR
     perimeter["Perimeter<br/>(Cloudflare Access · Tailscale · Caddy auth)"]
     caddy["Caddy<br/>gateway / reverse proxy"]
     spa["Vite SPA<br/>React 19 + Tailwind"]
-    api["FastAPI backend<br/>Python 3.12"]
-    db[("SQLite WAL<br/>aiosqlite")]
+    api["FastAPI backend<br/>Python 3.12 + SQLite"]
+    db[("SQLite WAL<br/>/data/dispatch.db")]
     sched["APScheduler<br/>in-process"]
-    storage[("Pluggable storage<br/>Local · R2 · S3")]
+    storage[("Storage backend<br/>local · R2 · S3")]
     github[("GitHub<br/>REST API")]
     ai["AI providers<br/>Kimi · Anthropic · OpenAI"]
     tts["Google Chirp 3 HD<br/>TTS"]
@@ -55,5 +57,38 @@ flowchart LR
     sched --> api
     sched --> github
     sched --> ai
-    sched --> tts
+    api --> tts
+```
+
+### Hybrid — Vercel + Self-Hosted Backend
+
+```mermaid
+flowchart LR
+    user["Reader / Operator"]
+    perimeter["Perimeter<br/>(Cloudflare Access)"]
+
+    subgraph vercel["Vercel (serverless)"]
+        spa["Vite SPA"]
+        vapi["Vercel Functions<br/>ingest · synthesis · admin"]
+        cron["Vercel Cron Jobs"]
+        turso[("Turso DB")]
+        r2[("Cloudflare R2")]
+    end
+
+    subgraph backend["Self-hosted backend (Docker)"]
+        be["FastAPI<br/>TTS + podcasts"]
+        sqlite[("SQLite WAL")]
+    end
+
+    user --> perimeter
+    perimeter --> spa
+    perimeter --> be
+    spa -->|"/api/*"| vapi
+    vapi <--> turso
+    vapi -->|"R2 upload"| r2
+    vapi -->|"POST /api/tts/generate"| be
+    cron --> vapi
+    be --> tts["Google Cloud TTS"]
+    be --> nlm["NotebookLM + ffmpeg"]
+    be <--> sqlite
 ```
