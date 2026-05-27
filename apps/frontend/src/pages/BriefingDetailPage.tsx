@@ -68,7 +68,6 @@ export default function BriefingDetailPage() {
           >
             ← Briefings
           </Link>
-          <AudioPlayer leadUrl={brief.audio_lead_url} addendumUrl={brief.audio_addendum_url} />
         </div>
         <Masthead issueNo={brief.issue_no} date={brief.date} filedAt={brief.filed_at} durationSec={brief.audio_duration_s ?? undefined} />
         <main className="pt-12 pb-24 grid grid-cols-1 lg:grid-cols-[minmax(0,8fr)_minmax(0,3fr)] gap-16">
@@ -82,6 +81,9 @@ export default function BriefingDetailPage() {
               weekNo={isoWeek(brief.date)}
               linkable={false}
             />
+            <div className="-mt-6 mb-10">
+              <AudioPlayer leadUrl={brief.audio_lead_url} addendumUrl={brief.audio_addendum_url} />
+            </div>
             {brief.lead_article ? (
               <LeadArticle
                 headline={brief.lead_headline}
