@@ -19,7 +19,9 @@ interface SeoProps {
 const SITE_NAME = "Dispatch";
 const DEFAULT_DESCRIPTION =
   "A self-hosted daily editorial brief generator for software projects. AI-synthesized daily reports with audio narration and weekly podcasts.";
-const DEFAULT_OG_IMAGE = "https://dispatch-demo.markdavidgan.com/og-image.png";
+function defaultOgImage(): string {
+  return `${origin()}/og-image.png`;
+}
 
 function origin(): string {
   try {
@@ -43,7 +45,7 @@ export default function Seo({
   const ogDescription = og?.description ?? description;
   const ogType = og?.type ?? "website";
   const ogUrl = og?.url ?? (canonicalPath ? `${origin()}${canonicalPath}` : undefined);
-  const ogImage = og?.image ?? DEFAULT_OG_IMAGE;
+  const ogImage = og?.image ?? defaultOgImage();
   const canonical = canonicalPath ? `${origin()}${canonicalPath}` : undefined;
 
   return (

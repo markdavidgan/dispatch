@@ -114,89 +114,89 @@ export default function SetupPage() {
     <>
       {seo}
       <main className="max-w-[720px] mx-auto px-4 sm:px-8 py-16">
-      <div className="mb-10">
-        <h1 className="font-disp text-3xl font-bold tracking-[-0.02em] text-ink mb-2">
-          Setup
-        </h1>
-        <p className="font-disp text-sm text-ink-mute">
-          Configure Dispatch to get started.
-        </p>
-      </div>
-
-      {/* Progress */}
-      <div className="flex gap-0 border border-ink mb-10">
-        {STEPS.map((s, i) => (
-          <div
-            key={s.key}
-            className={`flex-1 px-2 py-2.5 text-center border-r border-ink last:border-r-0 transition-colors ${
-              i === step
-                ? "bg-ink text-paper"
-                : i < step
-                  ? "bg-paper-deep text-ink"
-                  : "bg-paper text-ink-mute"
-            }`}
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
-              {i + 1}. {s.label}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {error && (
-        <div className="mb-6 px-4 py-3 border border-signal text-signal font-mono text-[11px]">
-          {error}
+        <div className="mb-10">
+          <h1 className="font-disp text-3xl font-bold tracking-[-0.02em] text-ink mb-2">
+            Setup
+          </h1>
+          <p className="font-disp text-sm text-ink-mute">
+            Configure Dispatch to get started.
+          </p>
         </div>
-      )}
 
-      {/* Step content */}
-      <div className="border border-ink p-6 mb-8">
-        {current.key === "storage" && (
-          <StepStorage values={storage} onChange={setStorage} />
-        )}
-        {current.key === "ai" && <StepAi values={ai} onChange={setAi} />}
-        {current.key === "tts" && <StepTts values={tts} onChange={setTts} />}
-        {current.key === "github" && (
-          <StepGithub values={github} onChange={setGithub} />
-        )}
-        {current.key === "project" && (
-          <StepProject values={project} onChange={setProject} />
-        )}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={handleSkip}
-          disabled={saving}
-          className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-ink text-ink hover:bg-paper-deep transition-colors disabled:opacity-50"
-        >
-          {isLast ? "Skip & Finish" : "Skip for now"}
-        </button>
-        <div className="flex gap-3">
-          {step > 0 && (
-            <button
-              onClick={() => setStep((s) => s - 1)}
-              disabled={saving}
-              className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-ink text-ink hover:bg-paper-deep transition-colors disabled:opacity-50"
+        {/* Progress */}
+        <div className="flex gap-0 border border-ink mb-10">
+          {STEPS.map((s, i) => (
+            <div
+              key={s.key}
+              className={`flex-1 px-2 py-2.5 text-center border-r border-ink last:border-r-0 transition-colors ${
+                i === step
+                  ? "bg-ink text-paper"
+                  : i < step
+                    ? "bg-paper-deep text-ink"
+                    : "bg-paper text-ink-mute"
+              }`}
             >
-              Back
-            </button>
-          )}
-          <button
-            onClick={handleNext}
-            disabled={saving}
-            className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-6 py-2.5 bg-signal text-paper hover:bg-ink transition-colors disabled:opacity-50"
-          >
-            {saving
-              ? "Saving…"
-              : isLast
-                ? "Finish"
-                : `Next: ${STEPS[step + 1].label}`}
-          </button>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] font-semibold">
+                {i + 1}. {s.label}
+              </span>
+            </div>
+          ))}
         </div>
-      </div>
-    </main>
+
+        {error && (
+          <div className="mb-6 px-4 py-3 border border-signal text-signal font-mono text-[11px]">
+            {error}
+          </div>
+        )}
+
+        {/* Step content */}
+        <div className="border border-ink p-6 mb-8">
+          {current.key === "storage" && (
+            <StepStorage values={storage} onChange={setStorage} />
+          )}
+          {current.key === "ai" && <StepAi values={ai} onChange={setAi} />}
+          {current.key === "tts" && <StepTts values={tts} onChange={setTts} />}
+          {current.key === "github" && (
+            <StepGithub values={github} onChange={setGithub} />
+          )}
+          {current.key === "project" && (
+            <StepProject values={project} onChange={setProject} />
+          )}
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleSkip}
+            disabled={saving}
+            className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-ink text-ink hover:bg-paper-deep transition-colors disabled:opacity-50"
+          >
+            {isLast ? "Skip & Finish" : "Skip for now"}
+          </button>
+          <div className="flex gap-3">
+            {step > 0 && (
+              <button
+                onClick={() => setStep((s) => s - 1)}
+                disabled={saving}
+                className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-5 py-2.5 border border-ink text-ink hover:bg-paper-deep transition-colors disabled:opacity-50"
+              >
+                Back
+              </button>
+            )}
+            <button
+              onClick={handleNext}
+              disabled={saving}
+              className="font-mono text-[11px] uppercase tracking-[0.14em] font-semibold px-6 py-2.5 bg-signal text-paper hover:bg-ink transition-colors disabled:opacity-50"
+            >
+              {saving
+                ? "Saving…"
+                : isLast
+                  ? "Finish"
+                  : `Next: ${STEPS[step + 1].label}`}
+            </button>
+          </div>
+        </div>
+      </main>
     </>
   );
 }
