@@ -1,5 +1,14 @@
 [
   {
+    "slug": "ai-sdk",
+    "display_name": "AI SDK",
+    "status": "active",
+    "kind": "tool",
+    "color_hint": null,
+    "github_repo": "vercel/ai",
+    "local_path": null
+  },
+  {
     "slug": "astro",
     "display_name": "Astro",
     "status": "active",
@@ -15,6 +24,51 @@
     "kind": "tool",
     "color_hint": null,
     "github_repo": "anthropics/claude-code",
+    "local_path": null
+  },
+  {
+    "slug": "gemma-cpp",
+    "display_name": "Gemma.cpp",
+    "status": "active",
+    "kind": "tool",
+    "color_hint": null,
+    "github_repo": "google/gemma.cpp",
+    "local_path": null
+  },
+  {
+    "slug": "hydrogen",
+    "display_name": "Hydrogen",
+    "status": "active",
+    "kind": "app",
+    "color_hint": null,
+    "github_repo": "Shopify/hydrogen",
+    "local_path": null
+  },
+  {
+    "slug": "mantis",
+    "display_name": "Mantis",
+    "status": "active",
+    "kind": "service",
+    "color_hint": null,
+    "github_repo": "Netflix/mantis",
+    "local_path": null
+  },
+  {
+    "slug": "metaflow",
+    "display_name": "Metaflow",
+    "status": "active",
+    "kind": "tool",
+    "color_hint": null,
+    "github_repo": "Netflix/metaflow",
+    "local_path": null
+  },
+  {
+    "slug": "workflow-sdk",
+    "display_name": "Workflow SDK",
+    "status": "active",
+    "kind": "tool",
+    "color_hint": null,
+    "github_repo": "vercel/workflow",
     "local_path": null
   }
 ]

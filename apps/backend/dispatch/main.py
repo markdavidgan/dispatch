@@ -78,14 +78,10 @@ async def lifespan(app: FastAPI):
     from dispatch.publish import r2 as r2_compat
     r2_compat.set_storage_backend(storage)
 
-    # Projects bootstrap from YAML (optional — can be disabled once DB registry is populated)
+    # Projects bootstrap from YAML — re-sync on every boot so that
+    # changes to projects.yml are picked up without manual DB edits.
     projects_yml = Path(__file__).parent / "projects.yml"
-    bootstrap_env = Path(__file__).parent.parent / ".env"
-    # Only bootstrap from YAML if projects table is empty
-    async with db.cursor() as cur:
-        await cur.execute("SELECT COUNT(*) FROM projects")
-        row = await cur.fetchone()
-    if (not row or row[0] == 0) and projects_yml.exists():
+    if projects_yml.exists():
         await sync_to_db(db, load_yaml(projects_yml))
 
     app.state.db = db

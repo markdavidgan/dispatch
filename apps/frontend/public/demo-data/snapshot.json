@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T03:03:42.626879+00:00",
+  "generated_at": "2026-05-28T03:15:42.172924+00:00",
   "brief": {
     "date": "2026-05-27",
     "issue_no": 2,
@@ -91,6 +91,16 @@
   },
   "projects": [
     {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "kind": "tool",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
+    },
+    {
       "slug": "astro",
       "name": "Astro",
       "status": "active",
@@ -134,9 +144,122 @@
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
       "mentioned_in_briefings": []
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "kind": "tool",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "kind": "app",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "kind": "service",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "kind": "tool",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "kind": "tool",
+      "color_hint": null,
+      "from_the_desk": null,
+      "from_the_desk_generated_at": null,
+      "mentioned_in_briefings": []
     }
   ],
   "recent_events": [
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "62982",
+      "title": "[redacted at user request]",
+      "author": "alexkahel",
+      "occurred_at": "2026-05-28T03:01:06Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62982"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62987",
+      "title": "[BUG] claude rm/stop/reap SIGKILLs background session tree without SIGTERM grace, orphaning git index.lock and similar",
+      "author": "alchemymakemoney",
+      "occurred_at": "2026-05-28T02:56:38Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62987"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "62986",
+      "title": "[BUG]  Long URLs are broken into multiple lines and become   unclickable in terminal output",
+      "author": "hustzyd",
+      "occurred_at": "2026-05-28T02:55:18Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62986"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62986",
+      "title": "[BUG]  Long URLs are broken into multiple lines and become   unclickable in terminal output",
+      "author": "hustzyd",
+      "occurred_at": "2026-05-28T02:54:45Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62986"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62985",
+      "title": "stopShellPty on tab switch kills active sessions (exit 143) — regression in May 27 build",
+      "author": "renatomoscati-creator",
+      "occurred_at": "2026-05-28T02:46:24Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62985"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62984",
+      "title": "[BUG] Tailscale via Homebrew CLI + Mac App Store GUI, both Macs on macOS, Cowork blocked by VPN detector despite Tailscale being a mesh VPN with no traffic interception",
+      "author": "planewryter",
+      "occurred_at": "2026-05-28T02:40:11Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62984"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62983",
+      "title": "Opus 4.7 behavioral regression: loaded instruction-following discipline degraded in recent Claude Code/Cowork updates",
+      "author": "yurievf",
+      "occurred_at": "2026-05-28T02:39:29Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62983"
+    },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
@@ -523,71 +646,8 @@
       "author": "NK5NK5",
       "occurred_at": "2026-05-27T22:46:15Z",
       "url": "https://github.com/anthropics/claude-code/issues/39269"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52488",
-      "title": "Feature request: decouple CLAUDE.md and MEMORY.md controls — autoMemoryEnabled should not toggle both simultaneously",
-      "author": "OnCeUponTry",
-      "occurred_at": "2026-05-27T22:46:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52488"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52558",
-      "title": "[Bug] Team vs Pro account API limits incorrectly applied after re-authentication",
-      "author": "andrew-potachits",
-      "occurred_at": "2026-05-27T22:46:11Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52558"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52561",
-      "title": "[BUG] JSON errors in Claude Cowork",
-      "author": "abiscotto",
-      "occurred_at": "2026-05-27T22:46:09Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52561"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52554",
-      "title": "Agent Teams: teammate-message envelope intermittently renders as raw XML text instead of styled notification block",
-      "author": "michael-wojcik",
-      "occurred_at": "2026-05-27T22:46:08Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52554"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52557",
-      "title": "Sub-agents can escalate permission mode beyond parent session (default → auto)",
-      "author": "mrhota",
-      "occurred_at": "2026-05-27T22:46:05Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52557"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52146",
-      "title": "Resumed session loses prior conversation history",
-      "author": "alexisrobles-ekho",
-      "occurred_at": "2026-05-27T22:46:03Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52146"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52136",
-      "title": "Session breaks after regressing a user message that contains an inline image",
-      "author": "DrewBatcheller",
-      "occurred_at": "2026-05-27T22:46:01Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52136"
     }
   ],
   "episodes": [],
-  "signature": "198dac694346831fe2cf5d05b1d12274"
+  "signature": "2be178cb0de98e4b6c46c7d880f65b71"
 }
