@@ -71,6 +71,6 @@ projects:
       description: "Weekly cross-project digest. One episode picks the best insights from every project Dispatch tracks, woven into a conversational 25–30 minute listen."
       author: "Dispatch"
       itunes_category: "Technology"
-      cron: "0 5 * * sat"
+      cron: "0 1 * * mon"
       compose_window_days: 7
       enabled: true
