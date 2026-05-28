@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T05:22:16.091991+00:00",
+  "generated_at": "2026-05-28T06:01:17.924745+00:00",
   "brief": {
     "date": "2026-05-27",
     "issue_no": 18,
@@ -75,7 +75,7 @@
     ],
     "addendums": [],
     "audio": {
-      "lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
+      "lead_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
       "lead_duration_s": 154,
       "addendum_url": null,
       "addendum_duration_s": null,
@@ -266,6 +266,114 @@
     }
   ],
   "recent_events": [
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63008",
+      "title": "[BUG] Claude_Preview MCP preview_start spawns dev server with main-repo cwd instead of session's worktree cwd",
+      "author": "jhopper28",
+      "occurred_at": "2026-05-28T05:53:33Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63008"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63007",
+      "title": "[BUG] Claude Code hangs on M1 Mac when terminal says \"opening browser to sign in\" and browser opens",
+      "author": "og20claude",
+      "occurred_at": "2026-05-28T05:44:06Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63007"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63006",
+      "title": "Does delegating work to `claude -p` subprocesses reduce context accumulation in the parent session?",
+      "author": "mg1986jp",
+      "occurred_at": "2026-05-28T05:43:34Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63006"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63005",
+      "title": "[Bug] Anthropic API Error: Server rate limiting despite normal usage",
+      "author": "LovelyCookie",
+      "occurred_at": "2026-05-28T05:24:43Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63005"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "64b516a2a1ce170f92853df5da2f813963fa10e5",
+      "title": "fix: remove dispatch from briefings, renumber sequentially, rebuild demo",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T05:23:40Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/64b516a2a1ce170f92853df5da2f813963fa10e5"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63004",
+      "title": "[BUG] Dictation error: Invalid character in header content [\"x-config-keyterms\"] on Windows",
+      "author": "jr1000451a-bot",
+      "occurred_at": "2026-05-28T05:22:11Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63004"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "54012",
+      "title": "Starlog published a deep-dive on anthropics/claude-code",
+      "author": "basicScandal",
+      "occurred_at": "2026-05-28T05:15:39Z",
+      "url": "https://github.com/anthropics/claude-code/issues/54012"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63003",
+      "title": "[FEATURE] Add context window usage indicator and warning before auto-compaction",
+      "author": "saint90ms",
+      "occurred_at": "2026-05-28T05:14:41Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63003"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63002",
+      "title": "[Bug] Thread context stale after sleep/resume, returns outdated date and calendar data",
+      "author": "PeterZajac",
+      "occurred_at": "2026-05-28T05:13:14Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63002"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63001",
+      "title": "[Feature Request] Persistent project memory — sessions forget everything on close, forcing users to keep many sessions open",
+      "author": "cmhungksu",
+      "occurred_at": "2026-05-28T04:57:01Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63001"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "pr_opened",
+      "external_id": "15662",
+      "title": "feat(provider/xai): expose `enableImageSearch` on the Web Search tool",
+      "author": "ushiromiya-lion",
+      "occurred_at": "2026-05-28T04:54:26Z",
+      "url": "https://github.com/vercel/ai/pull/15662"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "03cbeb1bc197007caa12a82c3134277242a3307a",
+      "title": "chore: rebuild demo data with R2 audio URLs",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T04:54:23Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/03cbeb1bc197007caa12a82c3134277242a3307a"
+    },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
@@ -607,116 +715,8 @@
       "author": "Mark David Gan",
       "occurred_at": "2026-05-28T02:13:16Z",
       "url": "https://github.com/markdavidgan/dispatch/commit/3a6ccb6a3cc525802f5b45c34681fffe6d881b28"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62979",
-      "title": "🚨Claude Code VSCode Extension Does Not Detect Custom Slash Commands From .claude/commands",
-      "author": "bloodykheeng",
-      "occurred_at": "2026-05-28T02:11:49Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62979"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62978",
-      "title": "Bash tool permanently broken (exit 1, no output) after a killed background task",
-      "author": "nmdesai",
-      "occurred_at": "2026-05-28T01:51:32Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62978"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62977",
-      "title": "[BUG] Claude Code on the web: autofix sessions stopped receiving bot PR review comments (Copilot/Codex)",
-      "author": "bobmccracken",
-      "occurred_at": "2026-05-28T01:45:09Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62977"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62976",
-      "title": "[UX] /plugin install on an already-installed plugin does not refresh stale cache, leaving users on outdated versions",
-      "author": "kenjiO-skr",
-      "occurred_at": "2026-05-28T01:42:01Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62976"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62975",
-      "title": "[Bug] Image Processing Failure: Unable to Parse Crop Phenology Color Pattern",
-      "author": "raenvigo",
-      "occurred_at": "2026-05-28T01:40:46Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62975"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62974",
-      "title": "Hook event: PreModelResponse (inject context before model plans)",
-      "author": "in4mer",
-      "occurred_at": "2026-05-28T01:37:50Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62974"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62973",
-      "title": "[FEATURE] Support for Strict Enterprise APIM Gateways (Custom Paths, Payload Injection, SSE Fallbacks)",
-      "author": "SamuelMarks",
-      "occurred_at": "2026-05-28T01:27:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62973"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62972",
-      "title": "Discord plugin inbound notifications silently dropped on CC 2.1.153 (Windows)",
-      "author": "SideQuestTrading",
-      "occurred_at": "2026-05-28T01:21:30Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62972"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "22115",
-      "title": "statusLine: pass terminal columns to command via stdin or env, and account for visual line wrapping",
-      "author": "MeroZemory",
-      "occurred_at": "2026-05-28T01:20:09Z",
-      "url": "https://github.com/anthropics/claude-code/issues/22115"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62971",
-      "title": "[BUG] Persistent ECONNRESET on macOS — works in curl, fails in CLI and VS Code extension; root cause appears to be ProtonVPN WireGuard system extension leaving 12 utun interfaces + conflicting IPv6 ro",
-      "author": "arvisnot",
-      "occurred_at": "2026-05-28T01:15:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62971"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62970",
-      "title": "[BUG] Bash commands produce no output on Windows 11",
-      "author": "lqRAND",
-      "occurred_at": "2026-05-28T01:14:03Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62970"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62969",
-      "title": "[BUG] Korean (Hangul) IME: last syllable dropped on space/punctuation in input",
-      "author": "eondcom",
-      "occurred_at": "2026-05-28T01:04:21Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62969"
     }
   ],
   "episodes": [],
-  "signature": "bd5d4ec10fb448e917e0422140a76b66"
+  "signature": "1ae0ce4aa22b24473643e085debe2875"
 }

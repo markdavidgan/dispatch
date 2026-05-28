@@ -4,7 +4,7 @@
       "date": "2026-05-27",
       "issue_no": 18,
       "lead_headline": "AI SDK ships twenty releases in a single cycle on the back of a codebase-wide rename sweep",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
       "active_count": 5,
       "filed_at": "05:12"
     },
@@ -12,7 +12,7 @@
       "date": "2026-05-26",
       "issue_no": 17,
       "lead_headline": "Claude Code absorbs sixty-plus bug reports in a single day as platform-edge failures pile up",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-26-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-26-lead.mp3",
       "active_count": 6,
       "filed_at": "05:12"
     },
@@ -20,7 +20,7 @@
       "date": "2026-05-25",
       "issue_no": 16,
       "lead_headline": "Claude Code closes 80+ issues in a single overnight sweep, then immediately takes on new ones",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-25-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-25-lead.mp3",
       "active_count": 2,
       "filed_at": "05:06"
     },
@@ -28,7 +28,7 @@
       "date": "2026-05-24",
       "issue_no": 15,
       "lead_headline": "Claude Code's release-day triage sweeps fifty issues while new regressions surface in the connector stack",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-24-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-24-lead.mp3",
       "active_count": 0,
       "filed_at": "05:05"
     },
@@ -36,7 +36,7 @@
       "date": "2026-05-23",
       "issue_no": 14,
       "lead_headline": "Claude Code 2.1.150 ships into a documentation blitz and a growing issue queue",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-23-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-23-lead.mp3",
       "active_count": 2,
       "filed_at": "05:05"
     },
@@ -44,7 +44,7 @@
       "date": "2026-05-22",
       "issue_no": 13,
       "lead_headline": "Workflow SDK patches a path-traversal vulnerability and ships two releases in a single afternoon",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-22-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-22-lead.mp3",
       "active_count": 4,
       "filed_at": "05:05"
     },
@@ -52,7 +52,7 @@
       "date": "2026-05-21",
       "issue_no": 12,
       "lead_headline": "Workflow SDK closes a coordinated replay and event-integrity push; AI SDK ships two new first-party providers",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-21-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-21-lead.mp3",
       "active_count": 4,
       "filed_at": "05:04"
     },
@@ -60,7 +60,7 @@
       "date": "2026-05-20",
       "issue_no": 11,
       "lead_headline": "Workflow SDK's replay-correctness sprint leads a dense Wednesday across five active projects",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-20-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-20-lead.mp3",
       "active_count": 4,
       "filed_at": "05:03"
     },
@@ -68,7 +68,7 @@
       "date": "2026-05-19",
       "issue_no": 10,
       "lead_headline": "Workflow SDK beta.6 lands schema bootstrapping as Cloudflare Workers blocker gets formally logged",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-19-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-19-lead.mp3",
       "active_count": 5,
       "filed_at": "05:03"
     },
@@ -76,7 +76,7 @@
       "date": "2026-05-18",
       "issue_no": 9,
       "lead_headline": "AI SDK and Astro lead a dense Monday as Claude Code accumulates fifteen issue reports",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-18-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-18-lead.mp3",
       "active_count": 6,
       "filed_at": "05:02"
     },
@@ -84,7 +84,7 @@
       "date": "2026-05-17",
       "issue_no": 8,
       "lead_headline": "Claude Code's Desktop wrapper shows a process lifecycle fault as surface rendering issues accumulate",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-17-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-17-lead.mp3",
       "active_count": 0,
       "filed_at": "05:02"
     },
@@ -92,7 +92,7 @@
       "date": "2026-05-16",
       "issue_no": 7,
       "lead_headline": "Claude Code 2.1.143 ships three crash surfaces in one release as the tracker fills with red",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-16-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-16-lead.mp3",
       "active_count": 1,
       "filed_at": "05:02"
     },
@@ -100,7 +100,7 @@
       "date": "2026-05-15",
       "issue_no": 6,
       "lead_headline": "AI SDK races a May 26 deadline while Claude Code's sub-agent seams show",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-15-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-15-lead.mp3",
       "active_count": 5,
       "filed_at": "05:01"
     },
@@ -108,7 +108,7 @@
       "date": "2026-05-14",
       "issue_no": 5,
       "lead_headline": "Workflow SDK leads a dense Thursday with a duration-rounding fix, SvelteKit repairs, and an XSS patch in Astro",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-14-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-14-lead.mp3",
       "active_count": 7,
       "filed_at": "05:01"
     },
@@ -116,7 +116,7 @@
       "date": "2026-05-13",
       "issue_no": 4,
       "lead_headline": "AI SDK absorbs 33 commits as Zod 4.4 pressure and telemetry cleanup signal a stabilizing v5/v6 boundary",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-13-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-13-lead.mp3",
       "active_count": 3,
       "filed_at": "05:01"
     },
@@ -124,7 +124,7 @@
       "date": "2026-05-12",
       "issue_no": 3,
       "lead_headline": "AI SDK turns 44 commits into a disciplined infrastructure day",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-12-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-12-lead.mp3",
       "active_count": 5,
       "filed_at": "05:00"
     },
@@ -132,7 +132,7 @@
       "date": "2026-05-11",
       "issue_no": 2,
       "lead_headline": "AI SDK closes a real gap in Google agent cancellation; Astro pushes experimental background dev server",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-11-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-11-lead.mp3",
       "active_count": 6,
       "filed_at": "05:00"
     },
@@ -140,7 +140,7 @@
       "date": "2026-05-10",
       "issue_no": 1,
       "lead_headline": "Metaflow closes five issues in a quiet overnight window; Claude Code accumulates noise",
-      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-10-lead.mp3",
+      "audio_url": "https://pub-caeda3e4d5864325b0df0796aa89a656.r2.dev/dispatch/audio/2026-05-10-lead.mp3",
       "active_count": 1,
       "filed_at": "04:59"
     }
