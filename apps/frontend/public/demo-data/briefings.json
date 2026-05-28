@@ -4,7 +4,7 @@
       "date": "2026-05-27",
       "issue_no": 2,
       "lead_headline": "Dispatch logs 47 commits in a single day as audio, podcast, and admin architecture converge",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-27-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
       "active_count": 3,
       "filed_at": "01:00"
     },
@@ -12,7 +12,7 @@
       "date": "2026-05-26",
       "issue_no": 1,
       "lead_headline": "Dispatch rewires its own delivery stack in a single day, then reads the results aloud",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-26-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-26-lead.mp3",
       "active_count": 3,
       "filed_at": "23:18"
     },
@@ -20,7 +20,7 @@
       "date": "2026-05-25",
       "issue_no": 13,
       "lead_headline": "Dispatch reaches a stable delivery architecture as Claude Code weathers a rough triage day",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-25-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-25-lead.mp3",
       "active_count": 3,
       "filed_at": "03:50"
     },
@@ -28,7 +28,7 @@
       "date": "2026-05-24",
       "issue_no": 12,
       "lead_headline": "Dispatch completes its full stack in a single day; Claude Code runs a mass triage",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-24-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-24-lead.mp3",
       "active_count": 1,
       "filed_at": "03:50"
     },
@@ -36,7 +36,7 @@
       "date": "2026-05-23",
       "issue_no": 14,
       "lead_headline": "Dispatch extracted, auth simplified, and tests green — all before noon",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-23-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-23-lead.mp3",
       "active_count": 3,
       "filed_at": "03:49"
     },
@@ -44,7 +44,7 @@
       "date": "2026-05-22",
       "issue_no": 11,
       "lead_headline": "Workflow SDK patches path traversal, cuts 4.2.5; AI SDK gains Claude on AWS and two Anthropic tool fixes",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-22-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-22-lead.mp3",
       "active_count": 4,
       "filed_at": "03:49"
     },
@@ -52,7 +52,7 @@
       "date": "2026-05-21",
       "issue_no": 10,
       "lead_headline": "AI SDK and Workflow SDK lead a dense Thursday, with Astro patching close behind",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-21-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-21-lead.mp3",
       "active_count": 4,
       "filed_at": "03:48"
     },
@@ -60,7 +60,7 @@
       "date": "2026-05-20",
       "issue_no": 15,
       "lead_headline": "Astro ships two releases and queues four more PRs as build-option inheritance and Cloudflare SSR gaps close",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-20-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-20-lead.mp3",
       "active_count": 3,
       "filed_at": "03:40"
     },
@@ -68,7 +68,7 @@
       "date": "2026-05-19",
       "issue_no": 9,
       "lead_headline": "Two betas ship against a tide of bug reports as AI SDK and Workflow SDK lead a busy Tuesday",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-19-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-19-lead.mp3",
       "active_count": 5,
       "filed_at": "03:48"
     },
@@ -76,7 +76,7 @@
       "date": "2026-05-18",
       "issue_no": 8,
       "lead_headline": "AI SDK and Astro each ship two releases; Claude Code's agent surface accumulates a notable bug backlog",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-18-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-18-lead.mp3",
       "active_count": 6,
       "filed_at": "03:47"
     },
@@ -84,7 +84,7 @@
       "date": "2026-05-17",
       "issue_no": 7,
       "lead_headline": "Claude Code accumulates a cluster of rendering and session bugs on an otherwise quiet Sunday",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-17-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-17-lead.mp3",
       "active_count": 0,
       "filed_at": "03:47"
     },
@@ -92,7 +92,7 @@
       "date": "2026-05-16",
       "issue_no": 6,
       "lead_headline": "Claude Code 2.1.143 ships into a wall of regressions on macOS and Windows",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-16-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-16-lead.mp3",
       "active_count": 1,
       "filed_at": "03:47"
     },
@@ -100,7 +100,7 @@
       "date": "2026-05-15",
       "issue_no": 5,
       "lead_headline": "AI SDK races a May 26 deadline while Claude Code accumulates a day's worth of bug reports",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-15-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-15-lead.mp3",
       "active_count": 5,
       "filed_at": "03:46"
     },
@@ -108,7 +108,7 @@
       "date": "2026-05-14",
       "issue_no": 4,
       "lead_headline": "Workflow SDK's duration formatter fixed and folded; Astro patches an XSS vector in slot hydration",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-14-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-14-lead.mp3",
       "active_count": 7,
       "filed_at": "03:46"
     },
@@ -116,7 +116,7 @@
       "date": "2026-05-13",
       "issue_no": 3,
       "lead_headline": "AI SDK clears a backlog of Zod, file-handling, and telemetry fixes in a single afternoon",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-13-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-13-lead.mp3",
       "active_count": 3,
       "filed_at": "03:45"
     },
@@ -124,7 +124,7 @@
       "date": "2026-05-12",
       "issue_no": 16,
       "lead_headline": "AI SDK absorbs 25 commits in a day, standardizing provider contracts while Claude Code's billing bug draws scrutiny",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-12-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-12-lead.mp3",
       "active_count": 5,
       "filed_at": "03:41"
     },
@@ -132,7 +132,7 @@
       "date": "2026-05-11",
       "issue_no": 17,
       "lead_headline": "Astro's background dev server takes shape; AI SDK opens subagent prototype",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-11-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-11-lead.mp3",
       "active_count": 6,
       "filed_at": "03:41"
     },
@@ -140,7 +140,7 @@
       "date": "2026-05-10",
       "issue_no": 18,
       "lead_headline": "Metaflow clears a five-issue backlog before dawn; Claude Code accumulates a prompt-cache inheritance problem worth watching",
-      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-10-lead.mp3",
+      "audio_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-10-lead.mp3",
       "active_count": 1,
       "filed_at": "03:42"
     }

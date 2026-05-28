@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-05-28T03:52:12.656901+00:00",
+  "as_of": "2026-05-28T04:54:03.149742+00:00",
   "projects": {
     "ai-sdk": {
-      "open_prs": 3,
+      "open_prs": 2,
       "commits_7d": 111,
       "last_commit_at": "2026-05-28T00:23:09Z"
     },
@@ -18,8 +18,8 @@
     },
     "dispatch": {
       "open_prs": 0,
-      "commits_7d": 99,
-      "last_commit_at": "2026-05-28T03:17:07Z"
+      "commits_7d": 101,
+      "last_commit_at": "2026-05-28T04:42:58Z"
     },
     "gemma-cpp": {
       "open_prs": 1,
@@ -37,7 +37,7 @@
       "last_commit_at": "2026-05-18T20:18:12Z"
     },
     "metaflow": {
-      "open_prs": 5,
+      "open_prs": 6,
       "commits_7d": 2,
       "last_commit_at": "2026-05-28T03:31:16Z"
     },

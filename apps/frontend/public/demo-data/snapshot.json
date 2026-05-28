@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T03:52:12.624380+00:00",
+  "generated_at": "2026-05-28T04:54:03.033396+00:00",
   "brief": {
     "date": "2026-05-27",
     "issue_no": 2,
@@ -82,7 +82,7 @@
     ],
     "addendums": [],
     "audio": {
-      "lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-27-lead.mp3",
+      "lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
       "lead_duration_s": 167,
       "addendum_url": null,
       "addendum_duration_s": null,
@@ -298,6 +298,150 @@
     }
   ],
   "recent_events": [
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63000",
+      "title": "[BUG] Cowork downloads Linux ELF binary instead of macOS binary on macOS Sonoma 14.8.7 — exit code 132 (SIGILL) on every session",
+      "author": "jimparker2012-sketch",
+      "occurred_at": "2026-05-28T04:52:17Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63000"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62999",
+      "title": "[BUG] TUI input freezes randomly mid-typing — entire prompt becomes unresponsive for minutes",
+      "author": "cmhungksu",
+      "occurred_at": "2026-05-28T04:48:34Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62999"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62998",
+      "title": "Bypass mode clamps to Accept Edits even with the toggle ON (Claude Code Desktop 1.9255.2 / CC 2.1.149)",
+      "author": "lxgicstudios",
+      "occurred_at": "2026-05-28T04:46:23Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62998"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "1c926359286cc3cb9ca804e1eba74c5518fea01a",
+      "title": "chore: backfill demo briefings audio + podcast recovery script",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T04:42:58Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/1c926359286cc3cb9ca804e1eba74c5518fea01a"
+    },
+    {
+      "project_slug": "metaflow",
+      "kind": "pr_opened",
+      "external_id": "3214",
+      "title": "fix(client): avoid redundant metadata fetch in task log accessors",
+      "author": "ynachiket",
+      "occurred_at": "2026-05-28T04:42:48Z",
+      "url": "https://github.com/Netflix/metaflow/pull/3214"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62997",
+      "title": "[BUG] Claude Desktop reinstall destroys Code chat history (transcripts + Recents) while regular Chat history, project files, and memory all survive",
+      "author": "TLBcloud",
+      "occurred_at": "2026-05-28T04:42:41Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62997"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62996",
+      "title": "Model fails to read/reference CLAUDE.md contents despite being loaded in context",
+      "author": "ember-agentic",
+      "occurred_at": "2026-05-28T04:28:02Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62996"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62995",
+      "title": "[BUG]",
+      "author": "stormfly-cloud",
+      "occurred_at": "2026-05-28T04:27:54Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62995"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62994",
+      "title": "[remote-control] Input from mobile app/browser not reaching host session — output works fine",
+      "author": "ErnestoMoscoso",
+      "occurred_at": "2026-05-28T04:26:32Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62994"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62993",
+      "title": "[BUG] Connector toggles in conversation are not clickable — must click text label instead",
+      "author": "hanktsai1985-pixel",
+      "occurred_at": "2026-05-28T04:26:04Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62993"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62992",
+      "title": "[Regression v2.1.153] Plugin bash hooks fail with \"echo: write error: Permission denied\" on Windows   (claude-mem, shell: \"bash\")",
+      "author": "alejandro2go",
+      "occurred_at": "2026-05-28T04:22:51Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62992"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "54639",
+      "title": "[BUG] Auto-update breaks claude.exe on Windows (NVM for Windows)",
+      "author": "itzhakl",
+      "occurred_at": "2026-05-28T04:15:44Z",
+      "url": "https://github.com/anthropics/claude-code/issues/54639"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "51713",
+      "title": "[BUG] MCP progress notifications are no longer displayed in the UI (regression)",
+      "author": "EDmitry",
+      "occurred_at": "2026-05-28T04:15:20Z",
+      "url": "https://github.com/anthropics/claude-code/issues/51713"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62991",
+      "title": "Paid yearly subscription silently downgraded to Free with no user action",
+      "author": "ji-jo",
+      "occurred_at": "2026-05-28T04:06:57Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62991"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "pr_merged",
+      "external_id": "15659",
+      "title": "Backport: ci(playwright): only run browser tests on lts version of node, and retry on timeout (#15624)",
+      "author": "gr2m",
+      "occurred_at": "2026-05-28T03:58:39Z",
+      "url": "https://github.com/vercel/ai/pull/15659"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "f368af7e4cc41378ea41179900d3553d8615bdf7",
+      "title": "fix(frontend): align project row links and shorten demo banner",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T03:53:49Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/f368af7e4cc41378ea41179900d3553d8615bdf7"
+    },
     {
       "project_slug": "metaflow",
       "kind": "pr_opened",
@@ -603,152 +747,8 @@
       "author": "eondcom",
       "occurred_at": "2026-05-28T01:04:21Z",
       "url": "https://github.com/anthropics/claude-code/issues/62969"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62968",
-      "title": "[BUG] CCR routine runs stuck at \"setting up a cloud container\" — stop button doesn't clear status",
-      "author": "owen-calcs",
-      "occurred_at": "2026-05-28T00:59:33Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62968"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62967",
-      "title": "[BUG] Claude in Chrome v1.0.74 — MCP bridge navigation and read tools wedge after May 27 update",
-      "author": "skhsu91",
-      "occurred_at": "2026-05-28T00:59:10Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62967"
-    },
-    {
-      "project_slug": "workflow-sdk",
-      "kind": "pr_opened",
-      "external_id": "2128",
-      "title": "[test] workflow-server PR #456",
-      "author": "vercel-gh-bot-2[bot]",
-      "occurred_at": "2026-05-28T00:59:00Z",
-      "url": "https://github.com/vercel/workflow/pull/2128"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62966",
-      "title": "`claude plugin uninstall` refuses with \"enabled at project scope\" when plugin is absent from every enabledPlugins map (contradicts `disable` which reports already-disabled)",
-      "author": "andrewstyer",
-      "occurred_at": "2026-05-28T00:57:15Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62966"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "release",
-      "external_id": "330532213",
-      "title": "v2.1.153",
-      "author": "ashwin-ant",
-      "occurred_at": "2026-05-28T00:52:08Z",
-      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.153"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62965",
-      "title": "[Bug] Transcript corruption from unsafe tool_result/thinking block separation during compaction",
-      "author": "groenewt",
-      "occurred_at": "2026-05-28T00:49:55Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62965"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62964",
-      "title": "MCP `.mcp.json` project-trust modal re-fires on every launch in Linux docker container (v2.1.141 and v2.1.152)",
-      "author": "renatogcarvalho",
-      "occurred_at": "2026-05-28T00:40:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62964"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62963",
-      "title": "[BUG] Bug: 400 error \"thinking blocks must be passed back\" with third-party compatible endpoints after upgrade to 2.1.152",
-      "author": "shiqizhou1998-prog",
-      "occurred_at": "2026-05-28T00:39:55Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62963"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62962",
-      "title": "claude --continue ignores ANTHROPIC_DEFAULT_OPUS_MODEL, resumes on 200K instead of configured 1M",
-      "author": "Gab-CosmoLabs",
-      "occurred_at": "2026-05-28T00:26:00Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62962"
-    },
-    {
-      "project_slug": "ai-sdk",
-      "kind": "commit",
-      "external_id": "6be108d1a4ff623fd3d5865763f1dd4aa2d86763",
-      "title": "rname channel name",
-      "author": "Aayush Kapoor",
-      "occurred_at": "2026-05-28T00:23:09Z",
-      "url": "https://github.com/vercel/ai/commit/6be108d1a4ff623fd3d5865763f1dd4aa2d86763"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62961",
-      "title": "Korean outputs use informal/slang verb \"박다\" (bakda) at 18× baseline frequency",
-      "author": "eiaserinnys",
-      "occurred_at": "2026-05-28T00:21:19Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62961"
-    },
-    {
-      "project_slug": "ai-sdk",
-      "kind": "commit",
-      "external_id": "696715125aa1fc84176ffc2d2bb5f906aacb0d51",
-      "title": "fix + docs",
-      "author": "Aayush Kapoor",
-      "occurred_at": "2026-05-28T00:18:34Z",
-      "url": "https://github.com/vercel/ai/commit/696715125aa1fc84176ffc2d2bb5f906aacb0d51"
-    },
-    {
-      "project_slug": "ai-sdk",
-      "kind": "pr_opened",
-      "external_id": "15660",
-      "title": "feat(ai): use tracing channels to track parent-child context",
-      "author": "aayush-kapoor",
-      "occurred_at": "2026-05-28T00:16:53Z",
-      "url": "https://github.com/vercel/ai/pull/15660"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62960",
-      "title": "[FEATURE] GUI project/session switcher in Claude Code Desktop",
-      "author": "saint90ms",
-      "occurred_at": "2026-05-28T00:06:18Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62960"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62959",
-      "title": "[BUG] Session transcripts silently auto-deleted after 30 days; sidebar shows ghost entries that error on click",
-      "author": "ashpat00",
-      "occurred_at": "2026-05-28T00:05:45Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62959"
-    },
-    {
-      "project_slug": "ai-sdk",
-      "kind": "commit",
-      "external_id": "4a00bdb6f0e7a47093a768beece4ba693424ce5c",
-      "title": "failing tests",
-      "author": "Aayush Kapoor",
-      "occurred_at": "2026-05-28T00:03:44Z",
-      "url": "https://github.com/vercel/ai/commit/4a00bdb6f0e7a47093a768beece4ba693424ce5c"
     }
   ],
   "episodes": [],
-  "signature": "98acdd65723991106d0b6d652b078f8a"
+  "signature": "5f55971689b99be2579dd09a7e020100"
 }
