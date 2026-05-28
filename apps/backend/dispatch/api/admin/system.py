@@ -64,6 +64,7 @@ async def setup_status(request: Request) -> dict[str, Any]:
         "project_count": row[0] or 0,
         "storage_provider": storage_provider or "local",
         "ai_provider": ai_provider or None,
+        "tts_provider": tts_provider or None,
         "dispatch_tz": settings.dispatch_tz,
     }
 

@@ -5,6 +5,9 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
+    { "source": "/api/proxy/(.*)", "destination": "/api/proxy/$1" },
+    { "source": "/api/(.*)", "destination": "https://dispatch-demo-api.marklab.uk/api/$1" },
+    { "source": "/health", "destination": "https://dispatch-demo-api.marklab.uk/health" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
@@ -14,13 +17,5 @@
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
     }
-  ],
-  "crons": [
-    { "path": "/api/cron/ingest-github", "schedule": "*/30 * * * *" },
-    { "path": "/api/cron/ingest-github-commits", "schedule": "0 * * * *" },
-    { "path": "/api/cron/synthesis-lead", "schedule": "0 1 * * *" },
-    { "path": "/api/cron/audio", "schedule": "15 1 * * *" },
-    { "path": "/api/cron/from-the-desk", "schedule": "0 23 * * 0" },
-    { "path": "/api/cron/housekeeping", "schedule": "0 2 * * *" }
   ]
 }
