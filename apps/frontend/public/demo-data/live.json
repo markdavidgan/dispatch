@@ -1,8 +1,8 @@
 {
-  "as_of": "2026-05-28T06:01:17.958769+00:00",
+  "as_of": "2026-05-28T09:05:22.245878+00:00",
   "projects": {
     "ai-sdk": {
-      "open_prs": 3,
+      "open_prs": 4,
       "commits_7d": 111,
       "last_commit_at": "2026-05-28T00:23:09Z"
     },
@@ -18,8 +18,8 @@
     },
     "dispatch": {
       "open_prs": 0,
-      "commits_7d": 103,
-      "last_commit_at": "2026-05-28T05:23:40Z"
+      "commits_7d": 104,
+      "last_commit_at": "2026-05-28T06:01:38Z"
     },
     "gemma-cpp": {
       "open_prs": 1,
@@ -42,9 +42,9 @@
       "last_commit_at": "2026-05-28T03:31:16Z"
     },
     "workflow-sdk": {
-      "open_prs": 33,
-      "commits_7d": 73,
-      "last_commit_at": "2026-05-27T23:14:38Z"
+      "open_prs": 32,
+      "commits_7d": 83,
+      "last_commit_at": "2026-05-28T07:38:07Z"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T06:01:17.924745+00:00",
+  "generated_at": "2026-05-28T09:05:22.114055+00:00",
   "brief": {
     "date": "2026-05-27",
     "issue_no": 18,
@@ -269,454 +269,454 @@
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63008",
-      "title": "[BUG] Claude_Preview MCP preview_start spawns dev server with main-repo cwd instead of session's worktree cwd",
-      "author": "jhopper28",
-      "occurred_at": "2026-05-28T05:53:33Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63008"
+      "external_id": "63040",
+      "title": "[DOCS] Background session docs omit `$CLAUDE_JOB_DIR` temp-file behavior",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T08:02:49Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63040"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63007",
-      "title": "[BUG] Claude Code hangs on M1 Mac when terminal says \"opening browser to sign in\" and browser opens",
-      "author": "og20claude",
-      "occurred_at": "2026-05-28T05:44:06Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63007"
+      "external_id": "63039",
+      "title": "[DOCS] Agent SDK docs omit `subagent_type: \"claude\"` worktree and output persistence behavior",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T08:01:47Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63039"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63006",
-      "title": "Does delegating work to `claude -p` subprocesses reduce context accumulation in the parent session?",
-      "author": "mg1986jp",
-      "occurred_at": "2026-05-28T05:43:34Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63006"
+      "external_id": "63038",
+      "title": "[DOCS] Npm update docs do not explain release-channel behavior for `claude update`",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T08:00:45Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63038"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63005",
-      "title": "[Bug] Anthropic API Error: Server rate limiting despite normal usage",
-      "author": "LovelyCookie",
-      "occurred_at": "2026-05-28T05:24:43Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63005"
-    },
-    {
-      "project_slug": "dispatch",
-      "kind": "commit",
-      "external_id": "64b516a2a1ce170f92853df5da2f813963fa10e5",
-      "title": "fix: remove dispatch from briefings, renumber sequentially, rebuild demo",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T05:23:40Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/64b516a2a1ce170f92853df5da2f813963fa10e5"
+      "external_id": "63037",
+      "title": "[DOCS] Agent view docs omit macOS Privacy & Security identity for background agents",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T07:59:44Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63037"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63004",
-      "title": "[BUG] Dictation error: Invalid character in header content [\"x-config-keyterms\"] on Windows",
-      "author": "jr1000451a-bot",
-      "occurred_at": "2026-05-28T05:22:11Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63004"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "54012",
-      "title": "Starlog published a deep-dive on anthropics/claude-code",
-      "author": "basicScandal",
-      "occurred_at": "2026-05-28T05:15:39Z",
-      "url": "https://github.com/anthropics/claude-code/issues/54012"
+      "external_id": "63036",
+      "title": "[DOCS] MCP docs omit combined startup notification for MCP server and connector authentication",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T07:58:42Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63036"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "63003",
-      "title": "[FEATURE] Add context window usage indicator and warning before auto-compaction",
-      "author": "saint90ms",
-      "occurred_at": "2026-05-28T05:14:41Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63003"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "63002",
-      "title": "[Bug] Thread context stale after sleep/resume, returns outdated date and calendar data",
-      "author": "PeterZajac",
-      "occurred_at": "2026-05-28T05:13:14Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63002"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "63001",
-      "title": "[Feature Request] Persistent project memory — sessions forget everything on close, forcing users to keep many sessions open",
-      "author": "cmhungksu",
-      "occurred_at": "2026-05-28T04:57:01Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63001"
+      "external_id": "63035",
+      "title": "[DOCS] Plugin marketplace guide omits `skipLfs` option for git-based sources",
+      "author": "coygeek",
+      "occurred_at": "2026-05-28T07:57:39Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63035"
     },
     {
       "project_slug": "ai-sdk",
       "kind": "pr_opened",
-      "external_id": "15662",
-      "title": "feat(provider/xai): expose `enableImageSearch` on the Web Search tool",
-      "author": "ushiromiya-lion",
-      "occurred_at": "2026-05-28T04:54:26Z",
-      "url": "https://github.com/vercel/ai/pull/15662"
+      "external_id": "15665",
+      "title": "fix(google): omit function ids for vertex requests",
+      "author": "onmax",
+      "occurred_at": "2026-05-28T07:55:08Z",
+      "url": "https://github.com/vercel/ai/pull/15665"
     },
     {
-      "project_slug": "dispatch",
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63034",
+      "title": "[BUG] Stop pushing \"AUTO\"-mode",
+      "author": "LasseRafn",
+      "occurred_at": "2026-05-28T07:46:09Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63034"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63033",
+      "title": "False-positive safety blocks on self-administered governance amendments — request for owner-authority mode for verified professional users",
+      "author": "Orca-I",
+      "occurred_at": "2026-05-28T07:43:22Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63033"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63032",
+      "title": "Claude Desktop's Info.plist missing TCC usage strings, blocks all EventKit-based MCP servers",
+      "author": "godyj",
+      "occurred_at": "2026-05-28T07:41:28Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63032"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63031",
+      "title": "claude agents: workflow slash-commands missing from dispatch-input completion (regression-adjacent to #61424)",
+      "author": "nfrith",
+      "occurred_at": "2026-05-28T07:41:04Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63031"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63030",
+      "title": "[BUG] M365 connector fails with AADSTS50011 in Cowork — localhost vs 127.0.0.1 redirect URI mismatch",
+      "author": "stephensnicola-rgb",
+      "occurred_at": "2026-05-28T07:40:57Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63030"
+    },
+    {
+      "project_slug": "workflow-sdk",
       "kind": "commit",
-      "external_id": "03cbeb1bc197007caa12a82c3134277242a3307a",
-      "title": "chore: rebuild demo data with R2 audio URLs",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T04:54:23Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/03cbeb1bc197007caa12a82c3134277242a3307a"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "63000",
-      "title": "[BUG] Cowork downloads Linux ELF binary instead of macOS binary on macOS Sonoma 14.8.7 — exit code 132 (SIGILL) on every session",
-      "author": "jimparker2012-sketch",
-      "occurred_at": "2026-05-28T04:52:17Z",
-      "url": "https://github.com/anthropics/claude-code/issues/63000"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62999",
-      "title": "[BUG] TUI input freezes randomly mid-typing — entire prompt becomes unresponsive for minutes",
-      "author": "cmhungksu",
-      "occurred_at": "2026-05-28T04:48:34Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62999"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62998",
-      "title": "Bypass mode clamps to Accept Edits even with the toggle ON (Claude Code Desktop 1.9255.2 / CC 2.1.149)",
-      "author": "lxgicstudios",
-      "occurred_at": "2026-05-28T04:46:23Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62998"
-    },
-    {
-      "project_slug": "dispatch",
-      "kind": "commit",
-      "external_id": "1c926359286cc3cb9ca804e1eba74c5518fea01a",
-      "title": "chore: backfill demo briefings audio + podcast recovery script",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T04:42:58Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/1c926359286cc3cb9ca804e1eba74c5518fea01a"
-    },
-    {
-      "project_slug": "metaflow",
-      "kind": "pr_opened",
-      "external_id": "3214",
-      "title": "fix(client): avoid redundant metadata fetch in task log accessors",
-      "author": "ynachiket",
-      "occurred_at": "2026-05-28T04:42:48Z",
-      "url": "https://github.com/Netflix/metaflow/pull/3214"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62997",
-      "title": "[BUG] Claude Desktop reinstall destroys Code chat history (transcripts + Recents) while regular Chat history, project files, and memory all survive",
-      "author": "TLBcloud",
-      "occurred_at": "2026-05-28T04:42:41Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62997"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62996",
-      "title": "Model fails to read/reference CLAUDE.md contents despite being loaded in context",
-      "author": "ember-agentic",
-      "occurred_at": "2026-05-28T04:28:02Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62996"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62995",
-      "title": "[BUG]",
-      "author": "stormfly-cloud",
-      "occurred_at": "2026-05-28T04:27:54Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62995"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62994",
-      "title": "[remote-control] Input from mobile app/browser not reaching host session — output works fine",
-      "author": "ErnestoMoscoso",
-      "occurred_at": "2026-05-28T04:26:32Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62994"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62993",
-      "title": "[BUG] Connector toggles in conversation are not clickable — must click text label instead",
-      "author": "hanktsai1985-pixel",
-      "occurred_at": "2026-05-28T04:26:04Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62993"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62992",
-      "title": "[Regression v2.1.153] Plugin bash hooks fail with \"echo: write error: Permission denied\" on Windows   (claude-mem, shell: \"bash\")",
-      "author": "alejandro2go",
-      "occurred_at": "2026-05-28T04:22:51Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62992"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "54639",
-      "title": "[BUG] Auto-update breaks claude.exe on Windows (NVM for Windows)",
-      "author": "itzhakl",
-      "occurred_at": "2026-05-28T04:15:44Z",
-      "url": "https://github.com/anthropics/claude-code/issues/54639"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "51713",
-      "title": "[BUG] MCP progress notifications are no longer displayed in the UI (regression)",
-      "author": "EDmitry",
-      "occurred_at": "2026-05-28T04:15:20Z",
-      "url": "https://github.com/anthropics/claude-code/issues/51713"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62991",
-      "title": "Paid yearly subscription silently downgraded to Free with no user action",
-      "author": "ji-jo",
-      "occurred_at": "2026-05-28T04:06:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62991"
+      "external_id": "3da0595d348cb5e05e368303fab69f13ed5bd817",
+      "title": "[DEBUG] Drop x-vercel-set-bypass-cookie from protection-bypass header",
+      "author": "Nathan Rajlich",
+      "occurred_at": "2026-05-28T07:38:07Z",
+      "url": "https://github.com/vercel/workflow/commit/3da0595d348cb5e05e368303fab69f13ed5bd817"
     },
     {
       "project_slug": "ai-sdk",
+      "kind": "issue_opened",
+      "external_id": "15664",
+      "title": "@ai-sdk/google-vertex sends unsupported functionCall.id/functionResponse.id fields",
+      "author": "onmax",
+      "occurred_at": "2026-05-28T07:32:54Z",
+      "url": "https://github.com/vercel/ai/issues/15664"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63029",
+      "title": "[BUG] Restore from archive deleted sessions instead of restoring them",
+      "author": "sergiodigiorgio",
+      "occurred_at": "2026-05-28T07:30:00Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63029"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "commit",
+      "external_id": "38730f80b630ca723ec2c291c9e31c1c0378a1c0",
+      "title": "Version Packages",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:25:30Z",
+      "url": "https://github.com/vercel/workflow/commit/38730f80b630ca723ec2c291c9e31c1c0378a1c0"
+    },
+    {
+      "project_slug": "workflow-sdk",
       "kind": "pr_merged",
-      "external_id": "15659",
-      "title": "Backport: ci(playwright): only run browser tests on lts version of node, and retry on timeout (#15624)",
-      "author": "gr2m",
-      "occurred_at": "2026-05-28T03:58:39Z",
-      "url": "https://github.com/vercel/ai/pull/15659"
+      "external_id": "2114",
+      "title": "Backport #1978: [world-vercel] Add /run-id sub-export with tagged ULID encode/decode",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:24:51Z",
+      "url": "https://github.com/vercel/workflow/pull/2114"
     },
     {
-      "project_slug": "dispatch",
+      "project_slug": "workflow-sdk",
       "kind": "commit",
-      "external_id": "f368af7e4cc41378ea41179900d3553d8615bdf7",
-      "title": "fix(frontend): align project row links and shorten demo banner",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T03:53:49Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/f368af7e4cc41378ea41179900d3553d8615bdf7"
+      "external_id": "17cf939d48e163f1cc93942a9db1069793da1176",
+      "title": "[world-vercel] Add /run-id sub-export with tagged ULID encode/decode (#1978) (#2114)",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:24:50Z",
+      "url": "https://github.com/vercel/workflow/commit/17cf939d48e163f1cc93942a9db1069793da1176"
     },
     {
-      "project_slug": "metaflow",
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63028",
+      "title": "[BUG] Claude Code on the web: declared plugins inactive on first session, require restart to fully load",
+      "author": "ryukai-arakawa-ctc",
+      "occurred_at": "2026-05-28T07:24:33Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63028"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63027",
+      "title": "billing is unfair and poorly documented",
+      "author": "wdewing",
+      "occurred_at": "2026-05-28T07:22:08Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63027"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "commit",
+      "external_id": "6a17a99e55b8c44a3a46a02c9a488e4f1911a913",
+      "title": "[DEBUG] Re-add explicit protection-bypass env var support",
+      "author": "Nathan Rajlich",
+      "occurred_at": "2026-05-28T07:20:29Z",
+      "url": "https://github.com/vercel/workflow/commit/6a17a99e55b8c44a3a46a02c9a488e4f1911a913"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "commit",
+      "external_id": "ad9d426ed4df19407245aa62ad88a9e54a5c0d19",
+      "title": "[DEBUG] Point world-vercel at workflow-server PR 456 preview",
+      "author": "Nathan Rajlich",
+      "occurred_at": "2026-05-28T07:16:48Z",
+      "url": "https://github.com/vercel/workflow/commit/ad9d426ed4df19407245aa62ad88a9e54a5c0d19"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "commit",
+      "external_id": "9f2d9d7b159acac704e7575c09c528ea332c7bf5",
+      "title": "Merge branch 'main' into fix/builder-nitro-exclude",
+      "author": "Nathan Rajlich",
+      "occurred_at": "2026-05-28T07:14:23Z",
+      "url": "https://github.com/vercel/workflow/commit/9f2d9d7b159acac704e7575c09c528ea332c7bf5"
+    },
+    {
+      "project_slug": "workflow-sdk",
       "kind": "pr_opened",
-      "external_id": "3213",
-      "title": "build(deps-dev): bump tmp from 0.2.5 to 0.2.7 in /metaflow/plugins/cards/ui",
-      "author": "dependabot[bot]",
-      "occurred_at": "2026-05-28T03:31:17Z",
-      "url": "https://github.com/Netflix/metaflow/pull/3213"
+      "external_id": "2131",
+      "title": "Version Packages",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:12:47Z",
+      "url": "https://github.com/vercel/workflow/pull/2131"
     },
     {
-      "project_slug": "metaflow",
+      "project_slug": "workflow-sdk",
+      "kind": "pr_merged",
+      "external_id": "2130",
+      "title": "Backport #1979: fix(world): make run.input and step.input optional on snapshot schemas",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:12:05Z",
+      "url": "https://github.com/vercel/workflow/pull/2130"
+    },
+    {
+      "project_slug": "workflow-sdk",
       "kind": "commit",
-      "external_id": "5241da1c050c3b62b99b2c33718e5f1695db5d32",
-      "title": "build(deps-dev): bump tmp in /metaflow/plugins/cards/ui",
-      "author": "dependabot[bot]",
-      "occurred_at": "2026-05-28T03:31:16Z",
-      "url": "https://github.com/Netflix/metaflow/commit/5241da1c050c3b62b99b2c33718e5f1695db5d32"
+      "external_id": "8ab6c4f0657a2aa26805a80b8db5798bdfe9847c",
+      "title": "fix(world): make run.input and step.input optional on snapshot schemas (#1979) (#2130)",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T07:12:05Z",
+      "url": "https://github.com/vercel/workflow/commit/8ab6c4f0657a2aa26805a80b8db5798bdfe9847c"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "62577",
+      "title": "[Bug] Anthropic API Error: Tool result block missing corresponding tool use block",
+      "author": "reed-colloton",
+      "occurred_at": "2026-05-28T07:11:28Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62577"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62990",
-      "title": "You've hit your weekly limit · resets May 31 at 5pm (Asia/Shanghai)",
-      "author": "majiayu000",
-      "occurred_at": "2026-05-28T03:20:47Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62990"
+      "external_id": "63026",
+      "title": "[Bug] Claude Code not applying fixes despite claiming to complete tasks",
+      "author": "kunaalarya",
+      "occurred_at": "2026-05-28T07:10:07Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63026"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_closed",
+      "external_id": "62937",
+      "title": "**[BUG] Cowork: sessiondata.vhdx not found — path mismatch between copy destination and expected location**",
+      "author": "atlas55-web",
+      "occurred_at": "2026-05-28T07:02:26Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62937"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62989",
-      "title": "[MODEL] Inconsistent output quality / Ignoring instructions (overfitting and inappropriate repetition of Korean vocabulary)",
-      "author": "x2605",
-      "occurred_at": "2026-05-28T03:17:47Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62989"
+      "external_id": "63025",
+      "title": "[BUG] SSH Remote: `projects` field in remote ~/.claude.json becomes null after desktop restart — jsonl files intact, UI shows 'No messages yet' for every session",
+      "author": "Fasted93",
+      "occurred_at": "2026-05-28T07:01:42Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63025"
     },
     {
-      "project_slug": "ai-sdk",
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63024",
+      "title": "Add option to hide email address from welcome banner",
+      "author": "Evilweapon141",
+      "occurred_at": "2026-05-28T07:01:08Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63024"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63023",
+      "title": "Background agents silently die on session pause/resume — no completion notification, no work recovery",
+      "author": "Dalailalama",
+      "occurred_at": "2026-05-28T07:00:48Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63023"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63022",
+      "title": "Background agent UI Stop button is a no-op for stuck agents — process keeps consuming tokens",
+      "author": "Dalailalama",
+      "occurred_at": "2026-05-28T07:00:14Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63022"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "commit",
+      "external_id": "387e0189347fcdd1dd86a0f496708774d6b8d7a9",
+      "title": "Version Packages (beta)",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T06:55:20Z",
+      "url": "https://github.com/vercel/workflow/commit/387e0189347fcdd1dd86a0f496708774d6b8d7a9"
+    },
+    {
+      "project_slug": "workflow-sdk",
       "kind": "pr_opened",
-      "external_id": "15661",
-      "title": "fix(google): round-trip provider code execution parts",
-      "author": "SJvaca30",
-      "occurred_at": "2026-05-28T03:17:30Z",
-      "url": "https://github.com/vercel/ai/pull/15661"
+      "external_id": "2130",
+      "title": "Backport #1979: fix(world): make run.input and step.input optional on snapshot schemas",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T06:55:16Z",
+      "url": "https://github.com/vercel/workflow/pull/2130"
     },
     {
-      "project_slug": "dispatch",
+      "project_slug": "workflow-sdk",
       "kind": "commit",
-      "external_id": "c1db43fda05cb28ea10d71f3c2b83c15f63ec813",
-      "title": "fix: re-sync projects.yml on every boot + restore full project list to demo",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T03:17:07Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/c1db43fda05cb28ea10d71f3c2b83c15f63ec813"
+      "external_id": "507fed38a99ea3034c2712ba6a7ef0fa126683d8",
+      "title": "fix(world): make run.input and step.input optional on snapshot schemas (#1979)",
+      "author": "github-actions[bot]",
+      "occurred_at": "2026-05-28T06:55:13Z",
+      "url": "https://github.com/vercel/workflow/commit/507fed38a99ea3034c2712ba6a7ef0fa126683d8"
     },
     {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62988",
-      "title": "[BUG] Default git workflow in the system prompt was pushed without context or consent",
-      "author": "DCowing",
-      "occurred_at": "2026-05-28T03:08:52Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62988"
-    },
-    {
-      "project_slug": "dispatch",
-      "kind": "commit",
-      "external_id": "f3b82f353f447fd6902af96db935e3245d42d26a",
-      "title": "ops: add cloud deployment configs and switch demo to static",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T03:06:37Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/f3b82f353f447fd6902af96db935e3245d42d26a"
-    },
-    {
-      "project_slug": "claude-code",
+      "project_slug": "workflow-sdk",
       "kind": "issue_closed",
-      "external_id": "62982",
-      "title": "[redacted at user request]",
-      "author": "alexkahel",
-      "occurred_at": "2026-05-28T03:01:06Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62982"
+      "external_id": "1977",
+      "title": "5.0.0-beta.5 Zod schema rejects RemoteRef-wrapped step inputs from production service",
+      "author": "adamiBs",
+      "occurred_at": "2026-05-28T06:54:34Z",
+      "url": "https://github.com/vercel/workflow/issues/1977"
     },
     {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62987",
-      "title": "[BUG] claude rm/stop/reap SIGKILLs background session tree without SIGTERM grace, orphaning git index.lock and similar",
-      "author": "alchemymakemoney",
-      "occurred_at": "2026-05-28T02:56:38Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62987"
+      "project_slug": "workflow-sdk",
+      "kind": "pr_merged",
+      "external_id": "1979",
+      "title": "fix(world): make run.input and step.input optional on snapshot schemas",
+      "author": "adamiBs",
+      "occurred_at": "2026-05-28T06:54:33Z",
+      "url": "https://github.com/vercel/workflow/pull/1979"
     },
     {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "62986",
-      "title": "[BUG]  Long URLs are broken into multiple lines and become   unclickable in terminal output",
-      "author": "hustzyd",
-      "occurred_at": "2026-05-28T02:55:18Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62986"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62986",
-      "title": "[BUG]  Long URLs are broken into multiple lines and become   unclickable in terminal output",
-      "author": "hustzyd",
-      "occurred_at": "2026-05-28T02:54:45Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62986"
-    },
-    {
-      "project_slug": "dispatch",
+      "project_slug": "workflow-sdk",
       "kind": "commit",
-      "external_id": "732c45a25878a993b54a031dafe3282fff9fef54",
-      "title": "feat: static demo build + cloud deployment guides",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T02:51:37Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/732c45a25878a993b54a031dafe3282fff9fef54"
+      "external_id": "62ec5372fb7dc0d8d088be0c55db35d14eea5b14",
+      "title": "fix(world): make run.input and step.input optional on snapshot schemas (#1979)",
+      "author": "adamiBs",
+      "occurred_at": "2026-05-28T06:54:32Z",
+      "url": "https://github.com/vercel/workflow/commit/62ec5372fb7dc0d8d088be0c55db35d14eea5b14"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62985",
-      "title": "stopShellPty on tab switch kills active sessions (exit 143) — regression in May 27 build",
-      "author": "renatomoscati-creator",
-      "occurred_at": "2026-05-28T02:46:24Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62985"
-    },
-    {
-      "project_slug": "dispatch",
-      "kind": "commit",
-      "external_id": "9c955a9a29bc233c866fd5dfac2bfe9d84a541e9",
-      "title": "chore: add open-source contributor infrastructure",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T02:40:43Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/9c955a9a29bc233c866fd5dfac2bfe9d84a541e9"
+      "external_id": "63021",
+      "title": "[BUG] Statusline not displaying on Windows [fixed]",
+      "author": "Bartosh16",
+      "occurred_at": "2026-05-28T06:50:12Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63021"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62984",
-      "title": "[BUG] Tailscale via Homebrew CLI + Mac App Store GUI, both Macs on macOS, Cowork blocked by VPN detector despite Tailscale being a mesh VPN with no traffic interception",
-      "author": "planewryter",
-      "occurred_at": "2026-05-28T02:40:11Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62984"
+      "external_id": "63020",
+      "title": "[FEATURE] Allow users to customize the background color of the Claude desktop app beyond the current light/dark theme presets.",
+      "author": "so-ramunas",
+      "occurred_at": "2026-05-28T06:44:36Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63020"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62983",
-      "title": "Opus 4.7 behavioral regression: loaded instruction-following discipline degraded in recent Claude Code/Cowork updates",
-      "author": "yurievf",
-      "occurred_at": "2026-05-28T02:39:29Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62983"
+      "external_id": "63019",
+      "title": "[BUG] Terminal corruption when permission prompt appears while navigating Agent Teams agent selection menu",
+      "author": "lucasec",
+      "occurred_at": "2026-05-28T06:33:54Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63019"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62982",
-      "title": "[BUG] macOS Claude Desktop fails to launch when claude-code-sessions is restored; sessions lose titles and Remote Control disconnects",
-      "author": "alexkahel",
-      "occurred_at": "2026-05-28T02:31:26Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62982"
-    },
-    {
-      "project_slug": "ai-sdk",
-      "kind": "issue_closed",
-      "external_id": "15621",
-      "title": "audio/mp4 mediaType signature broken — 'ftyp' detected at offset 0, real MP4 has it at offset 4",
-      "author": "dvmstr",
-      "occurred_at": "2026-05-28T02:25:04Z",
-      "url": "https://github.com/vercel/ai/issues/15621"
+      "external_id": "63018",
+      "title": "[Feature Request] Show timestamps for each message",
+      "author": "attun-greria",
+      "occurred_at": "2026-05-28T06:27:46Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63018"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62981",
-      "title": "[BUG] Plugin marketplace MCP connector remains stuck \"still connecting\" when mcp-remote requires OAuth",
-      "author": "nick-youngblut",
-      "occurred_at": "2026-05-28T02:18:41Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62981"
+      "external_id": "63017",
+      "title": "Feature request: option to switch between classic and new minimal UI",
+      "author": "LRSnowX",
+      "occurred_at": "2026-05-28T06:22:58Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63017"
     },
     {
       "project_slug": "claude-code",
       "kind": "issue_opened",
-      "external_id": "62980",
-      "title": "Cross-client session syncing between VS Code extension and Desktop app",
-      "author": "DGD28",
-      "occurred_at": "2026-05-28T02:13:32Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62980"
+      "external_id": "63016",
+      "title": "[BUG] [Desktop / macOS] 'Open in → New Window' detached session: font renders smaller than main, no per-window controls, Cmd+/Cmd- keystrokes routed to main window instead",
+      "author": "LeoGestetner",
+      "occurred_at": "2026-05-28T06:20:55Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63016"
     },
     {
-      "project_slug": "dispatch",
-      "kind": "commit",
-      "external_id": "3a6ccb6a3cc525802f5b45c34681fffe6d881b28",
-      "title": "refactor: move API routes from Vercel serverless to unified backend",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-28T02:13:16Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/3a6ccb6a3cc525802f5b45c34681fffe6d881b28"
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63015",
+      "title": "[Bug] Auto-compact never triggers despite statusline reporting \"100% context used\" (v2.1.153, Max sub, 200K mode)",
+      "author": "sandcastlesystem",
+      "occurred_at": "2026-05-28T06:16:04Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63015"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63014",
+      "title": "[BUG]  API Error: Server is temporarily limiting requests (not your usage limit) · Rate limited",
+      "author": "Sahasrara",
+      "occurred_at": "2026-05-28T06:14:56Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63014"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63013",
+      "title": "[BUG] Cowork: Live Artifacts folder path changed in 1.9255.2, no automatic migration from Documents\\Claude\\Artifacts",
+      "author": "ojovirtual",
+      "occurred_at": "2026-05-28T06:14:30Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63013"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "63012",
+      "title": "[BUG] API 500 ERROR ALL THROUGHOUT THE DAY",
+      "author": "nero-tulip",
+      "occurred_at": "2026-05-28T06:10:16Z",
+      "url": "https://github.com/anthropics/claude-code/issues/63012"
+    },
+    {
+      "project_slug": "workflow-sdk",
+      "kind": "pr_opened",
+      "external_id": "2129",
+      "title": "[test] workflow-server PR #457",
+      "author": "vercel-gh-bot-2[bot]",
+      "occurred_at": "2026-05-28T06:09:56Z",
+      "url": "https://github.com/vercel/workflow/pull/2129"
     }
   ],
   "episodes": [],
-  "signature": "1ae0ce4aa22b24473643e085debe2875"
+  "signature": "075c07c57e5cadfc3ab09ead8362d5a4"
 }

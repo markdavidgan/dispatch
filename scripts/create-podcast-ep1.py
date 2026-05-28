@@ -26,8 +26,8 @@ async def main():
     r2_compat.set_storage_backend(storage)
 
     async with db.cursor() as cur:
-        await cur.execute("DELETE FROM episodes")
         await cur.execute("DELETE FROM podcast_jobs")
+        await cur.execute("DELETE FROM episodes")
     log.info("Deleted existing episodes and jobs")
 
     podcasts = enabled_podcasts(Path("/app/dispatch/projects.yml"))
