@@ -1,0 +1,35 @@
+# Fly.io configuration for Dispatch backend
+# Usage: flyctl launch (creates app) → flyctl deploy
+#
+# Memory note: The free tier provides 256 MB VMs. Dispatch backend alone boots
+# in ~180 MB, but TTS + ffmpeg spikes above 256 MB during audio generation.
+# If you hit OOMs, upgrade to the 512 MB VM (~$1.94/mo):
+#   flyctl scale memory 512
+
+app = 'dispatch-backend'
+primary_region = 'sin'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  HOST = '0.0.0.0'
+  PORT = '10060'
+  DB_PATH = '/data/dispatch.db'
+
+[[mounts]]
+  source = 'dispatch_data'
+  destination = '/data'
+
+[http_service]
+  internal_port = 10060
+  force_https = true
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
