@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T03:15:42.172924+00:00",
+  "generated_at": "2026-05-28T03:52:12.624380+00:00",
   "brief": {
     "date": "2026-05-27",
     "issue_no": 2,
@@ -98,7 +98,28 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": []
+      "mentioned_in_briefings": [
+        {
+          "date": "2026-05-22",
+          "excerpt": "AI SDK landed Claude Platform on AWS, a gateway serviceTier option, and Vercel access token support while closing two Anthropic tool bugs."
+        },
+        {
+          "date": "2026-05-21",
+          "excerpt": "AI SDK shipped two new providers and a clutch of provider fixes across 31 commits and two releases — the window's single busiest project by volume."
+        },
+        {
+          "date": "2026-05-19",
+          "excerpt": "AI SDK logged the highest commit count at 34, adding Gemini 3.5 Flash, a Cerebras provider, and managed-agents support."
+        },
+        {
+          "date": "2026-05-18",
+          "excerpt": "Twenty-two commits landed in AI SDK today, delivering the Vue useChat composable, sandboxed file I/O wrappers, and a same-day Vertex project-ID backport alongside a Node 22 floor."
+        },
+        {
+          "date": "2026-05-15",
+          "excerpt": "Thirty commits landed in AI SDK today, anchoring on a patch for Google's Interactions API before its upstream breaking change hits on May 26."
+        }
+      ]
     },
     {
       "slug": "astro",
@@ -108,7 +129,28 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": []
+      "mentioned_in_briefings": [
+        {
+          "date": "2026-05-21",
+          "excerpt": "Astro cut two patch releases and cleared a backlog of correctness bugs in MDX, the Node adapter, and redirect handling."
+        },
+        {
+          "date": "2026-05-20",
+          "excerpt": "Astro pushed astro@6.3.6 and @astrojs/cloudflare@13.5.3 before noon, then spent the afternoon closing gaps in Vite build-option inheritance and Cloudflare SSR optimizeDeps forwarding."
+        },
+        {
+          "date": "2026-05-18",
+          "excerpt": "Astro cut 6.3.4 and 6.3.5 within three hours, bundling a stale-content dev-server fix, CSP correction, and a full error-message overhaul."
+        },
+        {
+          "date": "2026-05-17",
+          "excerpt": "Astro added one item — a Vite race condition dropping React in dev mode — and every other project was silent."
+        },
+        {
+          "date": "2026-05-14",
+          "excerpt": "Astro's busiest concern was a security patch: unescaped slot names in hydration attributes opened an XSS vector, closed at 13:32 and released as `astro@6.3.3` minutes later."
+        }
+      ]
     },
     {
       "slug": "claude-code",
@@ -118,7 +160,28 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": []
+      "mentioned_in_briefings": [
+        {
+          "date": "2026-05-25",
+          "excerpt": "Upstream, Claude Code closed roughly a hundred issues in a sweep around 22:30 UTC while fresh bugs around ECONNRESET, PTY CPU spin, and --resume fork selection queued up."
+        },
+        {
+          "date": "2026-05-24",
+          "excerpt": "Claude Code's tracker saw a bulk closure of roughly fifty issues around 22:35, with new reports arriving through the night on MCP respawn failures, credential detection, and a word-boundary fix for the @claude trigger."
+        },
+        {
+          "date": "2026-05-19",
+          "excerpt": "Claude Code pushed two releases but absorbed more issues than it closed — stale daemons, a context-spec regression, and a broken worktree attach path among them."
+        },
+        {
+          "date": "2026-05-18",
+          "excerpt": "Claude Code shipped nothing substantive but drew a cluster of agent-mode reports worth reviewing before that surface sees wider use."
+        },
+        {
+          "date": "2026-05-15",
+          "excerpt": "Claude Code shipped v2.1.143 quietly but opened six bug reports by day's end, including a 429-into-400 retry spiral that leaves sessions unrecoverable and a Task tool gap that collapses multi-agent orchestration to single-agent execution."
+        }
+      ]
     },
     {
       "slug": "dispatch",
@@ -132,6 +195,18 @@
         {
           "date": "2026-05-27",
           "excerpt": "Dispatch had its busiest single day on record."
+        },
+        {
+          "date": "2026-05-25",
+          "excerpt": "Seven commits landed in Dispatch overnight, covering the podcast page redesign, split-deployment CORS support, and the long-form brief mode generating this issue."
+        },
+        {
+          "date": "2026-05-24",
+          "excerpt": "Nine commits took Dispatch from skeleton to deployable: Phases 2–7 landed together, followed by a configurable scheduler, a manual trigger, a backfill script, and an architectural note pinning Caddy as the gateway."
+        },
+        {
+          "date": "2026-05-23",
+          "excerpt": "Dispatch left the marklab monorepo this morning as its own repository, with backend and frontend reorganized under apps/ and a Phase 1 foundation plan drafted, executed, and archived in seventeen commits."
         }
       ]
     },
@@ -183,7 +258,20 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": []
+      "mentioned_in_briefings": [
+        {
+          "date": "2026-05-15",
+          "excerpt": "Metaflow drew a security disclosure — four findings, one an RCE claim — low in volume, not in consequence."
+        },
+        {
+          "date": "2026-05-11",
+          "excerpt": "Metaflow closed the night with 2.19.29."
+        },
+        {
+          "date": "2026-05-10",
+          "excerpt": "Metaflow absorbed four merged PRs in a tight early-morning window, closing bugs ranging from an orphaned-process race condition to a Windows SIGALRM crash in the timeout decorator."
+        }
+      ]
     },
     {
       "slug": "workflow-sdk",
@@ -193,10 +281,95 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": []
+      "mentioned_in_briefings": [
+        {
+          "date": "2026-05-21",
+          "excerpt": "Workflow SDK worked both ends of the day: replay-stability commits in the early hours, then three production fixes and a v4 wire-format migration by evening."
+        },
+        {
+          "date": "2026-05-19",
+          "excerpt": "Workflow SDK cut beta.6 with a graphile-worker schema bootstrap and a socket fix, while a new issue immediately flags Cloudflare Workers as blocked on node:vm."
+        },
+        {
+          "date": "2026-05-14",
+          "excerpt": "Fourteen commits landed in Workflow SDK today, anchored by a fix to `formatDurationPrecise` — which had been producing boundary nonsense like \"60s\" and \"1m 60s\" — subsequently folded into `formatDuration` as a precise mode."
+        }
+      ]
     }
   ],
   "recent_events": [
+    {
+      "project_slug": "metaflow",
+      "kind": "pr_opened",
+      "external_id": "3213",
+      "title": "build(deps-dev): bump tmp from 0.2.5 to 0.2.7 in /metaflow/plugins/cards/ui",
+      "author": "dependabot[bot]",
+      "occurred_at": "2026-05-28T03:31:17Z",
+      "url": "https://github.com/Netflix/metaflow/pull/3213"
+    },
+    {
+      "project_slug": "metaflow",
+      "kind": "commit",
+      "external_id": "5241da1c050c3b62b99b2c33718e5f1695db5d32",
+      "title": "build(deps-dev): bump tmp in /metaflow/plugins/cards/ui",
+      "author": "dependabot[bot]",
+      "occurred_at": "2026-05-28T03:31:16Z",
+      "url": "https://github.com/Netflix/metaflow/commit/5241da1c050c3b62b99b2c33718e5f1695db5d32"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62990",
+      "title": "You've hit your weekly limit · resets May 31 at 5pm (Asia/Shanghai)",
+      "author": "majiayu000",
+      "occurred_at": "2026-05-28T03:20:47Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62990"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62989",
+      "title": "[MODEL] Inconsistent output quality / Ignoring instructions (overfitting and inappropriate repetition of Korean vocabulary)",
+      "author": "x2605",
+      "occurred_at": "2026-05-28T03:17:47Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62989"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "pr_opened",
+      "external_id": "15661",
+      "title": "fix(google): round-trip provider code execution parts",
+      "author": "SJvaca30",
+      "occurred_at": "2026-05-28T03:17:30Z",
+      "url": "https://github.com/vercel/ai/pull/15661"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "c1db43fda05cb28ea10d71f3c2b83c15f63ec813",
+      "title": "fix: re-sync projects.yml on every boot + restore full project list to demo",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T03:17:07Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/c1db43fda05cb28ea10d71f3c2b83c15f63ec813"
+    },
+    {
+      "project_slug": "claude-code",
+      "kind": "issue_opened",
+      "external_id": "62988",
+      "title": "[BUG] Default git workflow in the system prompt was pushed without context or consent",
+      "author": "DCowing",
+      "occurred_at": "2026-05-28T03:08:52Z",
+      "url": "https://github.com/anthropics/claude-code/issues/62988"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "f3b82f353f447fd6902af96db935e3245d42d26a",
+      "title": "ops: add cloud deployment configs and switch demo to static",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T03:06:37Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/f3b82f353f447fd6902af96db935e3245d42d26a"
+    },
     {
       "project_slug": "claude-code",
       "kind": "issue_closed",
@@ -234,6 +407,15 @@
       "url": "https://github.com/anthropics/claude-code/issues/62986"
     },
     {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "732c45a25878a993b54a031dafe3282fff9fef54",
+      "title": "feat: static demo build + cloud deployment guides",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T02:51:37Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/732c45a25878a993b54a031dafe3282fff9fef54"
+    },
+    {
       "project_slug": "claude-code",
       "kind": "issue_opened",
       "external_id": "62985",
@@ -241,6 +423,15 @@
       "author": "renatomoscati-creator",
       "occurred_at": "2026-05-28T02:46:24Z",
       "url": "https://github.com/anthropics/claude-code/issues/62985"
+    },
+    {
+      "project_slug": "dispatch",
+      "kind": "commit",
+      "external_id": "9c955a9a29bc233c866fd5dfac2bfe9d84a541e9",
+      "title": "chore: add open-source contributor infrastructure",
+      "author": "Mark David Gan",
+      "occurred_at": "2026-05-28T02:40:43Z",
+      "url": "https://github.com/markdavidgan/dispatch/commit/9c955a9a29bc233c866fd5dfac2bfe9d84a541e9"
     },
     {
       "project_slug": "claude-code",
@@ -268,6 +459,15 @@
       "author": "alexkahel",
       "occurred_at": "2026-05-28T02:31:26Z",
       "url": "https://github.com/anthropics/claude-code/issues/62982"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "issue_closed",
+      "external_id": "15621",
+      "title": "audio/mp4 mediaType signature broken — 'ftyp' detected at offset 0, real MP4 has it at offset 4",
+      "author": "dvmstr",
+      "occurred_at": "2026-05-28T02:25:04Z",
+      "url": "https://github.com/vercel/ai/issues/15621"
     },
     {
       "project_slug": "claude-code",
@@ -423,6 +623,15 @@
       "url": "https://github.com/anthropics/claude-code/issues/62967"
     },
     {
+      "project_slug": "workflow-sdk",
+      "kind": "pr_opened",
+      "external_id": "2128",
+      "title": "[test] workflow-server PR #456",
+      "author": "vercel-gh-bot-2[bot]",
+      "occurred_at": "2026-05-28T00:59:00Z",
+      "url": "https://github.com/vercel/workflow/pull/2128"
+    },
+    {
       "project_slug": "claude-code",
       "kind": "issue_opened",
       "external_id": "62966",
@@ -477,6 +686,15 @@
       "url": "https://github.com/anthropics/claude-code/issues/62962"
     },
     {
+      "project_slug": "ai-sdk",
+      "kind": "commit",
+      "external_id": "6be108d1a4ff623fd3d5865763f1dd4aa2d86763",
+      "title": "rname channel name",
+      "author": "Aayush Kapoor",
+      "occurred_at": "2026-05-28T00:23:09Z",
+      "url": "https://github.com/vercel/ai/commit/6be108d1a4ff623fd3d5865763f1dd4aa2d86763"
+    },
+    {
       "project_slug": "claude-code",
       "kind": "issue_opened",
       "external_id": "62961",
@@ -484,6 +702,24 @@
       "author": "eiaserinnys",
       "occurred_at": "2026-05-28T00:21:19Z",
       "url": "https://github.com/anthropics/claude-code/issues/62961"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "commit",
+      "external_id": "696715125aa1fc84176ffc2d2bb5f906aacb0d51",
+      "title": "fix + docs",
+      "author": "Aayush Kapoor",
+      "occurred_at": "2026-05-28T00:18:34Z",
+      "url": "https://github.com/vercel/ai/commit/696715125aa1fc84176ffc2d2bb5f906aacb0d51"
+    },
+    {
+      "project_slug": "ai-sdk",
+      "kind": "pr_opened",
+      "external_id": "15660",
+      "title": "feat(ai): use tracing channels to track parent-child context",
+      "author": "aayush-kapoor",
+      "occurred_at": "2026-05-28T00:16:53Z",
+      "url": "https://github.com/vercel/ai/pull/15660"
     },
     {
       "project_slug": "claude-code",
@@ -504,150 +740,15 @@
       "url": "https://github.com/anthropics/claude-code/issues/62959"
     },
     {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62958",
-      "title": "[Bug] Claude 4.6 Model Instability: Frequent Instruction Drift",
-      "author": "Lonerider007",
-      "occurred_at": "2026-05-28T00:00:23Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62958"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62957",
-      "title": "v2.1.152 native installer build hangs indefinitely on ARM aarch64 Linux",
-      "author": "jaeadams",
-      "occurred_at": "2026-05-27T23:37:23Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62957"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62956",
-      "title": "[BUG] Claude Code agent violated explicit instructions, consumed 25%+ of weekly Max(20x) usage, then denied the violation.",
-      "author": "drdave-flexnetos",
-      "occurred_at": "2026-05-27T23:36:27Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62956"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62955",
-      "title": "[BUG] Preview pane spawned by background session opens in foreground session and stays there",
-      "author": "JRPMike",
-      "occurred_at": "2026-05-27T23:35:49Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62955"
-    },
-    {
-      "project_slug": "dispatch",
+      "project_slug": "ai-sdk",
       "kind": "commit",
-      "external_id": "b20853a8f66af7d109e75eb9e1c1c41bed71a491",
-      "title": "refactor: move project management out of admin into project pages",
-      "author": "Mark David Gan",
-      "occurred_at": "2026-05-27T23:25:58Z",
-      "url": "https://github.com/markdavidgan/dispatch/commit/b20853a8f66af7d109e75eb9e1c1c41bed71a491"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62954",
-      "title": "Session list should show sessions from all entrypoints (VS Code + Desktop)",
-      "author": "renomsh",
-      "occurred_at": "2026-05-27T23:08:36Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62954"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62953",
-      "title": "[Bug] Cannot write to temporary directory on macOS",
-      "author": "scamposd",
-      "occurred_at": "2026-05-27T23:06:10Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62953"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62952",
-      "title": "Hooks fail on non-FHS systems (NixOS): ENOENT posix_spawn '/bin/sh'",
-      "author": "rayhem",
-      "occurred_at": "2026-05-27T23:02:56Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62952"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62951",
-      "title": "[BUG] Releases not gated behind changelog update. Doctor reports stale \"Latest version\".",
-      "author": "mgroth0",
-      "occurred_at": "2026-05-27T23:01:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62951"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62950",
-      "title": "[Bug] Auto-update failed with diagnostic error",
-      "author": "recchia",
-      "occurred_at": "2026-05-27T22:59:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62950"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "62938",
-      "title": "[BUG] Cowork (Windows): caches fill sessiondata.vhdx; env-based caches can't be self-fixed & orphaned session dirs never cleaned",
-      "author": "bbdiskoverdata",
-      "occurred_at": "2026-05-27T22:58:59Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62938"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62949",
-      "title": "[BUG] [Bug] Cowork Desktop only shows Sonnet 4.6 (1M) — no standard 200K option, triggers usage credits error on Max plan",
-      "author": "kelvinb-lab",
-      "occurred_at": "2026-05-27T22:56:47Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62949"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62948",
-      "title": "[FEATURE] [BUG] [ENHANCEMENT] Chrome Extension Not Dismissible - No way out.",
-      "author": "seoking23",
-      "occurred_at": "2026-05-27T22:54:42Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62948"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "49501",
-      "title": "[SYS-032] Ultrareview crash kills Remote Control session — cascading failure, no isolation",
-      "author": "ThatDragonOverThere",
-      "occurred_at": "2026-05-27T22:46:19Z",
-      "url": "https://github.com/anthropics/claude-code/issues/49501"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52566",
-      "title": "[Feature Request] Hide or disable /effort levels incompatible with current model",
-      "author": "kevinbryantlou",
-      "occurred_at": "2026-05-27T22:46:17Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52566"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "39269",
-      "title": "[BUG] Voice mode transcription silently fails on macOS Terminal.app",
-      "author": "NK5NK5",
-      "occurred_at": "2026-05-27T22:46:15Z",
-      "url": "https://github.com/anthropics/claude-code/issues/39269"
+      "external_id": "4a00bdb6f0e7a47093a768beece4ba693424ce5c",
+      "title": "failing tests",
+      "author": "Aayush Kapoor",
+      "occurred_at": "2026-05-28T00:03:44Z",
+      "url": "https://github.com/vercel/ai/commit/4a00bdb6f0e7a47093a768beece4ba693424ce5c"
     }
   ],
   "episodes": [],
-  "signature": "2be178cb0de98e4b6c46c7d880f65b71"
+  "signature": "98acdd65723991106d0b6d652b078f8a"
 }

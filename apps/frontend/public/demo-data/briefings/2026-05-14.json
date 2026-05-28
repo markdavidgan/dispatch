@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-14",
+  "issue_no": 4,
+  "lead_headline": "Workflow SDK's duration formatter fixed and folded; Astro patches an XSS vector in slot hydration",
+  "lead_body": "Fourteen commits landed in Workflow SDK today, anchored by a fix to `formatDurationPrecise` — which had been producing boundary nonsense like \"60s\" and \"1m 60s\" — subsequently folded into `formatDuration` as a precise mode. Astro's busiest concern was a security patch: unescaped slot names in hydration attributes opened an XSS vector, closed at 13:32 and released as `astro@6.3.3` minutes later. AI SDK ran a backport sweep across Mistral, xAI, and Cohere; Claude Code shipped v2.1.142 with one fix and arrived to a fresh queue of bug reports.",
+  "lead_article": "The day's loudest signal came from Workflow SDK, where fourteen commits landed across a range of concerns. The most precise fix was also the most satisfying: a `formatDurationPrecise` bug that had been producing nonsensical output at unit boundaries — \"60s\", \"1000ms\", \"1m 60s\" — was corrected and then folded cleanly back into `formatDuration` as a precise mode rather than a separate function. The trace viewer now consumes it. Alongside that, a detached ArrayBuffer proxy DX fix was ported and patched in the same evening window, SvelteKit queue triggers got a stale-state fix forward-ported, the docs homepage examples link was corrected, and the durable agents guide was updated to reference `ToolLoopAgent`. The Fantastic Four community worlds commit landed just before midnight — quieter, but shipped.\n\nAstro put up the second-busiest board. The headline there was a security patch: slot names in hydration template attributes were escaping unsanitized, opening an XSS vector; that fix cut at 13:32 and both `astro@6.3.3` and `@astrojs/mdx@5.0.6` released shortly after. The `Map` and `Set` regression in content collections was also resolved, MDX syntax highlighting for indented Astro codeblocks got corrected, and the image metadata path now handles SVGs with a zero-dimension gracefully. Claude Code shipped v2.1.142, with the stale preview-panel cache issue closed and a cluster of new bug reports arriving — silent transcript deletion and a TUI corruption issue on macOS being the ones worth watching. AI SDK ran a focused backport sweep: Mistral stop-sequence forwarding, an xAI `additionalProperties` emission fix, Cohere switching to secure JSON parsing, and a gateway fix encoding inline file bytes correctly. Mantis merged its transactional scale-up worker patch. Metaflow merged step-and-project context forwarding to the monitor for metric tagging, plus the S3 empty-input guard.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "14 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "17 COMMITS · 2 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "15 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "1 COMMIT · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "2 COMMITS · 4 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "2 COMMITS · 4 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "1 COMMIT · 1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-14-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 7,
+  "filed_at": "03:46",
+  "recent_events": []
+}

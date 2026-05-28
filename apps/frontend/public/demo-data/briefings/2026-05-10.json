@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-10",
+  "issue_no": 18,
+  "lead_headline": "Metaflow clears a five-issue backlog before dawn; Claude Code accumulates a prompt-cache inheritance problem worth watching",
+  "lead_body": "Metaflow absorbed four merged PRs in a tight early-morning window, closing bugs ranging from an orphaned-process race condition to a Windows SIGALRM crash in the timeout decorator. Claude Code, meanwhile, stayed unpatched while a structurally notable report landed: subagents are inheriting the parent's prompt cache at roughly 150K tokens, producing what the reporter terms plan-mode bleed and self-poisoning hallucinations.",
+  "lead_article": "Metaflow was the only project with meaningful movement today. Four PRs merged in a tight early-morning window: the redundant `_sfn_host_network` variable that had been hardcoded to `False` in the Tiltfile local setup was removed outright, closing the underlying bug; the Cards UI picked up a typos-and-syntax-errors pass; the CI configuration gained workflow concurrency to reduce runner contention; and a missing Airflow dependency quietly appeared in the README. Five issues closed alongside those merges, including a race condition in subprocess termination that was leaving orphaned processes after timeouts or SIGINT, a Windows crash in the `@timeout` decorator tracing back to SIGALRM being Unix-only, and the longstanding gap where `@catch` couldn't be applied to `foreach` split steps. Config files rejecting YAML in favour of JSON-only input also closed, as did the request for standardised GitHub issue templates.\n\nClaude Code surfaced a cluster of issues worth watching. The most structurally interesting: a report that subagents are inheriting the parent's prompt cache — roughly 150K tokens — producing what the reporter calls plan-mode bleed and self-poisoning hallucinations. Separately, an Opus 4.7 Korean output regression arrived with an unusually detailed in-vivo self-diagnosis from the model itself, flagged as related to an earlier issue. The Bun 1.3.14 GC segfault on AMD Ryzen Linux and the broken `/schedule` URL rounding out the bug side. Everything else — Astro, Hydrogen, the AI SDK, Workflow SDK, Dispatch, Gemma.cpp, Mantis — was silent.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "4 COMMITS · 4 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-10-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 1,
+  "filed_at": "03:42",
+  "recent_events": []
+}

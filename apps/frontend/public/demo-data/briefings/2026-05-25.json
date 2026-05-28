@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-25",
+  "issue_no": 13,
+  "lead_headline": "Dispatch reaches a stable delivery architecture as Claude Code weathers a rough triage day",
+  "lead_body": "Seven commits landed in Dispatch overnight, covering the podcast page redesign, split-deployment CORS support, and the long-form brief mode generating this issue. The crossOrigin credential fix was the final piece needed for the Vercel-plus-cloudflared topology to function end to end. Upstream, Claude Code closed roughly a hundred issues in a sweep around 22:30 UTC while fresh bugs around ECONNRESET, PTY CPU spin, and --resume fork selection queued up.",
+  "lead_article": "The biggest movement today was inside Dispatch itself: seven commits spanning a podcast page redesign, the new dispatch-wide weekly cross-project digest, split-deployment CORS support for the Vercel-plus-cloudflared topology, and the long-form brief mode that's generating this very briefing. The crossOrigin credential fix on the audio player was the last piece needed for the split-deployment path to actually work end to end. That's a meaningful cluster — not incremental polish, but the delivery architecture reaching a new stable shape.\n\nAstro had a productive morning: the sitemap index lastmod fix merged, the action-caching pipeline fix landed, and the Svelte testing-library type mismatch was closed out. A new PR addresses the SSR route-cache warning that 6.3.6 introduced — worth watching, since it's already generating noise in production logs. Workflow SDK merged two cookbook doc updates and has a handful of test PRs queued. Claude Code is having a rough day upstream — a mass closure of roughly a hundred issues around 22:30 UTC suggests a triage sweep rather than fixes, and fresh reports of ECONNRESET on parallel startup fetches, a 100%-CPU PTY EOF hang, and a --resume fork-selection bug are all sitting open. The AI SDK gained a containerUpload option for the Anthropic code-execution tool, quiet but worth noting for anything that eventually feeds into the homelab pipeline.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "7 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "5 COMMITS · 8 PRs",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "3 COMMITS · 7 PRs",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "6 PRs",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-25-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 3,
+  "filed_at": "03:50",
+  "recent_events": []
+}

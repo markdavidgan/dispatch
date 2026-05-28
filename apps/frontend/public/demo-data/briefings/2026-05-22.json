@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-22",
+  "issue_no": 11,
+  "lead_headline": "Workflow SDK patches path traversal, cuts 4.2.5; AI SDK gains Claude on AWS and two Anthropic tool fixes",
+  "lead_body": "A path traversal vulnerability in world-local ID handling was patched, backported to stable, and forward-ported to main before workflow@4.2.5 shipped by early evening. The clobbered-cursor regression behind missing event cursors on initial load was resolved on both branches the same hour. AI SDK landed Claude Platform on AWS, a gateway serviceTier option, and Vercel access token support while closing two Anthropic tool bugs.",
+  "lead_article": "Workflow SDK dominated the day. The headline is a security fix: path traversal via request-supplied world-local IDs was patched, backported to stable, and forward-ported to main — all three landings visible in the commit log, with workflow@4.2.5 cutting the stable release by early evening. Around the same time, a clobbered cursor was identified as the root cause of the \"event cursor missing after initial load\" performance regression, and that fix landed on both stable and main. The SWC plugin picked up two correctness fixes — lexical `this` capture for nested arrow step functions, and preserved imports referenced by hoisted nested steps — while the trace viewer got hook-name display and a layout repair. The `.vercel/output` caching fix for Next workbench builds shipped twice over, once to stable and once to main. Beta moved to 5.0.0-beta.7 in the early morning hours, carrying the `WritableStream` parent-passing feature and inline-step replay timeout exclusion. Four PRs opened against the server test suite, and the Attributes MVP — experimental, write-only — surfaced as a draft.\n\nAI SDK ran a parallel sprint: Claude Platform on AWS landed as a new Anthropic provider, the gateway gained both a `serviceTier` option and Vercel access token support, and two Anthropic tool bugs — web search error handling and `code_execution` dynamic call failures — were patched and backported to the release branch. A Google Gemini 3 replay issue around missing thought signatures opened as a PR late in the day. Claude Code pushed v2.1.148 just after midnight and v2.1.149 by evening, with CI shifting to workload identity federation for Claude auth; the issue tracker filled with a dense cluster of bug reports covering Windows MCP spawn timeouts, the `bin/claude.exe` shebang omission, sub-agent idle failures, and a context meter anomaly during advisor tool calls. Astro closed out a productive merge session — stylesheet URLs for prerendered routes in the manifest, dev-mode styles propagating through Fragment named slots, the Cloudflare `assets.directory` base-path correction, and a dangling pure CSS chunk import fix all merged within the afternoon window.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "35 COMMITS · 9 PRS · 2 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "18 COMMITS · 2 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "8 COMMITS · 13 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "3 COMMITS · 4 PRS · 2 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "3 PRS",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-22-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 4,
+  "filed_at": "03:49",
+  "recent_events": []
+}

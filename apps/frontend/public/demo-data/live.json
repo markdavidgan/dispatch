@@ -1,6 +1,11 @@
 {
-  "as_of": "2026-05-28T03:15:42.253277+00:00",
+  "as_of": "2026-05-28T03:52:12.656901+00:00",
   "projects": {
+    "ai-sdk": {
+      "open_prs": 3,
+      "commits_7d": 111,
+      "last_commit_at": "2026-05-28T00:23:09Z"
+    },
     "astro": {
       "open_prs": 0,
       "commits_7d": 85,
@@ -13,8 +18,33 @@
     },
     "dispatch": {
       "open_prs": 0,
-      "commits_7d": 95,
-      "last_commit_at": "2026-05-28T02:13:16Z"
+      "commits_7d": 99,
+      "last_commit_at": "2026-05-28T03:17:07Z"
+    },
+    "gemma-cpp": {
+      "open_prs": 1,
+      "commits_7d": 0,
+      "last_commit_at": null
+    },
+    "hydrogen": {
+      "open_prs": 1,
+      "commits_7d": 5,
+      "last_commit_at": "2026-05-26T18:54:00Z"
+    },
+    "mantis": {
+      "open_prs": 1,
+      "commits_7d": 0,
+      "last_commit_at": "2026-05-18T20:18:12Z"
+    },
+    "metaflow": {
+      "open_prs": 5,
+      "commits_7d": 2,
+      "last_commit_at": "2026-05-28T03:31:16Z"
+    },
+    "workflow-sdk": {
+      "open_prs": 33,
+      "commits_7d": 58,
+      "last_commit_at": "2026-05-27T22:18:54Z"
     }
   }
 }

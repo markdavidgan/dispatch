@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-20",
+  "issue_no": 15,
+  "lead_headline": "Astro ships two releases and queues four more PRs as build-option inheritance and Cloudflare SSR gaps close",
+  "lead_body": "Astro pushed astro@6.3.6 and @astrojs/cloudflare@13.5.3 before noon, then spent the afternoon closing gaps in Vite build-option inheritance and Cloudflare SSR optimizeDeps forwarding. Four PRs opened in the evening — covering prerendered stylesheet manifests, forwarded headers, worker-name normalization, and remote image domain gating — setting up a heavy merge queue tomorrow.",
+  "lead_article": "The headline today belongs to Astro, which pushed two releases before noon — astro@6.3.6 and @astrojs/cloudflare@13.5.3 — and kept moving through the afternoon. The Vite build options inheritance fix merged, ensuring client builds now respect vite.build.minify, sourcemap, and rollup output options properly; separately, optimizeDeps forwarding landed for SSR environments in the Cloudflare adapter. A revert of PR 16708 arrived in the same window, and triage rules were added to prevent server timeout loops. Four PRs opened in the evening — external stylesheet URL population for prerendered routes, X-Forwarded-* header resolution in FetchState, a wrangler.jsonc worker name normalization, and an error-throwing gate for non-allowed remote image domains — suggesting tomorrow's merge queue will be heavy.\n\nWorkflow SDK had two quiet but substantive movements: the Nitro v3 functionRules refactor merged, and a new PR opened for presigned S3 URLs with parallel event-log loading — a meaningful infrastructure step. Hydrogen shed a couple of exports and moved custom typings to global scope. The AI SDK gained an abort-signal propagation fix for telemetry error callbacks. Claude Code spent the day absorbing a surge of bug reports — TUI corruption, session-resume model-name mangling, a Telegram plugin CPU loop on EPIPE, plugin install false negatives — with four issues closed against the noise. Two PRs opened there: a docs polish on the plugins README and a PR addressing excessive token consumption on initial prompts.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "15 COMMITS · 6 PRS · 2 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "2 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "3 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "2 PRS",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-20-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 3,
+  "filed_at": "03:40",
+  "recent_events": []
+}

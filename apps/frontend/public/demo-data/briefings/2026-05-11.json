@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-11",
+  "issue_no": 17,
+  "lead_headline": "Astro's background dev server takes shape; AI SDK opens subagent prototype",
+  "lead_body": "The bulk of Monday's activity settled in Astro and the AI SDK. Astro's commit run built out experimental background dev-server scaffolding — lock files, SIGKILL fallback, log tailing — while the AI SDK opened a subagent prototype and landed AbortSignal support for long-running Google agent streams. Metaflow closed the night with 2.19.29.",
+  "lead_article": "The day's heaviest traffic split across Astro and the AI SDK, with Metaflow closing the night on a point release. Astro's commit run was dominated by background dev-server management — experimental scaffolding for running the dev server as a detached background process, complete with a lock file layer migrated from the JS API down to the CLI, a SIGKILL fallback after SIGTERM timeout, and a new --follow flag for tailing logs. Alongside that, a fix for infinite spawn recursion when agent environment variables are inherited suggests the background-server machinery was already hitting edge cases in testing. A separate PR opened late afternoon targets dev-mode styles missing from content-collection entries, and SSR routes broken by dynamic prerendered routes got patched in the same window. Astro also cut a changeset to major, which is worth noting.\n\nThe AI SDK pushed a subagent prototype to an open PR — notable given the broader direction — while landed commits added flexible tool descriptions, instructions as prepareStep input, and AbortSignal support for cancelling long-running Google Interactions API agents mid-stream. A fix for accumulative properties on StreamTextResult and GenerateTextResult cleaned up some accounting debt. Metaflow shipped 2.19.29 with a follow-on PYTHONPATH fix merged just before midnight and a new PR opening Bokeh integration. Workflow SDK rolled workflow@5.0.0-beta.5. Claude Code released v2.1.139 quietly; the bug queue is louder than the release, with a schema-hallucination report and a Korean output regression on Opus 4.7 both sitting open.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "23 COMMITS · 1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "11 COMMITS · 1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "2 COMMITS · 3 PRS · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "1 COMMIT · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "3 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-11-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 6,
+  "filed_at": "03:41",
+  "recent_events": []
+}

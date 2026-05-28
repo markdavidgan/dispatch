@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-17",
+  "issue_no": 7,
+  "lead_headline": "Claude Code accumulates a cluster of rendering and session bugs on an otherwise quiet Sunday",
+  "lead_body": "A bug queue that barely existed Friday has thickened: terminal rendering corruption in two forms, a broken Agent View scroll on macOS, and a Desktop-only exit 143 fault that the bare CLI cannot reproduce. Astro added one item — a Vite race condition dropping React in dev mode — and every other project was silent.",
+  "lead_article": "A quiet Sunday across the board, with Claude Code carrying most of the day's noise. The bug queue thickened noticeably: terminal rendering corruption surfaced in two distinct forms — a VS Code variant where text selection triggers a partial re-render, and a mid-session Unicode-mangling issue in the chat panel. On macOS, the Agent View scroll broke entirely under Ghostty and Warp, and the Desktop app is throwing exit 143 system errors on cycles past roughly five minutes, a fault that doesn't reproduce against the bare CLI with identical config. The Remote Control Android approval flow also landed a report: approvals aren't unblocking the local TUI, which stays pinned at Waiting. One segfault bug did close out. On the feature side, someone filed a cross-device session continuity request — the ability to connect to an active Claude Code session from any Claude client — which sits in the tracker now but is otherwise untouched.\n\nAstro contributed a single item: a race condition in Vite's optimizeDeps step that causes React to go missing in dev mode. Everywhere else — Hydrogen, Metaflow, Mantis, AI SDK, Workflow SDK, Gemma.cpp, Dispatch, Dispatch Weekly — the day was silent.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "Quiet",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-17-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 0,
+  "filed_at": "03:47",
+  "recent_events": []
+}

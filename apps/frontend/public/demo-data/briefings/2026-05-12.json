@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-12",
+  "issue_no": 16,
+  "lead_headline": "AI SDK absorbs 25 commits in a day, standardizing provider contracts while Claude Code's billing bug draws scrutiny",
+  "lead_body": "The AI SDK dominated the window with a new `konsistent-provider` package that formalizes conventions for third-party providers, alongside Anthropic's advisor tool, DeepSeek reasoning support, and several backport CI repairs. Claude Code shipped v2.1.140 against a queue of thirty-plus issues, the sharpest being an autonomous-mode bug that silently billed Opus instead of Sonnet and consumed 80% of a user's weekly quota in eleven hours.",
+  "lead_article": "The AI SDK dominated the day with twenty-five commits, the densest activity in the window. Two features stand out: the new `konsistent-provider` package codifies reusable conventions and a full `konsistent.json` contract for third-party provider packages, which should reduce drift as the provider ecosystem grows. Anthropic's advisor tool also landed, alongside Google's `fileData` embedding support and DeepSeek's adaptive thinking and full `reasoning_effort` enum. On the maintenance side, the backport CI machinery received several passes — race condition fixes, a switch to `pull_request.labeled`, cleaner error messaging — and the Mistral provider now correctly forwards `stopSequences` as a native stop parameter instead of silently dropping it. A pair of rename fixes (`onEmbedFinish` → `onEmbedEnd`, `onRerankFinish` → `onRerankEnd`) tidied the callback API.\n\nElsewhere: Astro shipped a security-focused run of commits, hardening the preview-release workflow against OIDC token theft, pinning `actions/labeler` to a SHA, removing release caching, and adding default `permissions: {}` across workflows — a quiet but meaningful supply-chain hygiene pass alongside a Svelte TypeScript peer-dep fix and an HTML entity escaping correction. Hydrogen merged the `cartGetDefault` cartId fix and cut a release PR. Metaflow opened three PRs — S3 empty-input guards, new `CondaFlowDecorator` unit tests, and narrowed CLI exception handling — while a Argo foreach duplicate-DAGTask bug was filed, closed, and re-filed within the same afternoon. Gemma.cpp merged the enum-to-string utility PR. Claude Code released v2.1.140 against a backdrop of thirty-plus issues, the most pointed being a report of autonomous agent mode silently billing Opus despite a Sonnet configuration and burning 80% of weekly quota in eleven hours — worth watching if that bug surfaces closer to home.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "25 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "11 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "1 COMMIT · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "3 PRS",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "1 COMMIT · 2 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-12-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 5,
+  "filed_at": "03:41",
+  "recent_events": []
+}

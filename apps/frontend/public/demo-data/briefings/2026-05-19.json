@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-19",
+  "issue_no": 9,
+  "lead_headline": "Two betas ship against a tide of bug reports as AI SDK and Workflow SDK lead a busy Tuesday",
+  "lead_body": "Workflow SDK cut beta.6 with a graphile-worker schema bootstrap and a socket fix, while a new issue immediately flags Cloudflare Workers as blocked on node:vm. Claude Code pushed two releases but absorbed more issues than it closed — stale daemons, a context-spec regression, and a broken worktree attach path among them. AI SDK logged the highest commit count at 34, adding Gemini 3.5 Flash, a Cerebras provider, and managed-agents support.",
+  "lead_article": "A busy Tuesday across nearly every active project, with the headline movement split between two betas and a flood of bug reports. Workflow SDK cut workflow@5.0.0-beta.6 late in the evening, anchored by the graphile-worker schema bootstrap landing in the world-postgres setup CLI and a socket file location fix that went in twice — once to main, once backported. The release coincided with a new issue flagging that Cloudflare Workers support is blocked entirely by a node:vm dependency, a constraint worth watching as that runtime target grows in relevance. Claude Code pushed two releases — v2.1.144 and v2.1.145 — while accumulating a stack of bug reports: stale background daemons causing ENOENT on agent launch after upgrade, a context-spec regression in resumed sessions falling back to 200k, the EnterWorktree attach path broken again, and a Read tool failure on local images. The velocity of issues outpaced the releases today.\n\nAI SDK was the highest-commit project at 34, with the substantive additions being Gemini 3.5 Flash, managed-agents support in Google's Interactions API, a Cerebras chat language model provider, and a streaming tool-call args fix for Google. Stream-resuming work is still in progress on a branch. Astro's day centered on exposing route asset URLs on middleware context — both a mainline PR and a v5 backport opened within hours of each other — alongside two HMR cache-invalidation fixes and a Solid rendering fix. Hydrogen opened a PR for generic cart type support, adding cart fragment override type generics to the implementation started yesterday. Gemma.cpp added Gemma 3 LM-only model variants and fixed a flash-attention test link error on multi-target SIMD builds. Metaflow's single PR prevents duplicate DAGTask names in foreach plus split-switch flows — quiet, but the kind of correctness fix that matters when pipelines branch.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "3 COMMITS · 1 PR · 2 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "23 COMMITS · 3 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "4 COMMITS · 4 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "34 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "10 COMMITS · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "2 PRS",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-19-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 5,
+  "filed_at": "03:48",
+  "recent_events": []
+}

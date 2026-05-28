@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-15",
+  "issue_no": 5,
+  "lead_headline": "AI SDK races a May 26 deadline while Claude Code accumulates a day's worth of bug reports",
+  "lead_body": "Thirty commits landed in AI SDK today, anchoring on a patch for Google's Interactions API before its upstream breaking change hits on May 26. Claude Code shipped v2.1.143 quietly but opened six bug reports by day's end, including a 429-into-400 retry spiral that leaves sessions unrecoverable and a Task tool gap that collapses multi-agent orchestration to single-agent execution. Metaflow drew a security disclosure — four findings, one an RCE claim — low in volume, not in consequence.",
+  "lead_article": "The busiest signal today belongs to AI SDK, which pushed thirty commits against a hard deadline: Google's Interactions API is breaking upstream on May 26, and the patch landed at 21:41 to absorb that change before it lands. Alongside it, native structured output was quietly disabled for claude-opus-4-7 on Amazon Bedrock — apparently it misbehaves there — and OpenAI gained an opt-in passthrough for unsupported file media types, a small but meaningful escape hatch for edge-case media handling. GitHub Actions pins moved to commit SHAs across the board, a supply-chain hygiene sweep that deserves a nod even if it reads like plumbing. Workflow SDK had a focused day of its own: the VQS handler retry landed at 20:17, and three CI files migrated to gh-sts for scoped token minting, trimming the default GITHUB_TOKEN permissions down to what's actually needed.\n\nClaude Code cut a quiet v2.1.143 but is accumulating bug reports at a pace worth watching — six opened today alone, touching session auto-archiving, a 429-into-400 retry spiral that leaves sessions unrecoverable, background agents stuck in working state, and the Task tool being unavailable inside sub-agents, which effectively collapses multi-role orchestrators to single-agent execution. Astro had eighteen commits across CI repair work, a deprecation removal for astro:transitions internals, and a late PR to fix syntax highlighting after CSS @property rules. Metaflow drew a security disclosure — four findings including an RCE claim — which is the quietest item in volume but not in consequence.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "30 COMMITS · 1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "18 COMMITS · 3 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "5 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "1 COMMIT · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "red"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-15-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 5,
+  "filed_at": "03:46",
+  "recent_events": []
+}

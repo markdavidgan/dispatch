@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-23",
+  "issue_no": 14,
+  "lead_headline": "Dispatch extracted, auth simplified, and tests green — all before noon",
+  "lead_body": "Dispatch left the marklab monorepo this morning as its own repository, with backend and frontend reorganized under apps/ and a Phase 1 foundation plan drafted, executed, and archived in seventeen commits. The auth layer shed its Cloudflare Access dependency in favor of trusting the deployment perimeter, and DISPATCH_MASTER_KEY is now a hard boot requirement.",
+  "lead_article": "The headline today is Dispatch itself: extracted from the marklab monorepo into its own repository, the backend and frontend reorganized under an apps/ folder, and a Phase 1 foundation plan drafted, implemented, and archived as complete — all before midday. The auth layer dropped its Cloudflare Access dependency in favor of trusting the deployment perimeter, DISPATCH_MASTER_KEY is now a hard boot requirement, and the test suite passed its first green run. Seventeen commits on a project restructure of this scope is a productive morning.\n\nWorkflow SDK had two merges worth noting: the getWritable() memoization fix closes a chunk-reordering bug that surfaces when the method is called repeatedly, and inline sourcemaps now propagate across all workspace packages via a backport of the build change. Claude Code shipped v2.1.150 overnight and then spent the rest of the day accumulating a dense backlog — thirty-six issues opened across billing false positives, context window silent downgrades after agents panel navigation, subprocess accumulation reaching 150 processes and 31 GB RAM, and a wave of troubleshooting PRs documenting the same. The MCP scheduled-routines approval bug and the AskUserQuestion empty-answer regression both closed. Astro resolved the domain-based i18n dynamic route 500 error and pushed a glob-loader negation fix, with two markdown abstraction PRs also queued. AI SDK moved quietly: a canary version bump and a broken-links docs fix.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "17 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "36 PRS · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "3 COMMITS · 5 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "2 COMMITS · 1 PR",
+      "bullet": "amber"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "5 PRS",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-23-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 3,
+  "filed_at": "03:49",
+  "recent_events": []
+}

@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-16",
+  "issue_no": 6,
+  "lead_headline": "Claude Code 2.1.143 ships into a wall of regressions on macOS and Windows",
+  "lead_body": "Background agents are crashing with 'exit 1 before init' on macOS arm64, the agents TUI is fully unresponsive on Windows Terminal, and interactive sessions are now misclassified as background jobs post-2.1.139. One feature request closed clean — attaching to existing cowork sessions — but the version's debut is otherwise rough.",
+  "lead_article": "The dominant signal today is Claude Code 2.1.143, which shipped into a minor crisis. Background agents are crashing with \"exit 1 before init\" on macOS arm64 — two separate reports, filed seven hours apart, suggesting the failure is consistent and reproducible. The Windows picture is worse: the agents TUI is fully unresponsive in Windows Terminal, with broken rendering and a dead input loop, and a separate thread documents a freeze on the home page after returning from agent detail. A subtler regression rounds out the version's rough debut: interactive claude sessions are now classified as background jobs post-2.1.139, which causes background-only guards to fire on work the user is actively running in the foreground. One feature request did close today — attaching to existing cowork sessions rather than always spawning new ones — so not everything is in reverse.\n\nElsewhere, the AI SDK absorbed six commits in a tight early-morning window. The substantive work was two xAI provider fixes: deduplication of reasoning-start events on multi-summary-part responses, which was triggering 400 errors on continuations, and surfacing full xAI error detail in APICallError.message rather than swallowing it. Both shipped to canary and were backported to v6 in the same pass. Astro got a single PR adding a .dev.vars file association to the VS Code extension so the file renders with .env syntax highlighting. Hydrogen quietly closed a MiniOxygen install error. Everything else held steady.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "1 PR",
+      "bullet": "sand"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "6 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-16-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 1,
+  "filed_at": "03:47",
+  "recent_events": []
+}
