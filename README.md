@@ -1,6 +1,7 @@
 # Dispatch
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-0b0b0e.svg)](LICENSE)
+[![CI](https://github.com/markdavidgan/dispatch/actions/workflows/ci.yml/badge.svg)](https://github.com/markdavidgan/dispatch/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker-Ready-0b0b0e.svg)](docker-compose.yml)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-dispatch--demo.markdavidgan.com-ff2a2a.svg)](https://dispatch-demo.markdavidgan.com)
 
