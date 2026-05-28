@@ -1,0 +1,15 @@
+{
+  "project_slug": "dispatch-weekly",
+  "episodes": [
+    {
+      "id": "092345cc-5f1b-4afa-a584-ae4a3bb6835e",
+      "episode_no": 1,
+      "week_start": "2026-05-20",
+      "title": "Dispatch Weekly — Week of 2026-05-20",
+      "audio_key": "podcast/dispatch-weekly/episode-001-2026-05-20.mp3",
+      "duration_seconds": 1230,
+      "status": "ready",
+      "published_at": "2026-05-27T04:44:09.904361+00:00"
+    }
+  ]
+}

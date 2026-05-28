@@ -1,0 +1,12 @@
+{
+  "storage": true,
+  "ai": true,
+  "tts": true,
+  "github_token_present": true,
+  "notebooklm": true,
+  "project_count": 2,
+  "storage_provider": "local",
+  "ai_provider": null,
+  "tts_provider": null,
+  "dispatch_tz": "Asia/Manila"
+}

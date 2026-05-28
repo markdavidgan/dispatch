@@ -1,0 +1,20 @@
+{
+  "as_of": "2026-05-28T02:48:00.543034+00:00",
+  "projects": {
+    "astro": {
+      "open_prs": 0,
+      "commits_7d": 85,
+      "last_commit_at": "2026-05-27T18:39:54Z"
+    },
+    "claude-code": {
+      "open_prs": 0,
+      "commits_7d": 8,
+      "last_commit_at": "2026-05-22T22:50:34Z"
+    },
+    "dispatch": {
+      "open_prs": 0,
+      "commits_7d": 95,
+      "last_commit_at": "2026-05-28T02:13:16Z"
+    }
+  }
+}

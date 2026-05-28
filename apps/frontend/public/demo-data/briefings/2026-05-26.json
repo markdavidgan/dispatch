@@ -1,0 +1,85 @@
+{
+  "date": "2026-05-26",
+  "issue_no": 1,
+  "lead_headline": "Dispatch rewires its own delivery stack in a single day, then reads the results aloud",
+  "lead_body": "Fourteen commits moved the briefings pipeline to Vercel serverless, swapped TTS to Kokoro-82M via the Hugging Face Inference API, and resolved a cascade of ESM import and TypeScript errors that the new build target exposed. A local SQLite fallback in db.ts ensures the pipeline degrades gracefully rather than going dark when the primary store is unreachable. The voice delivering this issue is the first production output of that change.",
+  "lead_article": "The biggest story today is Dispatch itself. Fourteen commits rewired the delivery stack from the ground up: the briefings pipeline migrated to Vercel serverless, TTS switched to Kokoro-82M via the Hugging Face Inference API, and a cascade of ESM import fixes — .js extensions, renamed api/_lib/ directories, TypeScript type errors — ironed out the rough edges of the new build target. The voice reading this is the first production output of that change. A local SQLite fallback landed in db.ts as well, which means the pipeline degrades gracefully rather than going dark when the primary store is unreachable.\n\nAstro shipped astro@6.3.8 and a companion wave of adapter and language-server patches. The Cloudflare adapter's vite plugin config resolution was being called redundantly across multiple sites, which is now collapsed to a single pass. A Vite dep-optimizer race condition that was surfacing a false React-not-found error in dev mode was fixed, as was an SSR route-cache warning that had been flooding production logs since 6.3.6. The language server closed a stack-overflow path triggered by project references containing non-TypeScript files. On the Claude Code tracker, the volume of opened issues is high but closures were selective — the pipe-buffer backpressure deadlock under MCP permission prompts closed, as did the sandbox environment leaking into child JVMs on Windows co-work sessions and the shell-snapshot base64 obfuscation concern. The remote-control input-drop regression from around May 25 remains open.",
+  "addendums": [],
+  "projects": [
+    {
+      "slug": "dispatch",
+      "name": "Dispatch",
+      "status": "active",
+      "stat": "14 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "39 COMMITS · 13 PRS · 6 RELEASES",
+      "bullet": "red"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "status": "active",
+      "stat": "7 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "hydrogen",
+      "name": "Hydrogen",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "metaflow",
+      "name": "Metaflow",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "mantis",
+      "name": "Mantis",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "gemma-cpp",
+      "name": "Gemma.cpp",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    },
+    {
+      "slug": "dispatch-weekly",
+      "name": "Dispatch Weekly",
+      "status": "active",
+      "stat": "QUIET",
+      "bullet": "sand"
+    }
+  ],
+  "audio_lead_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-26-lead.mp3",
+  "audio_addendum_url": null,
+  "active_count": 3,
+  "filed_at": "23:18",
+  "recent_events": []
+}

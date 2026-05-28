@@ -1,3 +1,5 @@
+export const IS_DEMO = false;
+
 const API_BASE = "/api";
 
 async function apiFetch(path: string, init?: RequestInit) {
@@ -33,7 +35,7 @@ export async function fetchBriefings(limit = 50, offset = 0) {
 }
 
 export async function fetchBriefing(date: string) {
-  return apiFetch(`/briefing?date=${encodeURIComponent(date)}`);
+  return apiFetch(`/briefings/${encodeURIComponent(date)}`);
 }
 
 // Projects

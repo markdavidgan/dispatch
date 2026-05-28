@@ -1,0 +1,21 @@
+{
+  "briefings": [
+    {
+      "date": "2026-05-27",
+      "issue_no": 2,
+      "lead_headline": "Dispatch logs 47 commits in a single day as audio, podcast, and admin architecture converge",
+      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-27-lead.mp3",
+      "active_count": 3,
+      "filed_at": "01:00"
+    },
+    {
+      "date": "2026-05-26",
+      "issue_no": 1,
+      "lead_headline": "Dispatch rewires its own delivery stack in a single day, then reads the results aloud",
+      "audio_url": "https://dispatch-demo-api.marklab.uk/api/audio/dispatch/audio/2026-05-26-lead.mp3",
+      "active_count": 3,
+      "filed_at": "23:18"
+    }
+  ],
+  "total": 2
+}

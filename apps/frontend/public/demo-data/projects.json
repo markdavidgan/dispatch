@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "astro",
+    "display_name": "Astro",
+    "status": "active",
+    "kind": "app",
+    "color_hint": null,
+    "github_repo": "withastro/astro",
+    "local_path": null
+  },
+  {
+    "slug": "claude-code",
+    "display_name": "Claude Code",
+    "status": "active",
+    "kind": "tool",
+    "color_hint": null,
+    "github_repo": "anthropics/claude-code",
+    "local_path": null
+  }
+]

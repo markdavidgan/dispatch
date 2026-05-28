@@ -1,0 +1,14 @@
+{
+  "podcasts": [
+    {
+      "project_slug": "dispatch-weekly",
+      "title": "Dispatch Weekly",
+      "description": "Weekly cross-project digest. One episode picks the best insights from every project Dispatch tracks, woven into a conversational 25–30 minute listen.",
+      "enabled": true,
+      "feed_url": "https://dispatch-demo-api.marklab.uk/api/audio/podcast/dispatch-weekly.xml",
+      "episode_count": 1,
+      "last_published_at": "2026-05-27T04:44:09.904361+00:00",
+      "auth": null
+    }
+  ]
+}
