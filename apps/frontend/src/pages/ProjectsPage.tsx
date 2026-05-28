@@ -258,30 +258,22 @@ function Row({
   dimmed?: boolean;
 }) {
   return (
-    <li>
+    <li className={`border-b border-hair hover:bg-paper-deep ${dimmed ? "opacity-55" : ""}`}>
       <Link
         to={`/projects/${p.slug}`}
-        className={`grid grid-cols-[1fr_auto_24px] sm:grid-cols-[1fr_120px_24px] gap-4 items-baseline py-4 border-b border-hair hover:bg-paper-deep ${
-          dimmed ? "opacity-55" : ""
-        }`}
+        className="grid grid-cols-[1fr_auto_24px] sm:grid-cols-[1fr_120px_24px] gap-4 items-center py-4"
       >
-        <span className="font-disp text-xl font-semibold tracking-[-0.01em]">{p.display_name}</span>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-disp text-xl font-semibold tracking-[-0.01em]">{p.display_name}</span>
+          {p.github_repo && (
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute">
+              {p.github_repo}
+            </span>
+          )}
+        </div>
         <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">{p.kind ?? ""}</span>
         <span className="font-mono text-sm text-ink-mute text-right">→</span>
       </Link>
-      {p.github_repo && (
-        <div className="pl-0 pb-3 -mt-2">
-          <a
-            href={`https://github.com/${p.github_repo}`}
-            target="_blank"
-            rel="noreferrer"
-            className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-mute hover:text-ink transition-colors"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {p.github_repo} ↗
-          </a>
-        </div>
-      )}
     </li>
   );
 }

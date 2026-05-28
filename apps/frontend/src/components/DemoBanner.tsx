@@ -8,7 +8,15 @@ export function DemoBanner() {
   return (
     <div className="bg-signal/10 border-b border-signal/20 text-center py-2 px-4">
       <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-signal">
-        Demo Mode — Data is static. Admin and audio generation are disabled.
+        Demo mode — static data.{" "}
+        <a
+          href="https://github.com/markdavidgan/dispatch"
+          target="_blank"
+          rel="noreferrer"
+          className="underline hover:text-ink transition-colors"
+        >
+          View on GitHub
+        </a>
       </p>
     </div>
   );
