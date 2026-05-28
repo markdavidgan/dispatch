@@ -357,6 +357,13 @@ async def run_synthesis_lead(db: Database, target_date: date | None = None) -> d
 
     events = await _events_for_window(db, covers_from, covers_until)
 
+    # Filter to only projects currently in the registry. This prevents
+    # stale or self-referential projects (e.g. dispatch) from reaching
+    # the LLM even if their events are still in the database.
+    registry_projects = load_yaml(SETTINGS_PATH)
+    allowed_slugs = {p["slug"] for p in registry_projects["projects"]}
+    events = {slug: evs for slug, evs in events.items() if slug in allowed_slugs}
+
     # Quiet-day skip: if no project moved at all in the window, don't
     # file a briefing and don't burn an issue number. The next active
     # day picks up where this one would have been.
@@ -489,6 +496,12 @@ async def run_synthesis_addendum(db: Database) -> dict:
 
     lead_headline, lead_body, lead_active_count, lead_project_lines_json = lead_row
     events = await _events_for_window(db, covers_from, covers_until)
+
+    # Filter to only projects currently in the registry
+    registry_projects = load_yaml(SETTINGS_PATH)
+    allowed_slugs = {p["slug"] for p in registry_projects["projects"]}
+    events = {slug: evs for slug, evs in events.items() if slug in allowed_slugs}
+
     projects = await _project_input(db, events)
 
     prompt, prompt_hash = build_addendum_prompt(

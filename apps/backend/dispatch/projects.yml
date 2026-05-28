@@ -61,13 +61,6 @@ projects:
     kind: tool
     summary: Google's lightweight C++ inference engine for the Gemma open models. Runs LLMs efficiently on CPU with minimal dependencies.
 
-  - slug: dispatch
-    display_name: Dispatch
-    github: markdavidgan/dispatch
-    status: active
-    kind: meta
-    summary: This repository — a self-hosted daily editorial brief generator. Included as a meta example so the instance reports on its own development activity.
-
   - slug: dispatch-weekly
     display_name: Dispatch Weekly
     status: active

@@ -1,23 +1,16 @@
 {
   "date": "2026-05-24",
-  "issue_no": 12,
-  "lead_headline": "Dispatch completes its full stack in a single day; Claude Code runs a mass triage",
-  "lead_body": "Nine commits took Dispatch from skeleton to deployable: Phases 2–7 landed together, followed by a configurable scheduler, a manual trigger, a backfill script, and an architectural note pinning Caddy as the gateway. Claude Code's tracker saw a bulk closure of roughly fifty issues around 22:35, with new reports arriving through the night on MCP respawn failures, credential detection, and a word-boundary fix for the @claude trigger.",
-  "lead_article": "Dispatch dominated the day. Nine commits landed across the full stack — Phases 2 through 7 in a single push brought the Vite SPA, encrypted settings, admin APIs, and pluggable storage into place, followed by a deploy configuration for revamp-dispatch.marklab.uk and a discreet admin gear icon tucked beside the brand mark. The afternoon and evening filled in the remaining surfaces: configurable generation time with timezone-aware UI, a manual briefing trigger with idempotent lead and addendum handling, a backfill and bootstrap script, and a commit clarifying Caddy's role as the gateway. That last one is architectural prose, not code — worth having in the repo regardless.\n\nClaude Code had a characteristically loud day in the tracker: a mass closure of roughly fifty issues around 22:35 points to a triage pass, while new reports continued arriving through the night — MCP stdio servers not respawning after plugin autoupdates, a credential-guard plugin PR adding hardcoded secret detection, a word-boundary fix for the @claude trigger to stop it firing on @claude-* variants, and a CLI-desktop conversation sync proposal. Astro contributed a single tight PR caching resolved actions in the base pipeline. The Hydrogen deploy flag conflict — --env and --env-branch being mutually exclusive without documentation — surfaced as a user-filed bug, nothing requiring immediate action.",
+  "issue_no": 15,
+  "lead_headline": "Claude Code's release-day triage sweeps fifty issues while new regressions surface in the connector stack",
+  "lead_body": "A coordinated batch close around 22:35 resolved roughly fifty issues spanning the desktop app, CLI, hooks, MCP, and permissions — the shape of a release-day sweep rather than organic triage. Two substantive PRs landed: a credential-guard plugin and a word-boundary fix to the @claude trigger. Fresh reports of MCP servers not respawning after autoupdate and a broken Cowork spawn pipeline suggest the release introduced lifecycle regressions faster than they were caught.",
+  "lead_article": "Claude Code dominated the day, and the shape of that activity tells a story. A mass-close event around 22:35 swept out roughly fifty issues in a single batch — bugs across the desktop app, CLI, hooks subsystem, MCP integration, and permissions logic all marked resolved at once, which reads like a coordinated release-day triage rather than organic close-out. Against that backdrop, two PRs of substance landed: a credential-guard plugin for hardcoded secret detection, and a word-boundary fix to the @claude trigger that was misfiring on @claude-* bot names. The CLI-desktop conversation sync proposal also opened as a PR, which has been a long-standing gap in the multi-surface story.\n\nThe new issues surfacing after that batch close are worth watching. MCP stdio servers torn down during plugin autoupdate and not respawning is a quiet reliability hole, and the report that Cowork's MCP tool binding broke entirely after the 2026-05-23 auto-update — spawn pipeline missing --mcp-config — suggests the release may have introduced a regression in the connector stack. A separate thread on session-only crons silently missing scheduled fires during idle sessions points at the same territory: lifecycle management under the new plugin architecture is producing edge cases faster than they're being caught upstream. Astro shipped a single PR caching resolved actions in the base pipeline, a focused correctness fix. Hydrogen saw one issue filed against mutually exclusive deploy flags.",
   "addendums": [],
   "projects": [
-    {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "9 COMMITS",
-      "bullet": "red"
-    },
     {
       "slug": "claude-code",
       "name": "Claude Code",
       "status": "active",
-      "stat": "7 PRS",
+      "stat": "7 PRs",
       "bullet": "sand"
     },
     {
@@ -31,55 +24,55 @@
       "slug": "hydrogen",
       "name": "Hydrogen",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "metaflow",
       "name": "Metaflow",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "mantis",
       "name": "Mantis",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "ai-sdk",
       "name": "AI SDK",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "gemma-cpp",
       "name": "Gemma.cpp",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     },
     {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
-      "stat": "QUIET",
+      "stat": "Quiet",
       "bullet": "sand"
     }
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-24-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 1,
-  "filed_at": "03:50",
+  "active_count": 0,
+  "filed_at": "05:05",
   "recent_events": []
 }

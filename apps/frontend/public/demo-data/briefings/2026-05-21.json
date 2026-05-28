@@ -1,23 +1,23 @@
 {
   "date": "2026-05-21",
-  "issue_no": 10,
-  "lead_headline": "AI SDK and Workflow SDK lead a dense Thursday, with Astro patching close behind",
-  "lead_body": "AI SDK shipped two new providers and a clutch of provider fixes across 31 commits and two releases — the window's single busiest project by volume. Workflow SDK worked both ends of the day: replay-stability commits in the early hours, then three production fixes and a v4 wire-format migration by evening. Astro cut two patch releases and cleared a backlog of correctness bugs in MDX, the Node adapter, and redirect handling.",
-  "lead_article": "The day's heaviest movement was split between AI SDK and Workflow SDK, with Astro running a close third. AI SDK shipped two new providers — `@ai-sdk/anthropic-aws` and `@ai-sdk/quiverai` — alongside Google search grounding support in `generateImage`, an OpenAI fix that skips passing reasoning items when a previous response ID is present, and a deduplication patch for MCP auth refresh on HTTP transport. A PR landed proposing an agent harness abstraction as a first-class SDK primitive, which is worth watching. Thirty-one commits across two releases made this the busiest SDK day in the window by some margin.\n\nWorkflow SDK had its own sustained arc: the day opened with replay-stability work — waiting for a stable workflow turn before replay resumes, yielding replay after buffering hook payloads, and backporting the VM-idle replay counter — then closed with three distinct production fixes: eager subscription of hook iterators, world contract failures promoted to fatal, and per-(run, correlation) uniqueness enforcement for entity-creating events in world-postgres. A `world-vercel` PR switched event endpoints to the v4 wire format. Astro shipped two patch releases (astro@6.3.7 and @astrojs/cloudflare@13.5.4), fixed custom elements in MDX bypassing the renderer pipeline, corrected Buffer and Uint8Array body handling in the Node adapter, and merged a fix for a misleading redirect error. Claude Code cut two releases (v2.1.146 and v2.1.147) while absorbing a notable volume of new issues — file descriptor leak regression, multi-level agent tree orchestration failures, MCP approval deadlocks in scheduled routines, and a macOS background agent TCC churn bug among them. Hydrogen and Metaflow were quiet: one i18n cart fragment fix and a dependency bump, respectively. Gemma.cpp opened a PR for a direct HuggingFace safetensors loader targeting Gemma 4 E2B/E4B variants — small surface area, but a useful reduction in conversion friction if it lands.",
+  "issue_no": 12,
+  "lead_headline": "Workflow SDK closes a coordinated replay and event-integrity push; AI SDK ships two new first-party providers",
+  "lead_body": "Workflow SDK spent the day closing replay correctness work — stable-turn gating, hook-payload buffering, VM-idle counter backport — then hardened production contracts: fatal world failures, per-(run, correlation) uniqueness in world-postgres, and parent WritableStream passthrough to child workflows. AI SDK matched the pace with 31 commits, adding @ai-sdk/anthropic-aws and @ai-sdk/quiverai alongside Google search grounding in generateImage and an MCP auth-refresh dedup fix.",
+  "lead_article": "The day's heaviest lift belongs to Workflow SDK, which closed out a string of replay-system commits before midnight — waiting for a stable workflow turn before resuming, yielding replay after buffering hook payloads, backporting a VM-idle replay counter — then layered production-grade hardening on top: world contract failures now captured as fatal, per-(run, correlation) uniqueness enforced for entity-creating events in world-postgres, and a late commit adding support for passing a parent WritableStream down to a child workflow via start(). The world-vercel PR switching event endpoints to the v4 wire format rounds out a day that reads less like incremental polish and more like a coordinated push toward replay correctness and strict event integrity.\n\nAI SDK was the other high-volume project, shipping two new first-party providers — @ai-sdk/anthropic-aws at v1.0.0 and @ai-sdk/quiverai at v2.0.0 — alongside Google search grounding support in generateImage, an OpenAI fix that skips passing reasoning items when a previous response ID is present, and an MCP auth-refresh deduplication patch on the HTTP transport. Astro had a clean release day: astro@6.3.7 and @astrojs/cloudflare@13.5.4 both shipped, carrying fixes for the misleading redirect error, custom elements in MDX bypassing the renderer pipeline, and Node adapter buffer bodies being JSON-stringified instead of passed through. Claude Code cut two releases — v2.1.146 and v2.1.147 — while absorbing a heavy inflow of issues ranging from a file descriptor leak regression in large monorepos to worktree isolation failures and MCP approval-gate breakage in scheduled routines. Hydrogen and Metaflow were quiet: a single i18n replacer fix in Hydrogen, a dependency bump and a pair of Batch-related issues in Metaflow. The Gemma.cpp PR adding a direct HuggingFace safetensors loader for Gemma 4 E2B/E4B is worth watching — small surface area, but it removes a friction point that currently makes local Gemma 4 experimentation more cumbersome than it needs to be.",
   "addendums": [],
   "projects": [
-    {
-      "slug": "ai-sdk",
-      "name": "AI SDK",
-      "status": "active",
-      "stat": "31 COMMITS · 2 RELEASES",
-      "bullet": "red"
-    },
     {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
       "stat": "12 COMMITS · 5 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "31 COMMITS · 2 PRS",
       "bullet": "red"
     },
     {
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-21-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 4,
-  "filed_at": "03:48",
+  "filed_at": "05:04",
   "recent_events": []
 }

@@ -1,38 +1,31 @@
 {
   "date": "2026-05-25",
-  "issue_no": 13,
-  "lead_headline": "Dispatch reaches a stable delivery architecture as Claude Code weathers a rough triage day",
-  "lead_body": "Seven commits landed in Dispatch overnight, covering the podcast page redesign, split-deployment CORS support, and the long-form brief mode generating this issue. The crossOrigin credential fix was the final piece needed for the Vercel-plus-cloudflared topology to function end to end. Upstream, Claude Code closed roughly a hundred issues in a sweep around 22:30 UTC while fresh bugs around ECONNRESET, PTY CPU spin, and --resume fork selection queued up.",
-  "lead_article": "The biggest movement today was inside Dispatch itself: seven commits spanning a podcast page redesign, the new dispatch-wide weekly cross-project digest, split-deployment CORS support for the Vercel-plus-cloudflared topology, and the long-form brief mode that's generating this very briefing. The crossOrigin credential fix on the audio player was the last piece needed for the split-deployment path to actually work end to end. That's a meaningful cluster — not incremental polish, but the delivery architecture reaching a new stable shape.\n\nAstro had a productive morning: the sitemap index lastmod fix merged, the action-caching pipeline fix landed, and the Svelte testing-library type mismatch was closed out. A new PR addresses the SSR route-cache warning that 6.3.6 introduced — worth watching, since it's already generating noise in production logs. Workflow SDK merged two cookbook doc updates and has a handful of test PRs queued. Claude Code is having a rough day upstream — a mass closure of roughly a hundred issues around 22:30 UTC suggests a triage sweep rather than fixes, and fresh reports of ECONNRESET on parallel startup fetches, a 100%-CPU PTY EOF hang, and a --resume fork-selection bug are all sitting open. The AI SDK gained a containerUpload option for the Anthropic code-execution tool, quiet but worth noting for anything that eventually feeds into the homelab pipeline.",
+  "issue_no": 16,
+  "lead_headline": "Claude Code closes 80+ issues in a single overnight sweep, then immediately takes on new ones",
+  "lead_body": "A tight cluster of closures around 22:30 UTC cleared MCP failures, worktree isolation bugs, Windows crashes, and VS Code conflicts in what reads as a coordinated release push. Fresh reports filled the gap within the hour: an ECONNRESET hitting 40–70% of parallel fetches, a --bg-pty-host process pegged at 100% CPU, a --resume bug grafting stale tool-permissions onto the wrong conversation leaf, and one user who watched Claude spawn roughly 3,000 bash processes in seventeen seconds before an OOM reboot.",
+  "lead_article": "The headline today belongs to Claude Code, which closed an extraordinary sweep of issues overnight — somewhere north of eighty tickets resolved in a tight window around 22:30, covering the full spectrum from MCP server reliability and worktree isolation failures to Windows dispatch crashes and VS Code binary conflicts. That mass closure feels less like routine triage and more like a coordinated release push, and new issues are already filling the vacuum: an ECONNRESET hitting 40–70% of parallel startup fetches, a --bg-pty-host process spinning at 100% CPU on PTY EOF, a --resume bug that reconstructs a stale fork by grafting an orphaned tool-permission onto the wrong leaf node, and a report of Claude Code spawning roughly 3,000 parallel bash processes in seventeen seconds before an OOM reboot. The volume and diversity of fresh reports suggests a significant version landed and users are stress-testing it hard.\n\nWorkflow SDK had a quieter but tidy day: two documentation PRs merged — the child workflows cookbook pattern and an AI SDK cookbook fix — with three test PRs open against workflow-server. Astro was more active, shipping fixes for action pipeline caching in the base pipeline, sitemap index lastmod stamping, and a Svelte testing-library type correction, while a new issue flagged a route-cache overwrite warning flooding SSR production logs since 6.3.6. The AI SDK picked up a single PR adding a containerUpload option to pass files into Anthropic's code execution tool — small surface area, but it extends a capability that tends to compound.",
   "addendums": [],
   "projects": [
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
+      "slug": "claude-code",
+      "name": "Claude Code",
       "status": "active",
-      "stat": "7 COMMITS",
-      "bullet": "red"
+      "stat": "6 PRS",
+      "bullet": "sand"
     },
     {
       "slug": "astro",
       "name": "Astro",
       "status": "active",
-      "stat": "5 COMMITS · 8 PRs",
+      "stat": "5 COMMITS · 8 PRS",
       "bullet": "red"
     },
     {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
-      "stat": "3 COMMITS · 7 PRs",
+      "stat": "3 COMMITS · 7 PRS",
       "bullet": "red"
-    },
-    {
-      "slug": "claude-code",
-      "name": "Claude Code",
-      "status": "active",
-      "stat": "6 PRs",
-      "bullet": "sand"
     },
     {
       "slug": "ai-sdk",
@@ -79,7 +72,7 @@
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-25-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 3,
-  "filed_at": "03:50",
+  "active_count": 2,
+  "filed_at": "05:06",
   "recent_events": []
 }

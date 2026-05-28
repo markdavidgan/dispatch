@@ -1,9 +1,9 @@
 {
   "date": "2026-05-16",
-  "issue_no": 6,
-  "lead_headline": "Claude Code 2.1.143 ships into a wall of regressions on macOS and Windows",
-  "lead_body": "Background agents are crashing with 'exit 1 before init' on macOS arm64, the agents TUI is fully unresponsive on Windows Terminal, and interactive sessions are now misclassified as background jobs post-2.1.139. One feature request closed clean — attaching to existing cowork sessions — but the version's debut is otherwise rough.",
-  "lead_article": "The dominant signal today is Claude Code 2.1.143, which shipped into a minor crisis. Background agents are crashing with \"exit 1 before init\" on macOS arm64 — two separate reports, filed seven hours apart, suggesting the failure is consistent and reproducible. The Windows picture is worse: the agents TUI is fully unresponsive in Windows Terminal, with broken rendering and a dead input loop, and a separate thread documents a freeze on the home page after returning from agent detail. A subtler regression rounds out the version's rough debut: interactive claude sessions are now classified as background jobs post-2.1.139, which causes background-only guards to fire on work the user is actively running in the foreground. One feature request did close today — attaching to existing cowork sessions rather than always spawning new ones — so not everything is in reverse.\n\nElsewhere, the AI SDK absorbed six commits in a tight early-morning window. The substantive work was two xAI provider fixes: deduplication of reasoning-start events on multi-summary-part responses, which was triggering 400 errors on continuations, and surfacing full xAI error detail in APICallError.message rather than swallowing it. Both shipped to canary and were backported to v6 in the same pass. Astro got a single PR adding a .dev.vars file association to the VS Code extension so the file renders with .env syntax highlighting. Hydrogen quietly closed a MiniOxygen install error. Everything else held steady.",
+  "issue_no": 7,
+  "lead_headline": "Claude Code 2.1.143 ships three crash surfaces in one release as the tracker fills with red",
+  "lead_body": "Version 2.1.143 is having a difficult Saturday: background agents are crashing with 'exit 1 before init' on macOS arm64, the agents TUI is unresponsive on Windows Terminal with a mouse-tracking leak leaving orphaned daemons, and the native binary segfaults at startup on Apple Silicon under Bun. Subtler breakages compound the picture — foreground sessions misclassified as background jobs, a goal function stuck in an infinite wait loop, and worktree sessions silently able to edit files in the parent checkout. The sole closure is the cowork session-attachment feature request.",
+  "lead_article": "The headline today belongs to Claude Code, and not in a flattering way. Version 2.1.143 is having a rough Saturday: background agents are crashing with \"exit 1 before init\" on macOS arm64, the agents TUI is fully unresponsive on Windows Terminal with a mouse-tracking leak leaving orphaned daemons behind, and the native binary is segfaulting at startup on Apple Silicon under Bun. That's three distinct crash surfaces in a single release. Layered on top are subtler breakages — interactive sessions misclassified as background jobs so that foreground guards fire incorrectly, a goal function caught in an infinite wait loop, and worktree sessions able to quietly edit files in the parent checkout with nothing to stop them. The one closure in the tracker is the cowork session-attachment feature request, which was resolved today, though it's easy to miss against that volume of red.\n\nEverywhere else the day is quiet. AI SDK shipped six commits concentrated in the early morning: the xai provider now dedupes reasoning-start events on multi-summary-part responses, which was producing 400 errors on continuations, and full error detail from xai is now surfaced in APICallError.message rather than swallowed. Both fixes were backported to v6. Astro has one open PR adding a .dev.vars file association to the VS Code extension so it renders as a .env file — small, sensible. Hydrogen closed a MiniOxygen install error. Everything else is holding at quiet.",
   "addendums": [],
   "projects": [
     {
@@ -11,7 +11,7 @@
       "name": "Claude Code",
       "status": "active",
       "stat": "QUIET",
-      "bullet": "sand"
+      "bullet": "red"
     },
     {
       "slug": "astro",
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-16-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 1,
-  "filed_at": "03:47",
+  "filed_at": "05:02",
   "recent_events": []
 }

@@ -1,9 +1,9 @@
 {
   "date": "2026-05-22",
-  "issue_no": 11,
-  "lead_headline": "Workflow SDK patches path traversal, cuts 4.2.5; AI SDK gains Claude on AWS and two Anthropic tool fixes",
-  "lead_body": "A path traversal vulnerability in world-local ID handling was patched, backported to stable, and forward-ported to main before workflow@4.2.5 shipped by early evening. The clobbered-cursor regression behind missing event cursors on initial load was resolved on both branches the same hour. AI SDK landed Claude Platform on AWS, a gateway serviceTier option, and Vercel access token support while closing two Anthropic tool bugs.",
-  "lead_article": "Workflow SDK dominated the day. The headline is a security fix: path traversal via request-supplied world-local IDs was patched, backported to stable, and forward-ported to main — all three landings visible in the commit log, with workflow@4.2.5 cutting the stable release by early evening. Around the same time, a clobbered cursor was identified as the root cause of the \"event cursor missing after initial load\" performance regression, and that fix landed on both stable and main. The SWC plugin picked up two correctness fixes — lexical `this` capture for nested arrow step functions, and preserved imports referenced by hoisted nested steps — while the trace viewer got hook-name display and a layout repair. The `.vercel/output` caching fix for Next workbench builds shipped twice over, once to stable and once to main. Beta moved to 5.0.0-beta.7 in the early morning hours, carrying the `WritableStream` parent-passing feature and inline-step replay timeout exclusion. Four PRs opened against the server test suite, and the Attributes MVP — experimental, write-only — surfaced as a draft.\n\nAI SDK ran a parallel sprint: Claude Platform on AWS landed as a new Anthropic provider, the gateway gained both a `serviceTier` option and Vercel access token support, and two Anthropic tool bugs — web search error handling and `code_execution` dynamic call failures — were patched and backported to the release branch. A Google Gemini 3 replay issue around missing thought signatures opened as a PR late in the day. Claude Code pushed v2.1.148 just after midnight and v2.1.149 by evening, with CI shifting to workload identity federation for Claude auth; the issue tracker filled with a dense cluster of bug reports covering Windows MCP spawn timeouts, the `bin/claude.exe` shebang omission, sub-agent idle failures, and a context meter anomaly during advisor tool calls. Astro closed out a productive merge session — stylesheet URLs for prerendered routes in the manifest, dev-mode styles propagating through Fragment named slots, the Cloudflare `assets.directory` base-path correction, and a dangling pure CSS chunk import fix all merged within the afternoon window.",
+  "issue_no": 13,
+  "lead_headline": "Workflow SDK patches a path-traversal vulnerability and ships two releases in a single afternoon",
+  "lead_body": "A path-traversal flaw in world-local ID validation was backported to stable and forward-ported to main within minutes, landing alongside a 4.2.5 release and the morning's 5.0.0-beta.7. AI SDK added Claude Platform on AWS, Vercel token support, and a serviceTier gateway option — all backported to the release branch before day's end.",
+  "lead_article": "Workflow SDK dominated the day. The headline is a security patch: a path-traversal vulnerability in world-local ID validation was backported to stable as PR #1920, then immediately forward-ported to main — the kind of fix that ships fast and quiet for good reason. That landed alongside a release of 4.2.5, and the beta line moved to 5.0.0-beta.7 earlier in the morning. Beneath the security work, a meaningful performance fix resolved an event-cursor bug that had been causing degradation after initial load — the clobbered cursor commit touched both main and stable branches. The Attributes MVP PR opened at 15:44, marked experimental and write-only, which is the shape of a feature being felt out carefully before it gets surface area. The swc-plugin picked up two correctness fixes: lexical `this` capture for nested arrow step functions, and preserved imports referenced by hoisted nested steps — both the kind of subtle compiler behavior that surfaces only under real usage.\n\nAI SDK had a full day of its own. Claude Platform on AWS landed as a new provider, Vercel access token support arrived in the gateway, and a `serviceTier` option was added to `GatewayProviderOptions` — all backported to the release branch within hours of merging. An issue opened late in the afternoon for auto-injecting `skip_thought_signature_validator` on Gemini 3 tool-call replays, with two PRs already open against it before the day closed. Astro resolved several issues simultaneously: dev-mode styles missing from content collection entries, dangling pure CSS chunk imports when `assetQueryParams` is set, and a Cloudflare adapter assets-directory path miscalculation. The external stylesheet URL population for prerendered routes also merged. Claude Code shipped two releases — v2.1.148 and v2.1.149 — while accumulating a substantial bug queue around MCP reliability on Windows, a missing shebang on the Windows binary stub, and sub-agent idle behavior. The workload identity federation PR for CI auth opened and merged within the same hour, which was the day's tidiest loop.",
   "addendums": [],
   "projects": [
     {
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-22-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 4,
-  "filed_at": "03:49",
+  "filed_at": "05:05",
   "recent_events": []
 }

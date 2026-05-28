@@ -1,9 +1,9 @@
 {
   "date": "2026-05-18",
-  "issue_no": 8,
-  "lead_headline": "AI SDK and Astro each ship two releases; Claude Code's agent surface accumulates a notable bug backlog",
-  "lead_body": "Twenty-two commits landed in AI SDK today, delivering the Vue useChat composable, sandboxed file I/O wrappers, and a same-day Vertex project-ID backport alongside a Node 22 floor. Astro cut 6.3.4 and 6.3.5 within three hours, bundling a stale-content dev-server fix, CSP correction, and a full error-message overhaul. Claude Code shipped nothing substantive but drew a cluster of agent-mode reports worth reviewing before that surface sees wider use.",
-  "lead_article": "The busiest thread today runs through AI SDK, where twenty-two commits landed across CI hardening, dependency cleanup, and two substantive features. The Vue useChat composable shipped, extending the SDK's framework reach. The Experimental_Sandbox abstraction gained readFile and writeFile convenience wrappers — a quiet but meaningful step toward portable, sandboxed file I/O in agentic contexts. The Google Vertex project-ID propagation fix merged and was backported the same evening, and the minimum Node version moved to 22, trimming legacy surface area. Astro had an equally dense afternoon: 6.3.4 and 6.3.5 both shipped inside three hours, carrying the stale-content dev-server fix, CSP position-prop correction, a full error-message consistency overhaul, and TypeScript updated to v6. The advanced routing types and config-gaps feature also landed before the second release cut.\n\nWorkflow SDK closed out the night with versioning documentation committed twice — once direct, once backported — alongside a durable-agents guide updated to reference ToolLoopAgent, an immediate-retry fix for failed VQS handlers, and instrumentation stripped from workbench. Hydrogen merged three PRs: storefrontRedirect now handles Single Fetch client-side navigations correctly, the Image component descriptor fix for fluid images is in, and the skeleton recursive line-item children patch closed the day. Mantis added a diagnostic log for the absent source job cluster and removed a stale Netty 3.7 dependency. Gemma.cpp merged the removal of Q transposition in the tiled attention kernel. Claude Code generated no commits of consequence but accumulated a notable cluster of agent-mode bug reports — socket keepalives disabled via feature flag, subagent context budgets blown by eager MCP schema materialisation, and a background-fleet deleteJob silently unlinking session JSONL — each worth a look before the agents surface gets wider use.",
+  "issue_no": 9,
+  "lead_headline": "AI SDK and Astro lead a dense Monday as Claude Code accumulates fifteen issue reports",
+  "lead_body": "AI SDK pushed 22 commits across a Node 22 floor bump, a Vue useChat composable, sandbox file I/O helpers, and a Google Vertex project-ID fix backported to release branches — all wrapped in a CI overhaul that shards test runs. Astro shipped 6.3.4 and 6.3.5 in the same afternoon alongside a full error-message consistency overhaul and a quiet TypeScript 6 upgrade. Claude Code was commit-quiet but drew fifteen issue reports, the most pointed being a confirmed behavior where self-identified reasoning gaps do not gate the output that follows.",
+  "lead_article": "The day's heaviest lift belongs to AI SDK, which pushed 22 commits spanning a Node 22 floor bump, a Vue `useChat` composable, sandbox file I/O helpers on the experimental abstraction layer, and a Google Vertex project-ID propagation fix that backported cleanly to release branches — all wrapped in a CI overhaul that shards test runs and narrows the PR matrix. Astro ran nearly as hot: `6.3.4` and `6.3.5` shipped in the same afternoon alongside a full error-message consistency overhaul, a CSP position-prop fix, stale-content correction for files outside the project root, and the TypeScript 6 upgrade landing quietly in the middle of it all. Workflow SDK closed out its evening with VQS handler retry-on-failure, instrumentation removal from workbench, and two passes of workflow versioning docs — the second a cherry-pick — plus a durable-agents guide updated to reference `ToolLoopAgent`.\n\nHydrogen had a tighter but complete session: three PRs merged covering `storefrontRedirect` compatibility with Single Fetch client-side navigation, recursive line-item children in the skeleton component, and fluid image descriptor handling, with a cache-hardening PR opened to close the day. Gemma.cpp merged the removal of Q transposition in the tiled attention kernel. Mantis added a diagnostic log for absent source job clusters and opened a PR to drop the long-dead Netty 3.7 dependency. Metaflow's sole movement was a docs fix — a broken TOC anchor and a grammar correction in the cards reference. Claude Code was quiet on commits but loud on issues: fifteen opened across the day, the most structurally pointed being the report that self-identified reasoning gaps in a response do not gate the output that follows — the model flags the problem and then proceeds anyway, which is the sort of quiet misbehavior worth watching.",
   "addendums": [],
   "projects": [
     {
@@ -63,13 +63,6 @@
       "bullet": "red"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-18-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 6,
-  "filed_at": "03:47",
+  "filed_at": "05:02",
   "recent_events": []
 }

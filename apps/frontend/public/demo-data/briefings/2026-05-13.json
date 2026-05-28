@@ -1,16 +1,16 @@
 {
   "date": "2026-05-13",
-  "issue_no": 3,
-  "lead_headline": "AI SDK clears a backlog of Zod, file-handling, and telemetry fixes in a single afternoon",
-  "lead_body": "Thirty-three commits landed in AI SDK today, patching Zod 4.4 compatibility, tool-result file downloads, and non-image file mapping in the OpenAI Responses provider. The sandbox API was quietly demoted to experimental, and the telemetry onFinish hook was renamed to onEnd — both worth checking before upgrading. Astro shipped five coordinated releases and opened Cloudflare fetch and Hono handlers as first-class export targets.",
-  "lead_article": "The busiest signal today belongs to AI SDK, which pushed through a sustained afternoon of fixes and documentation: Zod 4.4 compatibility restored in validateUIMessages, tool-result file URL downloads patched, non-image file parts correctly mapped in the OpenAI Responses provider, and a new performance statistics feature added. The rename of telemetry's onFinish to onEnd slipped in quietly between version bumps, and the sandbox API was demoted to experimental — both the kind of detail worth knowing before upgrading. Astro shipped a coordinated release across five packages (astro 6.3.2 among them), plus a PR opening Cloudflare fetch and Hono handlers as first-class export targets for advanced routing; the VSCode extension fix that preceded the release required reverting npm ci back to npm i, which suggests a toolchain wrinkle still being tidied.\n\nWorkflow SDK had a purposeful morning: three PRs arrived covering World.createRunId(), region-aware queue routing, a tagged ULID encode/decode sub-export, and a schema fix making run.input and step.input optional — the last of these probably prompted by the bug report that landed hours earlier about Zod rejecting RemoteRef-wrapped step inputs in production. Claude Code released v2.1.141 with changelog only, but the issue queue was loud: garbled display in agent view, mouse-tracking escape sequences leaking into prompts, background subagent zombie states triggering stop-hook loops, and AskUserQuestion cards silently dismissed on quit. Gemma.cpp opened a PR to remove Q transposition from the tiled attention kernel — a low-volume but architecturally meaningful change. Metaflow's single PR cleans up bare except clauses, which is unglamorous and correct.",
+  "issue_no": 4,
+  "lead_headline": "AI SDK absorbs 33 commits as Zod 4.4 pressure and telemetry cleanup signal a stabilizing v5/v6 boundary",
+  "lead_body": "AI SDK dominated Wednesday's commit log with parallel backports to v5 and v6, Zod 4.4 compatibility fixes, and a telemetry rename from onFinish to onEnd that suggests the instrumentation API is approaching a settled shape. Claude Code cut a minor release while its issue queue filled with agent-view edge cases — a zombie stop-hook loop, a silent AskUserQuestion dismissal, and leaking mouse-tracking sequences among them.",
+  "lead_article": "The busiest thread today runs through AI SDK, which absorbed 33 commits spanning bug fixes, documentation, and at least one feature of note: performance statistics landed via #15241, and a telemetry rename — onFinish to onEnd — suggests the instrumentation layer is being tidied toward a stable shape. Two Zod-related fixes arrived in close succession, one correcting validateUIMessages against Zod 4.4 and another through the backport channel, which hints at downstream pressure from users already on newer Zod versions. The sandbox feature was quietly demoted to experimental, and the open-responses provider now maps non-image file parts to input_file rather than dropping them. Backports to both the v5 and v6 release branches ran in parallel throughout the afternoon, which is the SDK's usual release cadence made visible.\n\nAstro shipped five packages — astro@6.3.2 among them — and a PR opened late in the evening adds Cloudflare fetch and Hono handler exports for advanced routing, which is the more forward-looking movement. Claude Code cut v2.1.141 but the release itself is minor; the issue queue tells the more interesting story: a zombie-subagent stop-hook loop, an AskUserQuestion card that silently resolves as dismissed on app quit, and mouse-tracking escape sequences leaking into prompt input all arrived today, suggesting the agent-view rollout is surfacing edge cases faster than the patch cycle can absorb them. Workflow SDK opened three PRs, the most substantive being region-aware queue routing and a new World.createRunId() method, while Gemma.cpp saw a PR removing Q-matrix transposition from the tiled attention kernel — a low-profile change that touches numerics.",
   "addendums": [],
   "projects": [
     {
-      "slug": "ai-sdk",
-      "name": "AI SDK",
+      "slug": "claude-code",
+      "name": "Claude Code",
       "status": "active",
-      "stat": "33 COMMITS",
+      "stat": "1 COMMIT · 1 PR · 1 RELEASE",
       "bullet": "red"
     },
     {
@@ -21,18 +21,18 @@
       "bullet": "red"
     },
     {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "33 COMMITS",
+      "bullet": "red"
+    },
+    {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
       "stat": "3 PRS",
       "bullet": "sand"
-    },
-    {
-      "slug": "claude-code",
-      "name": "Claude Code",
-      "status": "active",
-      "stat": "1 COMMIT · 1 PR · 1 RELEASE",
-      "bullet": "red"
     },
     {
       "slug": "gemma-cpp",
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-13-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 3,
-  "filed_at": "03:45",
+  "filed_at": "05:01",
   "recent_events": []
 }

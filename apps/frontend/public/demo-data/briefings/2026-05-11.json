@@ -1,23 +1,23 @@
 {
   "date": "2026-05-11",
-  "issue_no": 17,
-  "lead_headline": "Astro's background dev server takes shape; AI SDK opens subagent prototype",
-  "lead_body": "The bulk of Monday's activity settled in Astro and the AI SDK. Astro's commit run built out experimental background dev-server scaffolding — lock files, SIGKILL fallback, log tailing — while the AI SDK opened a subagent prototype and landed AbortSignal support for long-running Google agent streams. Metaflow closed the night with 2.19.29.",
-  "lead_article": "The day's heaviest traffic split across Astro and the AI SDK, with Metaflow closing the night on a point release. Astro's commit run was dominated by background dev-server management — experimental scaffolding for running the dev server as a detached background process, complete with a lock file layer migrated from the JS API down to the CLI, a SIGKILL fallback after SIGTERM timeout, and a new --follow flag for tailing logs. Alongside that, a fix for infinite spawn recursion when agent environment variables are inherited suggests the background-server machinery was already hitting edge cases in testing. A separate PR opened late afternoon targets dev-mode styles missing from content-collection entries, and SSR routes broken by dynamic prerendered routes got patched in the same window. Astro also cut a changeset to major, which is worth noting.\n\nThe AI SDK pushed a subagent prototype to an open PR — notable given the broader direction — while landed commits added flexible tool descriptions, instructions as prepareStep input, and AbortSignal support for cancelling long-running Google Interactions API agents mid-stream. A fix for accumulative properties on StreamTextResult and GenerateTextResult cleaned up some accounting debt. Metaflow shipped 2.19.29 with a follow-on PYTHONPATH fix merged just before midnight and a new PR opening Bokeh integration. Workflow SDK rolled workflow@5.0.0-beta.5. Claude Code released v2.1.139 quietly; the bug queue is louder than the release, with a schema-hallucination report and a Korean output regression on Opus 4.7 both sitting open.",
+  "issue_no": 2,
+  "lead_headline": "AI SDK closes a real gap in Google agent cancellation; Astro pushes experimental background dev server",
+  "lead_body": "Seventeen commits landed in AI SDK across Google Interactions API AbortSignal support, MCP protocol fixes, and a subagent prototype PR still open at day's end. Astro matched the pace with SSR correctness fixes and a coherent experimental block: background dev server management, a --follow log flag, and AI agent telemetry.",
+  "lead_article": "The day's heaviest traffic ran through AI SDK, where seventeen commits landed across a wide front. The headline movement was Google provider support for cancelling long-running Interactions API agents via AbortSignal — a real capability gap closed — alongside a fix for the negotiated protocol version in MCP transport request headers and MCP server instructions now surfaced to the client. The workflow fix passing step numbers into stream steps is quieter but load-bearing. A subagent prototype PR opened late afternoon; nothing merged yet, but the shape of something larger is visible there. Astro was nearly as busy: a clutch of SSR fixes landed — broken routes caused by dynamic prerendered routes with a Node prerender environment, double-encoded URL path rejection in pathname normalization, and the route cache shim restored. The more forward-looking commit batch introduced experimental background dev server management with a --follow flag for logs, a SIGKILL fallback after SIGTERM timeout, and AI agent telemetry reporting in CLI sessions — that block is marked experimental but it's a coherent feature push, not scattered cleanup.\n\nElsewhere the day was quieter but not empty. Metaflow shipped 2.19.29 with another pythonpath fix and opened a PR for Bokeh integration support. Workflow SDK reached workflow@5.0.0-beta.5 with a Nitro dev loading fix for local step dependencies. Gemma.cpp processed two internal-change PRs and one Kaggle link update to Gemma v3. Claude Code released v2.1.139 while accumulating four open bug reports — the hooks schema hallucination and the Co-Authored-By omission are the ones worth watching. Hydrogen and Dispatch Weekly stayed quiet.",
   "addendums": [],
   "projects": [
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "17 COMMITS · 1 PR",
+      "bullet": "red"
+    },
     {
       "slug": "astro",
       "name": "Astro",
       "status": "active",
       "stat": "23 COMMITS · 1 PR",
-      "bullet": "red"
-    },
-    {
-      "slug": "ai-sdk",
-      "name": "AI SDK",
-      "status": "active",
-      "stat": "11 COMMITS · 1 PR",
       "bullet": "red"
     },
     {
@@ -28,17 +28,17 @@
       "bullet": "red"
     },
     {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "2 COMMITS · 1 RELEASE",
+      "bullet": "red"
+    },
+    {
       "slug": "claude-code",
       "name": "Claude Code",
       "status": "active",
       "stat": "1 COMMIT · 1 RELEASE",
-      "bullet": "red"
-    },
-    {
-      "slug": "workflow-sdk",
-      "name": "Workflow SDK",
-      "status": "active",
-      "stat": "1 RELEASE",
       "bullet": "red"
     },
     {
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-11-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 6,
-  "filed_at": "03:41",
+  "filed_at": "05:00",
   "recent_events": []
 }

@@ -1,30 +1,30 @@
 {
   "date": "2026-05-20",
-  "issue_no": 15,
-  "lead_headline": "Astro ships two releases and queues four more PRs as build-option inheritance and Cloudflare SSR gaps close",
-  "lead_body": "Astro pushed astro@6.3.6 and @astrojs/cloudflare@13.5.3 before noon, then spent the afternoon closing gaps in Vite build-option inheritance and Cloudflare SSR optimizeDeps forwarding. Four PRs opened in the evening — covering prerendered stylesheet manifests, forwarded headers, worker-name normalization, and remote image domain gating — setting up a heavy merge queue tomorrow.",
-  "lead_article": "The headline today belongs to Astro, which pushed two releases before noon — astro@6.3.6 and @astrojs/cloudflare@13.5.3 — and kept moving through the afternoon. The Vite build options inheritance fix merged, ensuring client builds now respect vite.build.minify, sourcemap, and rollup output options properly; separately, optimizeDeps forwarding landed for SSR environments in the Cloudflare adapter. A revert of PR 16708 arrived in the same window, and triage rules were added to prevent server timeout loops. Four PRs opened in the evening — external stylesheet URL population for prerendered routes, X-Forwarded-* header resolution in FetchState, a wrangler.jsonc worker name normalization, and an error-throwing gate for non-allowed remote image domains — suggesting tomorrow's merge queue will be heavy.\n\nWorkflow SDK had two quiet but substantive movements: the Nitro v3 functionRules refactor merged, and a new PR opened for presigned S3 URLs with parallel event-log loading — a meaningful infrastructure step. Hydrogen shed a couple of exports and moved custom typings to global scope. The AI SDK gained an abort-signal propagation fix for telemetry error callbacks. Claude Code spent the day absorbing a surge of bug reports — TUI corruption, session-resume model-name mangling, a Telegram plugin CPU loop on EPIPE, plugin install false negatives — with four issues closed against the noise. Two PRs opened there: a docs polish on the plugins README and a PR addressing excessive token consumption on initial prompts.",
+  "issue_no": 11,
+  "lead_headline": "Workflow SDK's replay-correctness sprint leads a dense Wednesday across five active projects",
+  "lead_body": "Workflow SDK pushed the heaviest commit load of the day, closing stale-wait race conditions, properly guarding event consumers during replay, and surfacing corrupted event logs as distinct errors rather than silent failures. AI SDK shipped speech and transcription gateway support alongside Google service-tier fixes, all backported to v6 within hours. Astro cut two releases anchored by a Vite build-option inheritance regression fix that had been quietly mishandling production client builds.",
+  "lead_article": "The busiest thread today belongs to Workflow SDK, which pushed through a dense cluster of replay-correctness work: stale-wait race conditions patched and forward-ported to stable, event consumers properly guarded during replay, and corrupted event logs now surfaced with their own distinct error rather than swallowed quietly. Alongside that correctness run, the trace viewer received colour updates, a reduced-motion accessibility pass, and a bug-fix cleanup — and a new PR landed proposing presigned S3 URLs paired with parallel event-log loading, which would cut cold-load latency on large traces meaningfully. The Nitro v3 `functionRules` refactor also merged this morning, tidying workflow route definitions ahead of whatever comes next in that adapter layer.\n\nAI SDK had a full day of its own: speech and transcription model support shipped to the gateway provider overnight, the Google provider now correctly reads `serviceTier` from both the response header and `usageMetadata` in streaming and generate paths, and the tool-loop agent gained system-role message override support — all three backported to the v6 release branch within hours of merging. Astro shipped two releases, `6.3.6` and `@astrojs/cloudflare@13.5.3`, anchored by a fix that restores proper inheritance of Vite build options — `minify`, `sourcemap`, rollup output — for client environments, a regression that had been quietly mishandling production build configuration. The i18n-on-client fix and the double-encoding check repair rounded out the patch set. Claude Code remained in issue-triage mode: the context-spec regression from 2.1.144 closed, the TUI character-corruption report closed, and a fresh cluster of input-handling and session-resume bugs opened against 2.1.145. Hydrogen tidied its Cart types and moved custom typings to global scope. Metaflow filed a small conftest deduplification against its pytest spin setup.",
   "addendums": [],
   "projects": [
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "25 COMMITS · 2 PRS",
+      "bullet": "red"
+    },
+    {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "21 COMMITS · 1 PR",
+      "bullet": "red"
+    },
     {
       "slug": "astro",
       "name": "Astro",
       "status": "active",
       "stat": "15 COMMITS · 6 PRS · 2 RELEASES",
-      "bullet": "red"
-    },
-    {
-      "slug": "workflow-sdk",
-      "name": "Workflow SDK",
-      "status": "active",
-      "stat": "2 PRS",
-      "bullet": "red"
-    },
-    {
-      "slug": "hydrogen",
-      "name": "Hydrogen",
-      "status": "active",
-      "stat": "3 COMMITS",
       "bullet": "red"
     },
     {
@@ -35,11 +35,11 @@
       "bullet": "sand"
     },
     {
-      "slug": "ai-sdk",
-      "name": "AI SDK",
+      "slug": "hydrogen",
+      "name": "Hydrogen",
       "status": "active",
-      "stat": "1 PR",
-      "bullet": "sand"
+      "stat": "3 COMMITS",
+      "bullet": "red"
     },
     {
       "slug": "metaflow",
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -79,7 +72,7 @@
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-20-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 3,
-  "filed_at": "03:40",
+  "active_count": 4,
+  "filed_at": "05:03",
   "recent_events": []
 }

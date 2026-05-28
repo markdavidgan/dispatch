@@ -1,30 +1,23 @@
 {
   "date": "2026-05-27",
-  "issue_no": 2,
-  "lead_headline": "Dispatch logs 47 commits in a single day as audio, podcast, and admin architecture converge",
-  "lead_body": "Dispatch had its busiest single day on record. Forty-seven commits resolved a run of audio routing failures, graduated the podcast subsystem from scaffolding to a coherent feature, and closed the day by migrating project management logic out of the admin panel and into individual project pages.",
-  "lead_article": "Dispatch had its busiest single day yet. Forty-seven commits landed across a full sprint that touched audio routing, SEO, the podcast subsystem, frontend polish, architecture docs, and a late-night admin refactor. The audio stack alone accounts for a dozen fixes — presigned-URL resolution moved to deterministic keys, the TTS path was wired into all synthesis routes, the crossOrigin attribute that was silently breaking playback got removed, and the backend fallback now takes precedence over R2 when audio is missing. The podcast feature graduated from scaffolding to something coherent: index and detail merged into a single page, the audio proxy was restructured twice to get nested key routing right on Vercel, and the subtitle copy was corrected. SEO and social sharing shipped alongside a social preview image, README corrections, and a round of doc alignment to match actual codebase state. The evening closed with project management logic moving out of the admin panel and into individual project pages — a structural shift that will make the admin surface considerably quieter.\n\nAstro had a substantial day of its own. The advanced-routing flag was lifted in a dedicated PR, meaning that feature is now on by default. X-Forwarded-* header resolution merged into FetchState, closing a reported regression. Background dev mode was redesigned: the `astro dev background` subcommand was replaced with an `--background` flag, a cleaner surface that also got proper SIGTERM handling and improved lockfile error reporting. A markdown processor abstraction landed alongside a new `@astrojs/markdown-satteri` package, and the Cloudflare adapter now skips the SSR build for fully static sites. Claude Code, meanwhile, shipped v2.1.152 and absorbed a wave of incoming reports — two ralph-wiggum fixes merged addressing Stop-hook command quoting on Windows and an assistant-transcript read bug — but the volume of open issues suggests the release has friction on several platforms simultaneously.",
+  "issue_no": 18,
+  "lead_headline": "AI SDK ships twenty releases in a single cycle on the back of a codebase-wide rename sweep",
+  "lead_body": "Seventy-three PRs closed in one day, most of them a coordinated rename pass across Google, LangChain, workflow, MCP, devtools, and OpenAI packages — the documentation justifying the convention arrived after the code did. Three features also cleared: response.stream, the onAbort telemetry hook, and OpenAI Responses API query forwarding.",
+  "lead_article": "The day belonged to AI SDK, which put out twenty releases and closed seventy-three PRs in a single cycle — the bulk of them a coordinated rename sweep across Google, LangChain, workflow, MCP, devtools, and OpenAI packages, tightening local variable names throughout the codebase before the docs guidance that justified the change even landed. Alongside the hygiene work, three substantive features shipped: `response.stream` merged, giving callers a first-class stream handle off the result object; the `onAbort` hook arrived to close telemetry spans cleanly on cancellation; and the OpenAI provider now forwards `web_search_call.action.queries` from the Responses API. The Bedrock fix for document files in tool results also cleared, backported same-day.\n\nClaude Code released v2.1.152 and immediately absorbed a wave of reports — ARM aarch64 Linux hangs on the native installer, arrow keys hijacked in the prompt input, the auto-updater rewriting `~/.local/bin/claude` as a self-referential symlink (a recurrence of a prior regression), and a Cowork FUSE mount serving stale inodes that silently corrupt git operations. The batch close at 22:45 swept out dozens of older issues, including the sub-agent permission escalation bug, the SessionStart hook race against the cron scheduler, and the Opus 4.7 effort-level setting being ignored on session start. Astro moved steadily: advanced routing lost its experimental flag, the markdown processor abstraction merged, Cloudflare fetch and Hono handlers for advanced routing landed, and the `astro dev --background` flag replaced the old subcommand form. Workflow SDK merged the `Promise.race([sleep, hook])` prefix determinism tests and opened a trace replay debug PR. Gemma.cpp was quiet — a copyright-year correction and a flash-attention link-error fix on multi-target SIMD builds.",
   "addendums": [],
   "projects": [
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
+      "slug": "claude-code",
+      "name": "Claude Code",
       "status": "active",
-      "stat": "47 COMMITS",
+      "stat": "3 PRs · 1 RELEASE",
       "bullet": "red"
     },
     {
       "slug": "astro",
       "name": "Astro",
       "status": "active",
-      "stat": "25 COMMITS · 13 PRS",
-      "bullet": "red"
-    },
-    {
-      "slug": "claude-code",
-      "name": "Claude Code",
-      "status": "active",
-      "stat": "3 PRS · 1 RELEASE",
+      "stat": "25 COMMITS · 13 PRs",
       "bullet": "red"
     },
     {
@@ -52,22 +45,22 @@
       "slug": "ai-sdk",
       "name": "AI SDK",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "51 COMMITS · 73 PRs · 20 RELEASES",
+      "bullet": "red"
     },
     {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "2 COMMITS · 13 PRs",
+      "bullet": "red"
     },
     {
       "slug": "gemma-cpp",
       "name": "Gemma.cpp",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "4 PRs",
+      "bullet": "red"
     },
     {
       "slug": "dispatch-weekly",
@@ -79,458 +72,7 @@
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 3,
-  "filed_at": "01:00",
-  "recent_events": [
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62954",
-      "title": "Session list should show sessions from all entrypoints (VS Code + Desktop)",
-      "author": "renomsh",
-      "occurred_at": "2026-05-27T23:08:36Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62954"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62953",
-      "title": "[Bug] Cannot write to temporary directory on macOS",
-      "author": "scamposd",
-      "occurred_at": "2026-05-27T23:06:10Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62953"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62952",
-      "title": "Hooks fail on non-FHS systems (NixOS): ENOENT posix_spawn '/bin/sh'",
-      "author": "rayhem",
-      "occurred_at": "2026-05-27T23:02:56Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62952"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62951",
-      "title": "[BUG] Releases not gated behind changelog update. Doctor reports stale \"Latest version\".",
-      "author": "mgroth0",
-      "occurred_at": "2026-05-27T23:01:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62951"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62950",
-      "title": "[Bug] Auto-update failed with diagnostic error",
-      "author": "recchia",
-      "occurred_at": "2026-05-27T22:59:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62950"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "62938",
-      "title": "[BUG] Cowork (Windows): caches fill sessiondata.vhdx; env-based caches can't be self-fixed & orphaned session dirs never cleaned",
-      "author": "bbdiskoverdata",
-      "occurred_at": "2026-05-27T22:58:59Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62938"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62949",
-      "title": "[BUG] [Bug] Cowork Desktop only shows Sonnet 4.6 (1M) — no standard 200K option, triggers usage credits error on Max plan",
-      "author": "kelvinb-lab",
-      "occurred_at": "2026-05-27T22:56:47Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62949"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62948",
-      "title": "[FEATURE] [BUG] [ENHANCEMENT] Chrome Extension Not Dismissible - No way out.",
-      "author": "seoking23",
-      "occurred_at": "2026-05-27T22:54:42Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62948"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "49501",
-      "title": "[SYS-032] Ultrareview crash kills Remote Control session — cascading failure, no isolation",
-      "author": "ThatDragonOverThere",
-      "occurred_at": "2026-05-27T22:46:19Z",
-      "url": "https://github.com/anthropics/claude-code/issues/49501"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52566",
-      "title": "[Feature Request] Hide or disable /effort levels incompatible with current model",
-      "author": "kevinbryantlou",
-      "occurred_at": "2026-05-27T22:46:17Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52566"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "39269",
-      "title": "[BUG] Voice mode transcription silently fails on macOS Terminal.app",
-      "author": "NK5NK5",
-      "occurred_at": "2026-05-27T22:46:15Z",
-      "url": "https://github.com/anthropics/claude-code/issues/39269"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52488",
-      "title": "Feature request: decouple CLAUDE.md and MEMORY.md controls — autoMemoryEnabled should not toggle both simultaneously",
-      "author": "OnCeUponTry",
-      "occurred_at": "2026-05-27T22:46:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52488"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52558",
-      "title": "[Bug] Team vs Pro account API limits incorrectly applied after re-authentication",
-      "author": "andrew-potachits",
-      "occurred_at": "2026-05-27T22:46:11Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52558"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52561",
-      "title": "[BUG] JSON errors in Claude Cowork",
-      "author": "abiscotto",
-      "occurred_at": "2026-05-27T22:46:09Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52561"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52554",
-      "title": "Agent Teams: teammate-message envelope intermittently renders as raw XML text instead of styled notification block",
-      "author": "michael-wojcik",
-      "occurred_at": "2026-05-27T22:46:08Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52554"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52557",
-      "title": "Sub-agents can escalate permission mode beyond parent session (default → auto)",
-      "author": "mrhota",
-      "occurred_at": "2026-05-27T22:46:05Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52557"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52146",
-      "title": "Resumed session loses prior conversation history",
-      "author": "alexisrobles-ekho",
-      "occurred_at": "2026-05-27T22:46:03Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52146"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52136",
-      "title": "Session breaks after regressing a user message that contains an inline image",
-      "author": "DrewBatcheller",
-      "occurred_at": "2026-05-27T22:46:01Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52136"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52546",
-      "title": "[BUG] Enterprise managed settings (HKLM) are not applying",
-      "author": "RogerCibrian",
-      "occurred_at": "2026-05-27T22:45:59Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52546"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52552",
-      "title": "[BUG] Regression: Cost/status dialog data no longer visible to Claude in conversation context",
-      "author": "JerryHanelPak",
-      "occurred_at": "2026-05-27T22:45:57Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52552"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "51609",
-      "title": "Opus 4.7 does not delegate mechanical work to sub-agents, ignoring project rules — disproportionate quota burn",
-      "author": "Filament61",
-      "occurred_at": "2026-05-27T22:45:55Z",
-      "url": "https://github.com/anthropics/claude-code/issues/51609"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52550",
-      "title": "[BUG] SessionStart hooks should complete before scheduled_tasks.json is loaded by cron scheduler",
-      "author": "pkarnik3",
-      "occurred_at": "2026-05-27T22:45:54Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52550"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52541",
-      "title": "[BUG] Cowork 3P Gateway — claude-opus-4.7 fails with \"thinking.type.enabled is not supported\"",
-      "author": "dypaul",
-      "occurred_at": "2026-05-27T22:45:51Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52541"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52536",
-      "title": "[BUG] can't run trunk with sandbox mode enabled",
-      "author": "jschiff-recruitbot",
-      "occurred_at": "2026-05-27T22:45:49Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52536"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52538",
-      "title": "EnterWorktree intermittently returns false subagent isolation error from main session",
-      "author": "JoeInnsp23",
-      "occurred_at": "2026-05-27T22:45:48Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52538"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52534",
-      "title": "BUG: Opus 4.7 ignores CLAUDE_CODE_EFFORT_LEVEL and settings.json effortLevel on session start",
-      "author": "cnighswonger",
-      "occurred_at": "2026-05-27T22:45:46Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52534"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52535",
-      "title": "[Bug] Unable to access extra usage despite available funds",
-      "author": "kendreaditya",
-      "occurred_at": "2026-05-27T22:45:44Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52535"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "48191",
-      "title": "[BUG] API Error: Request rejected (429) · Rate limited",
-      "author": "guillaume-rgb",
-      "occurred_at": "2026-05-27T22:45:42Z",
-      "url": "https://github.com/anthropics/claude-code/issues/48191"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52439",
-      "title": "[BUG] Claude code won't start / Error 3221225501 / \"no_avx2 no_avx\" / Bun💩..",
-      "author": "needcoder",
-      "occurred_at": "2026-05-27T22:45:41Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52439"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "45432",
-      "title": "[BUG] bug: Claude Code plugins crash on Windows when user path contains accented characters",
-      "author": "kevin-martin-lcda",
-      "occurred_at": "2026-05-27T22:45:39Z",
-      "url": "https://github.com/anthropics/claude-code/issues/45432"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "48078",
-      "title": "[BUG] \"Run on Startup\" toggle cannot be turned off",
-      "author": "Publius54",
-      "occurred_at": "2026-05-27T22:45:37Z",
-      "url": "https://github.com/anthropics/claude-code/issues/48078"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52435",
-      "title": "[BUG] [Windows] Plugin marketplace install fails with EPERM on rename — path resolution collapses username + .claude into single token",
-      "author": "bluerush-nuno",
-      "occurred_at": "2026-05-27T22:45:35Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52435"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "39764",
-      "title": "[Bug] Paste functionality not working in Claude Code CLI",
-      "author": "sonewman",
-      "occurred_at": "2026-05-27T22:45:34Z",
-      "url": "https://github.com/anthropics/claude-code/issues/39764"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "49571",
-      "title": "[Bug] Multiline content paste not working in CLI input",
-      "author": "CodeCraftStudios",
-      "occurred_at": "2026-05-27T22:45:32Z",
-      "url": "https://github.com/anthropics/claude-code/issues/49571"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "49748",
-      "title": "[BUG] Cowork tab missing after update on Windows 11",
-      "author": "juliodevillasante-ship-it",
-      "occurred_at": "2026-05-27T22:45:30Z",
-      "url": "https://github.com/anthropics/claude-code/issues/49748"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52334",
-      "title": "[BUG] LIMIT calculation is broken - Weekly Limit reached, resetted 10pm -> 11pm weekly reached again",
-      "author": "tony-pythony",
-      "occurred_at": "2026-05-27T22:45:28Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52334"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52433",
-      "title": "[BUG] claude code prefilling assistant messages when using claude model 4.6+",
-      "author": "HumboldtC",
-      "occurred_at": "2026-05-27T22:45:26Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52433"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "33446",
-      "title": "[FEATURE]  - Privacy - Email Shown and Organization in Header",
-      "author": "CryptoNeverSleeps",
-      "occurred_at": "2026-05-27T22:45:24Z",
-      "url": "https://github.com/anthropics/claude-code/issues/33446"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "51149",
-      "title": "[BUG] Claude.ai/design can't read my .fig file.",
-      "author": "leslieligier-blip",
-      "occurred_at": "2026-05-27T22:45:22Z",
-      "url": "https://github.com/anthropics/claude-code/issues/51149"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52414",
-      "title": "[Bug] Anthropic API Error: ECONNRESET - Connection Reset During Session",
-      "author": "pghmatt",
-      "occurred_at": "2026-05-27T22:45:21Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52414"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52408",
-      "title": "Bug: Potential injection via unescaped prompt text in Ralph Wiggum setup heredoc",
-      "author": "sakal-s",
-      "occurred_at": "2026-05-27T22:45:19Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52408"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52413",
-      "title": "[BUG] Using tens of thousands of tokens for trivial work",
-      "author": "LeamHall",
-      "occurred_at": "2026-05-27T22:45:17Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52413"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "51440",
-      "title": "[Regression] Opus 4.7 delivers worse quality at higher token cost vs 4.6 for production coding workloads",
-      "author": "consdevs",
-      "occurred_at": "2026-05-27T22:45:15Z",
-      "url": "https://github.com/anthropics/claude-code/issues/51440"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52405",
-      "title": "Bug: Whitespace normalization mismatch in Ralph Wiggum stop hook causes completion promise comparison to fail",
-      "author": "sakal-s",
-      "occurred_at": "2026-05-27T22:45:13Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52405"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "52407",
-      "title": "Bug: Sort/filter mismatch in auto-close-duplicates script causes missed issues",
-      "author": "sakal-s",
-      "occurred_at": "2026-05-27T22:45:11Z",
-      "url": "https://github.com/anthropics/claude-code/issues/52407"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "39426",
-      "title": "[BUG] usage currency symbol is hardcoded and potentially misleading",
-      "author": "mpeg",
-      "occurred_at": "2026-05-27T22:44:48Z",
-      "url": "https://github.com/anthropics/claude-code/issues/39426"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_opened",
-      "external_id": "62947",
-      "title": "[BUG] `gitStatus` snapshot is captured at process launch, not at first-prompt-submit — goes stale when other workers commit before you type",
-      "author": "KamilDev",
-      "occurred_at": "2026-05-27T22:44:38Z",
-      "url": "https://github.com/anthropics/claude-code/issues/62947"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "50829",
-      "title": "[Bug] Claude 4.7 refuses authorized security tooling work that 4.6 handles",
-      "author": "Roltere",
-      "occurred_at": "2026-05-27T22:39:32Z",
-      "url": "https://github.com/anthropics/claude-code/issues/50829"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "60869",
-      "title": "[BUG] MacOS app crashes immediatly when loading up",
-      "author": "TheHutchGroup",
-      "occurred_at": "2026-05-27T22:37:53Z",
-      "url": "https://github.com/anthropics/claude-code/issues/60869"
-    },
-    {
-      "project_slug": "claude-code",
-      "kind": "issue_closed",
-      "external_id": "60843",
-      "title": "[BUG] 클로드 코드 폴더명 바꿔달라 요청하니 이전 폴더명을 찾으며 계속 이상동작함.",
-      "author": "TouchTouch-dev",
-      "occurred_at": "2026-05-27T22:37:51Z",
-      "url": "https://github.com/anthropics/claude-code/issues/60843"
-    }
-  ]
+  "active_count": 5,
+  "filed_at": "05:12",
+  "recent_events": []
 }

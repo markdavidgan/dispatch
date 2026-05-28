@@ -1,9 +1,9 @@
 {
   "date": "2026-05-14",
-  "issue_no": 4,
-  "lead_headline": "Workflow SDK's duration formatter fixed and folded; Astro patches an XSS vector in slot hydration",
-  "lead_body": "Fourteen commits landed in Workflow SDK today, anchored by a fix to `formatDurationPrecise` — which had been producing boundary nonsense like \"60s\" and \"1m 60s\" — subsequently folded into `formatDuration` as a precise mode. Astro's busiest concern was a security patch: unescaped slot names in hydration attributes opened an XSS vector, closed at 13:32 and released as `astro@6.3.3` minutes later. AI SDK ran a backport sweep across Mistral, xAI, and Cohere; Claude Code shipped v2.1.142 with one fix and arrived to a fresh queue of bug reports.",
-  "lead_article": "The day's loudest signal came from Workflow SDK, where fourteen commits landed across a range of concerns. The most precise fix was also the most satisfying: a `formatDurationPrecise` bug that had been producing nonsensical output at unit boundaries — \"60s\", \"1000ms\", \"1m 60s\" — was corrected and then folded cleanly back into `formatDuration` as a precise mode rather than a separate function. The trace viewer now consumes it. Alongside that, a detached ArrayBuffer proxy DX fix was ported and patched in the same evening window, SvelteKit queue triggers got a stale-state fix forward-ported, the docs homepage examples link was corrected, and the durable agents guide was updated to reference `ToolLoopAgent`. The Fantastic Four community worlds commit landed just before midnight — quieter, but shipped.\n\nAstro put up the second-busiest board. The headline there was a security patch: slot names in hydration template attributes were escaping unsanitized, opening an XSS vector; that fix cut at 13:32 and both `astro@6.3.3` and `@astrojs/mdx@5.0.6` released shortly after. The `Map` and `Set` regression in content collections was also resolved, MDX syntax highlighting for indented Astro codeblocks got corrected, and the image metadata path now handles SVGs with a zero-dimension gracefully. Claude Code shipped v2.1.142, with the stale preview-panel cache issue closed and a cluster of new bug reports arriving — silent transcript deletion and a TUI corruption issue on macOS being the ones worth watching. AI SDK ran a focused backport sweep: Mistral stop-sequence forwarding, an xAI `additionalProperties` emission fix, Cohere switching to secure JSON parsing, and a gateway fix encoding inline file bytes correctly. Mantis merged its transactional scale-up worker patch. Metaflow merged step-and-project context forwarding to the monitor for metric tagging, plus the S3 empty-input guard.",
+  "issue_no": 5,
+  "lead_headline": "Workflow SDK leads a dense Thursday with a duration-rounding fix, SvelteKit repairs, and an XSS patch in Astro",
+  "lead_body": "The evening's most surgical fix corrected a rounding-overflow in Workflow SDK's duration formatter that was producing outputs like \"1m 60s\" at unit boundaries. Astro shipped a security release escaping slot names in hydration attributes, and AI SDK trimmed telemetry coupling by dropping its onChunk dependency. Claude Code closed two long-standing bugs in v2.1.142 while a silent transcript-deletion report opened quietly behind them.",
+  "lead_article": "The busiest thread today belongs to Workflow SDK, where a cascade of fixes and forward-ports landed across the evening. The most precise of them corrected a rounding-overflow bug in `formatDurationPrecise` — the formatter was producing absurdities like \"60s\" or \"1m 60s\" at unit boundaries, violating its own documented contract — and the fix was subsequently folded into the trace viewer. A SvelteKit queue-trigger fix came in on both the main branch and as a forward-port, and the queue client version bumped alongside it. The community worlds addition and a docs-link linter rounding out the commit list suggest the SDK's surface area is quietly widening.\n\nAI SDK moved nearly as fast, shipping a clean-up to telemetry that removes the `onChunk` dependency and drops the `onChunk` event from telemetry outright — a welcome reduction in coupling. xAI's provider gained `none` and `medium` reasoning-effort values, the Cohere provider switched to secure JSON parsing, and inline file bytes in the gateway now encode as `{ type: 'data' }` rather than a `data:` URL. Astro's headline was the XSS patch — slot names in hydration template attributes were not being escaped, and `astro@6.3.3` and `@astrojs/mdx@5.0.6` ship the fix. The `Map` and `Set` breakage in content collections resolved in the same release window. Mantis made its one move count: scale-up worker additions are now transactional, closing a consistency gap. Metaflow merged S3 guard logic against empty-input paths and pushed step and project context through to the monitor for metric tagging, with a timer extension PR freshly opened. Hydrogen cleaned up stale docs and got a `destructure` register correction into the analytics integration example. Claude Code released v2.1.142, closed the stale preview-panel cache bug and the tool-enforcement gap for plugin-installed agents, and collected a fresh cluster of issue reports — silent transcript deletion on retention cleanup is the one that merits watching.",
   "addendums": [],
   "projects": [
     {
@@ -14,17 +14,17 @@
       "bullet": "red"
     },
     {
-      "slug": "astro",
-      "name": "Astro",
-      "status": "active",
-      "stat": "17 COMMITS · 2 RELEASES",
-      "bullet": "red"
-    },
-    {
       "slug": "ai-sdk",
       "name": "AI SDK",
       "status": "active",
       "stat": "15 COMMITS",
+      "bullet": "red"
+    },
+    {
+      "slug": "astro",
+      "name": "Astro",
+      "status": "active",
+      "stat": "17 COMMITS · 2 RELEASES",
       "bullet": "red"
     },
     {
@@ -63,13 +63,6 @@
       "bullet": "sand"
     },
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
-    },
-    {
       "slug": "dispatch-weekly",
       "name": "Dispatch Weekly",
       "status": "active",
@@ -80,6 +73,6 @@
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-14-lead.mp3",
   "audio_addendum_url": null,
   "active_count": 7,
-  "filed_at": "03:46",
+  "filed_at": "05:01",
   "recent_events": []
 }

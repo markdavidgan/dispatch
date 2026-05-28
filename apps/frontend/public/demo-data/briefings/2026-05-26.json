@@ -1,16 +1,16 @@
 {
   "date": "2026-05-26",
-  "issue_no": 1,
-  "lead_headline": "Dispatch rewires its own delivery stack in a single day, then reads the results aloud",
-  "lead_body": "Fourteen commits moved the briefings pipeline to Vercel serverless, swapped TTS to Kokoro-82M via the Hugging Face Inference API, and resolved a cascade of ESM import and TypeScript errors that the new build target exposed. A local SQLite fallback in db.ts ensures the pipeline degrades gracefully rather than going dark when the primary store is unreachable. The voice delivering this issue is the first production output of that change.",
-  "lead_article": "The biggest story today is Dispatch itself. Fourteen commits rewired the delivery stack from the ground up: the briefings pipeline migrated to Vercel serverless, TTS switched to Kokoro-82M via the Hugging Face Inference API, and a cascade of ESM import fixes — .js extensions, renamed api/_lib/ directories, TypeScript type errors — ironed out the rough edges of the new build target. The voice reading this is the first production output of that change. A local SQLite fallback landed in db.ts as well, which means the pipeline degrades gracefully rather than going dark when the primary store is unreachable.\n\nAstro shipped astro@6.3.8 and a companion wave of adapter and language-server patches. The Cloudflare adapter's vite plugin config resolution was being called redundantly across multiple sites, which is now collapsed to a single pass. A Vite dep-optimizer race condition that was surfacing a false React-not-found error in dev mode was fixed, as was an SSR route-cache warning that had been flooding production logs since 6.3.6. The language server closed a stack-overflow path triggered by project references containing non-TypeScript files. On the Claude Code tracker, the volume of opened issues is high but closures were selective — the pipe-buffer backpressure deadlock under MCP permission prompts closed, as did the sandbox environment leaking into child JVMs on Windows co-work sessions and the shell-snapshot base64 obfuscation concern. The remote-control input-drop regression from around May 25 remains open.",
+  "issue_no": 17,
+  "lead_headline": "Claude Code absorbs sixty-plus bug reports in a single day as platform-edge failures pile up",
+  "lead_body": "Claude Code's issue tracker took an unusual volume of reports on May 26 — PTY descriptor leaks, MSIX shells stripping PATHEXT, an MCP permission prompt deadlocking stdio, and a Remote Control regression silently dropping messages since roughly May 25. Several long-standing issues closed, including the pipe-buffer backpressure deadlock and a Windows sandbox environment leaking into child JVM processes. The density of failures across Windows path environments, macOS Keychain, Wayland, and JetBrains suggests the Cowork and Agents surface area is still settling across diverse host configurations.",
+  "lead_article": "The day's headline belongs to Claude Code, which absorbed an extraordinary volume of bug reports — well over sixty issues opened across a single calendar day, spanning PTY descriptor leaks, MSIX-packaged shells stripping PATHEXT, the MCP permission prompt deadlocking stdio under load, and a Remote Control regression that silently dropped all incoming messages from roughly May 25 onward. Several long-standing issues closed, including the pipe-buffer backpressure deadlock and the sandbox environment leaking into child JVM processes on Windows. Two security-guidance plugin PRs merged in quick succession around 20:00, and a PR landed targeting ten bug fixes across scripts and workflows. The sheer density of platform-edge failures — Windows path environments, macOS Keychain cycling, Wayland paste regressions, JetBrains startup crashes — suggests the recent Cowork and Agents surface area is still finding its footing across diverse host environments.\n\nAstro had a full release day: astro 6.3.8 and 5.18.2 both shipped, along with cloudflare 13.5.5, sitemap 3.7.3, svelte 8.1.2, and language-server 2.16.10. The Cloudflare adapter saw a fix for resolving vite plugin config once across call sites, the dep optimizer race condition that broke React in dev mode closed out, and a fix for the SSR route-cache false-positive warning merged after flooding production logs since 6.3.6. A session opt-out PR — adding `session: false` — opened late in the evening. Workflow SDK merged the `/run-id` sub-export with tagged ULID encode/decode and a Tailwind v3 backwards-compatibility fix for the encrypted-data blur, with optimistic concurrency control for event writes opened as a PR. AI SDK picked up `spawnCommand` on `Experimental_Sandbox` for detached command execution and narrowed the `tool()` return type when `execute` is provided. Hydrogen continued its typed custom cart fragments work with three TypeScript guard commits. Gemma.cpp closed a minor include-hygiene fix in flash_attention.h.",
   "addendums": [],
   "projects": [
     {
-      "slug": "dispatch",
-      "name": "Dispatch",
+      "slug": "claude-code",
+      "name": "Claude Code",
       "status": "active",
-      "stat": "14 COMMITS",
+      "stat": "7 PRs",
       "bullet": "red"
     },
     {
@@ -21,18 +21,11 @@
       "bullet": "red"
     },
     {
-      "slug": "claude-code",
-      "name": "Claude Code",
-      "status": "active",
-      "stat": "7 PRS",
-      "bullet": "red"
-    },
-    {
       "slug": "hydrogen",
       "name": "Hydrogen",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "4 COMMITS",
+      "bullet": "red"
     },
     {
       "slug": "metaflow",
@@ -52,22 +45,22 @@
       "slug": "ai-sdk",
       "name": "AI SDK",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "6 COMMITS",
+      "bullet": "red"
     },
     {
       "slug": "workflow-sdk",
       "name": "Workflow SDK",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "3 COMMITS · 9 PRS",
+      "bullet": "red"
     },
     {
       "slug": "gemma-cpp",
       "name": "Gemma.cpp",
       "status": "active",
-      "stat": "QUIET",
-      "bullet": "sand"
+      "stat": "2 PRS",
+      "bullet": "red"
     },
     {
       "slug": "dispatch-weekly",
@@ -79,7 +72,7 @@
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-26-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 3,
-  "filed_at": "23:18",
+  "active_count": 6,
+  "filed_at": "05:12",
   "recent_events": []
 }

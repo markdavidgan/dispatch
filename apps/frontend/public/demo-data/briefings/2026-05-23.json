@@ -1,38 +1,17 @@
 {
   "date": "2026-05-23",
   "issue_no": 14,
-  "lead_headline": "Dispatch extracted, auth simplified, and tests green — all before noon",
-  "lead_body": "Dispatch left the marklab monorepo this morning as its own repository, with backend and frontend reorganized under apps/ and a Phase 1 foundation plan drafted, executed, and archived in seventeen commits. The auth layer shed its Cloudflare Access dependency in favor of trusting the deployment perimeter, and DISPATCH_MASTER_KEY is now a hard boot requirement.",
-  "lead_article": "The headline today is Dispatch itself: extracted from the marklab monorepo into its own repository, the backend and frontend reorganized under an apps/ folder, and a Phase 1 foundation plan drafted, implemented, and archived as complete — all before midday. The auth layer dropped its Cloudflare Access dependency in favor of trusting the deployment perimeter, DISPATCH_MASTER_KEY is now a hard boot requirement, and the test suite passed its first green run. Seventeen commits on a project restructure of this scope is a productive morning.\n\nWorkflow SDK had two merges worth noting: the getWritable() memoization fix closes a chunk-reordering bug that surfaces when the method is called repeatedly, and inline sourcemaps now propagate across all workspace packages via a backport of the build change. Claude Code shipped v2.1.150 overnight and then spent the rest of the day accumulating a dense backlog — thirty-six issues opened across billing false positives, context window silent downgrades after agents panel navigation, subprocess accumulation reaching 150 processes and 31 GB RAM, and a wave of troubleshooting PRs documenting the same. The MCP scheduled-routines approval bug and the AskUserQuestion empty-answer regression both closed. Astro resolved the domain-based i18n dynamic route 500 error and pushed a glob-loader negation fix, with two markdown abstraction PRs also queued. AI SDK moved quietly: a canary version bump and a broken-links docs fix.",
+  "lead_headline": "Claude Code 2.1.150 ships into a documentation blitz and a growing issue queue",
+  "lead_body": "Version 2.1.150 landed just after 4 AM, followed within hours by twenty-plus coordinated documentation PRs converting known rough edges into official guidance. The issue queue caught up regardless: subprocess accumulation at 31 GB, auto-compact blocking long sessions, a Kanban swarm that hard-deleted seven directories, and a UTF-8 chunk boundary bug corrupting CJK text.",
+  "lead_article": "The dominant story today is Claude Code in a kind of controlled crisis. Version 2.1.150 shipped just after 4 AM, and by mid-morning a coordinated wave of documentation PRs had landed — twenty-plus troubleshooting entries covering everything from the context-window silently downgrading after agents panel navigation, to stale background-spare directories, to FleetView zombie session entries. That's not organic noise; it reads like a deliberate documentation push timed to the release, converting known rough edges into official guidance before the issue queue grew louder. The issue queue grew louder anyway. By evening the tracker held reports of subprocess accumulation eating 31 GB of RAM, auto-compact blocking long sessions, a Kanban swarm that hard-deleted seven project directories, and a UTF-8 chunk boundary bug corrupting CJK characters — the last of which closed before midnight. Four issues also closed on the positive side: the AskUserQuestion empty-answer regression, the Plan mode CLAUDE.md override, the MCP approval requirement on scheduled routines, and W3C trace context propagation into MCP tool requests.\n\nEverywhere else, quieter but clean. Workflow SDK closed the day's most satisfying fix: `getWritable()` is now memoized, eliminating chunk reordering when the method is called repeatedly — a subtle correctness bug that would have been hard to notice until it wasn't. The inline-sourcemap build change merged and backported in the same window, and a child-workflow cookbook PR arrived for documentation. Astro saw genuine breadth: a domain-based i18n dynamic route fix, a glob-loader negation-matching correction, and a CSP Level 3 directive PR all opened within the day. AI SDK was minimal — a canary version bump and a broken-links fix in the Next.js OpenAI examples.",
   "addendums": [],
   "projects": [
-    {
-      "slug": "dispatch",
-      "name": "Dispatch",
-      "status": "active",
-      "stat": "17 COMMITS",
-      "bullet": "red"
-    },
     {
       "slug": "claude-code",
       "name": "Claude Code",
       "status": "active",
-      "stat": "36 PRS · 1 RELEASE",
+      "stat": "36 PRs · 1 RELEASE",
       "bullet": "red"
-    },
-    {
-      "slug": "workflow-sdk",
-      "name": "Workflow SDK",
-      "status": "active",
-      "stat": "3 COMMITS · 5 PRS",
-      "bullet": "red"
-    },
-    {
-      "slug": "ai-sdk",
-      "name": "AI SDK",
-      "status": "active",
-      "stat": "2 COMMITS · 1 PR",
-      "bullet": "amber"
     },
     {
       "slug": "astro",
@@ -63,6 +42,20 @@
       "bullet": "sand"
     },
     {
+      "slug": "ai-sdk",
+      "name": "AI SDK",
+      "status": "active",
+      "stat": "2 COMMITS · 1 PR",
+      "bullet": "amber"
+    },
+    {
+      "slug": "workflow-sdk",
+      "name": "Workflow SDK",
+      "status": "active",
+      "stat": "3 COMMITS · 5 PRS",
+      "bullet": "red"
+    },
+    {
       "slug": "gemma-cpp",
       "name": "Gemma.cpp",
       "status": "active",
@@ -79,7 +72,7 @@
   ],
   "audio_lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-23-lead.mp3",
   "audio_addendum_url": null,
-  "active_count": 3,
-  "filed_at": "03:49",
+  "active_count": 2,
+  "filed_at": "05:05",
   "recent_events": []
 }

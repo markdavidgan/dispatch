@@ -1,33 +1,26 @@
 {
   "version": 1,
-  "generated_at": "2026-05-28T04:54:03.033396+00:00",
+  "generated_at": "2026-05-28T05:22:16.091991+00:00",
   "brief": {
     "date": "2026-05-27",
-    "issue_no": 2,
-    "filed_at": "01:00",
-    "active_count": "03",
-    "lead_headline": "Dispatch logs 47 commits in a single day as audio, podcast, and admin architecture converge",
-    "lead_body": "Dispatch had its busiest single day on record. Forty-seven commits resolved a run of audio routing failures, graduated the podcast subsystem from scaffolding to a coherent feature, and closed the day by migrating project management logic out of the admin panel and into individual project pages.",
+    "issue_no": 18,
+    "filed_at": "05:12",
+    "active_count": "05",
+    "lead_headline": "AI SDK ships twenty releases in a single cycle on the back of a codebase-wide rename sweep",
+    "lead_body": "Seventy-three PRs closed in one day, most of them a coordinated rename pass across Google, LangChain, workflow, MCP, devtools, and OpenAI packages — the documentation justifying the convention arrived after the code did. Three features also cleared: response.stream, the onAbort telemetry hook, and OpenAI Responses API query forwarding.",
     "projects": [
       {
-        "slug": "dispatch",
-        "name": "Dispatch",
+        "slug": "claude-code",
+        "name": "Claude Code",
         "status": "active",
-        "stat": "47 COMMITS",
+        "stat": "3 PRs · 1 RELEASE",
         "bullet": "red"
       },
       {
         "slug": "astro",
         "name": "Astro",
         "status": "active",
-        "stat": "25 COMMITS · 13 PRS",
-        "bullet": "red"
-      },
-      {
-        "slug": "claude-code",
-        "name": "Claude Code",
-        "status": "active",
-        "stat": "3 PRS · 1 RELEASE",
+        "stat": "25 COMMITS · 13 PRs",
         "bullet": "red"
       },
       {
@@ -55,22 +48,22 @@
         "slug": "ai-sdk",
         "name": "AI SDK",
         "status": "active",
-        "stat": "QUIET",
-        "bullet": "sand"
+        "stat": "51 COMMITS · 73 PRs · 20 RELEASES",
+        "bullet": "red"
       },
       {
         "slug": "workflow-sdk",
         "name": "Workflow SDK",
         "status": "active",
-        "stat": "QUIET",
-        "bullet": "sand"
+        "stat": "2 COMMITS · 13 PRs",
+        "bullet": "red"
       },
       {
         "slug": "gemma-cpp",
         "name": "Gemma.cpp",
         "status": "active",
-        "stat": "QUIET",
-        "bullet": "sand"
+        "stat": "4 PRs",
+        "bullet": "red"
       },
       {
         "slug": "dispatch-weekly",
@@ -83,7 +76,7 @@
     "addendums": [],
     "audio": {
       "lead_url": "https://7f5bbe163c03ce3b41590ff227ff6842.r2.dev/dispatch/audio/2026-05-27-lead.mp3",
-      "lead_duration_s": 167,
+      "lead_duration_s": 154,
       "addendum_url": null,
       "addendum_duration_s": null,
       "voice": "en-US-Chirp3-HD-Leda"
@@ -101,23 +94,23 @@
       "mentioned_in_briefings": [
         {
           "date": "2026-05-22",
-          "excerpt": "AI SDK landed Claude Platform on AWS, a gateway serviceTier option, and Vercel access token support while closing two Anthropic tool bugs."
+          "excerpt": "AI SDK added Claude Platform on AWS, Vercel token support, and a serviceTier gateway option — all backported to the release branch before day's end."
         },
         {
           "date": "2026-05-21",
-          "excerpt": "AI SDK shipped two new providers and a clutch of provider fixes across 31 commits and two releases — the window's single busiest project by volume."
+          "excerpt": "AI SDK matched the pace with 31 commits, adding @ai-sdk/anthropic-aws and @ai-sdk/quiverai alongside Google search grounding in generateImage and an MCP auth-refresh dedup fix."
+        },
+        {
+          "date": "2026-05-20",
+          "excerpt": "AI SDK shipped speech and transcription gateway support alongside Google service-tier fixes, all backported to v6 within hours."
         },
         {
           "date": "2026-05-19",
-          "excerpt": "AI SDK logged the highest commit count at 34, adding Gemini 3.5 Flash, a Cerebras provider, and managed-agents support."
+          "excerpt": "AI SDK led raw volume with Gemini 3.5 Flash, a streaming tool-call fix, and the Cerebras provider landing across both branches."
         },
         {
           "date": "2026-05-18",
-          "excerpt": "Twenty-two commits landed in AI SDK today, delivering the Vue useChat composable, sandboxed file I/O wrappers, and a same-day Vertex project-ID backport alongside a Node 22 floor."
-        },
-        {
-          "date": "2026-05-15",
-          "excerpt": "Thirty commits landed in AI SDK today, anchoring on a patch for Google's Interactions API before its upstream breaking change hits on May 26."
+          "excerpt": "AI SDK pushed 22 commits across a Node 22 floor bump, a Vue useChat composable, sandbox file I/O helpers, and a Google Vertex project-ID fix backported to release branches — all wrapped in a CI overhaul that shards test runs."
         }
       ]
     },
@@ -131,24 +124,24 @@
       "from_the_desk_generated_at": null,
       "mentioned_in_briefings": [
         {
-          "date": "2026-05-21",
-          "excerpt": "Astro cut two patch releases and cleared a backlog of correctness bugs in MDX, the Node adapter, and redirect handling."
-        },
-        {
           "date": "2026-05-20",
-          "excerpt": "Astro pushed astro@6.3.6 and @astrojs/cloudflare@13.5.3 before noon, then spent the afternoon closing gaps in Vite build-option inheritance and Cloudflare SSR optimizeDeps forwarding."
+          "excerpt": "Astro cut two releases anchored by a Vite build-option inheritance regression fix that had been quietly mishandling production client builds."
         },
         {
           "date": "2026-05-18",
-          "excerpt": "Astro cut 6.3.4 and 6.3.5 within three hours, bundling a stale-content dev-server fix, CSP correction, and a full error-message overhaul."
+          "excerpt": "Astro shipped 6.3.4 and 6.3.5 in the same afternoon alongside a full error-message consistency overhaul and a quiet TypeScript 6 upgrade."
         },
         {
           "date": "2026-05-17",
-          "excerpt": "Astro added one item — a Vite race condition dropping React in dev mode — and every other project was silent."
+          "excerpt": "Astro contributed a single Vite optimizeDeps race condition in dev mode; everything else stayed dark."
         },
         {
           "date": "2026-05-14",
-          "excerpt": "Astro's busiest concern was a security patch: unescaped slot names in hydration attributes opened an XSS vector, closed at 13:32 and released as `astro@6.3.3` minutes later."
+          "excerpt": "Astro shipped a security release escaping slot names in hydration attributes, and AI SDK trimmed telemetry coupling by dropping its onChunk dependency."
+        },
+        {
+          "date": "2026-05-11",
+          "excerpt": "Astro matched the pace with SSR correctness fixes and a coherent experimental block: background dev server management, a --follow log flag, and AI agent telemetry."
         }
       ]
     },
@@ -162,24 +155,24 @@
       "from_the_desk_generated_at": null,
       "mentioned_in_briefings": [
         {
-          "date": "2026-05-25",
-          "excerpt": "Upstream, Claude Code closed roughly a hundred issues in a sweep around 22:30 UTC while fresh bugs around ECONNRESET, PTY CPU spin, and --resume fork selection queued up."
-        },
-        {
-          "date": "2026-05-24",
-          "excerpt": "Claude Code's tracker saw a bulk closure of roughly fifty issues around 22:35, with new reports arriving through the night on MCP respawn failures, credential detection, and a word-boundary fix for the @claude trigger."
-        },
-        {
-          "date": "2026-05-19",
-          "excerpt": "Claude Code pushed two releases but absorbed more issues than it closed — stale daemons, a context-spec regression, and a broken worktree attach path among them."
+          "date": "2026-05-26",
+          "excerpt": "Claude Code's issue tracker took an unusual volume of reports on May 26 — PTY descriptor leaks, MSIX shells stripping PATHEXT, an MCP permission prompt deadlocking stdio, and a Remote Control regression silently dropping messages since roughly May 25."
         },
         {
           "date": "2026-05-18",
-          "excerpt": "Claude Code shipped nothing substantive but drew a cluster of agent-mode reports worth reviewing before that surface sees wider use."
+          "excerpt": "Claude Code was commit-quiet but drew fifteen issue reports, the most pointed being a confirmed behavior where self-identified reasoning gaps do not gate the output that follows."
+        },
+        {
+          "date": "2026-05-17",
+          "excerpt": "Eight issues landed in Claude Code across the day, most of them rendering pathologies in the terminal and chat panel."
         },
         {
           "date": "2026-05-15",
-          "excerpt": "Claude Code shipped v2.1.143 quietly but opened six bug reports by day's end, including a 429-into-400 retry spiral that leaves sessions unrecoverable and a Task tool gap that collapses multi-agent orchestration to single-agent execution."
+          "excerpt": "Claude Code cut v2.1.143 quietly; the issue queue was less quiet, with seven bugs filed in twelve hours pointing at the same process-tree boundary."
+        },
+        {
+          "date": "2026-05-14",
+          "excerpt": "Claude Code closed two long-standing bugs in v2.1.142 while a silent transcript-deletion report opened quietly behind them."
         }
       ]
     },
@@ -191,24 +184,7 @@
       "color_hint": null,
       "from_the_desk": null,
       "from_the_desk_generated_at": null,
-      "mentioned_in_briefings": [
-        {
-          "date": "2026-05-27",
-          "excerpt": "Dispatch had its busiest single day on record."
-        },
-        {
-          "date": "2026-05-25",
-          "excerpt": "Seven commits landed in Dispatch overnight, covering the podcast page redesign, split-deployment CORS support, and the long-form brief mode generating this issue."
-        },
-        {
-          "date": "2026-05-24",
-          "excerpt": "Nine commits took Dispatch from skeleton to deployable: Phases 2–7 landed together, followed by a configurable scheduler, a manual trigger, a backfill script, and an architectural note pinning Caddy as the gateway."
-        },
-        {
-          "date": "2026-05-23",
-          "excerpt": "Dispatch left the marklab monorepo this morning as its own repository, with backend and frontend reorganized under apps/ and a Phase 1 foundation plan drafted, executed, and archived in seventeen commits."
-        }
-      ]
+      "mentioned_in_briefings": []
     },
     {
       "slug": "dispatch-weekly",
@@ -260,16 +236,8 @@
       "from_the_desk_generated_at": null,
       "mentioned_in_briefings": [
         {
-          "date": "2026-05-15",
-          "excerpt": "Metaflow drew a security disclosure — four findings, one an RCE claim — low in volume, not in consequence."
-        },
-        {
-          "date": "2026-05-11",
-          "excerpt": "Metaflow closed the night with 2.19.29."
-        },
-        {
           "date": "2026-05-10",
-          "excerpt": "Metaflow absorbed four merged PRs in a tight early-morning window, closing bugs ranging from an orphaned-process race condition to a Windows SIGALRM crash in the timeout decorator."
+          "excerpt": "Metaflow was the only tracked project to move on May 10, merging four PRs just after 03:00 UTC and closing five issues alongside them."
         }
       ]
     },
@@ -284,15 +252,15 @@
       "mentioned_in_briefings": [
         {
           "date": "2026-05-21",
-          "excerpt": "Workflow SDK worked both ends of the day: replay-stability commits in the early hours, then three production fixes and a v4 wire-format migration by evening."
+          "excerpt": "Workflow SDK spent the day closing replay correctness work — stable-turn gating, hook-payload buffering, VM-idle counter backport — then hardened production contracts: fatal world failures, per-(run, correlation) uniqueness in world-postgres, and parent WritableStream passthrough to child workflows."
         },
         {
-          "date": "2026-05-19",
-          "excerpt": "Workflow SDK cut beta.6 with a graphile-worker schema bootstrap and a socket fix, while a new issue immediately flags Cloudflare Workers as blocked on node:vm."
+          "date": "2026-05-20",
+          "excerpt": "Workflow SDK pushed the heaviest commit load of the day, closing stale-wait race conditions, properly guarding event consumers during replay, and surfacing corrupted event logs as distinct errors rather than silent failures."
         },
         {
           "date": "2026-05-14",
-          "excerpt": "Fourteen commits landed in Workflow SDK today, anchored by a fix to `formatDurationPrecise` — which had been producing boundary nonsense like \"60s\" and \"1m 60s\" — subsequently folded into `formatDuration` as a precise mode."
+          "excerpt": "The evening's most surgical fix corrected a rounding-overflow in Workflow SDK's duration formatter that was producing outputs like \"1m 60s\" at unit boundaries."
         }
       ]
     }
@@ -750,5 +718,5 @@
     }
   ],
   "episodes": [],
-  "signature": "5f55971689b99be2579dd09a7e020100"
+  "signature": "bd5d4ec10fb448e917e0422140a76b66"
 }
