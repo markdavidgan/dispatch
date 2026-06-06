@@ -20,8 +20,7 @@ from dispatch.synthesis.prompt import (
     build_addendum_prompt,
 )
 from dispatch.synthesis.schema import ArticleFiling, LeadFiling, AddendumFiling
-from dispatch.synthesis.synthesizer import select_primary
-from dispatch.synthesis.anthropic import AnthropicSynthesizer
+from dispatch.synthesis.synthesizer import select_primary, make_synthesizer
 from dispatch.synthesis.critic import single_pass, two_pass
 from dispatch.synthesis.brief_lint import lint_lead
 from dispatch.synthesis.mention_extraction import extract_mentions, record_mentions
@@ -304,10 +303,18 @@ async def _synthesize_with_fallback(
 
     Logs failures to the runs table if *db* is provided.
     """
-    primary = AnthropicSynthesizer()
-    fallback = AnthropicSynthesizer()
+    primary = make_synthesizer(provider)
 
-    synthesizers = [primary, fallback]
+    # Build fallback chain: try the other two configured providers
+    all_providers = ["kimi", "gemini", "groq"]
+    fallback_providers = [p for p in all_providers if p != provider]
+    synthesizers = [primary]
+    for fp in fallback_providers:
+        try:
+            synthesizers.append(make_synthesizer(fp))
+        except Exception:
+            pass  # skip fallbacks that aren't configured
+
     pass_fn = two_pass if _USE_CRITIQUE else single_pass
 
     for synth in synthesizers:
@@ -325,7 +332,7 @@ async def _synthesize_with_fallback(
                 )
             continue
 
-    raise RuntimeError("Both synthesizers failed")
+    raise RuntimeError("All synthesizers failed")
 
 
 async def run_synthesis_lead(db: Database, target_date: date | None = None) -> dict:

@@ -199,7 +199,12 @@ export async function runSynthesisLead(targetDate?: string): Promise<Record<stri
 
   // Persist
   const generatedAt = new Date().toISOString();
-  const modelName = process.env.DISPATCH_AI_PROVIDER === "groq" ? "groq-llama-3.3-70b" : "gemini-2.5-flash";
+  const modelName = (() => {
+    const provider = process.env.DISPATCH_AI_PROVIDER || "kimi";
+    if (provider === "kimi") return "kimi-for-coding";
+    if (provider === "groq") return "groq-llama-3.3-70b";
+    return "gemini-2.5-flash";
+  })();
 
   await db.execute({
     sql: `INSERT INTO filings
@@ -262,7 +267,12 @@ export async function runSynthesisAddendum(): Promise<Record<string, any>> {
 
   const result = await synthesize(prompt, AddendumFilingSchema);
   const generatedAt = new Date().toISOString();
-  const modelName = process.env.DISPATCH_AI_PROVIDER === "groq" ? "groq-llama-3.3-70b" : "gemini-2.5-flash";
+  const modelName = (() => {
+    const provider = process.env.DISPATCH_AI_PROVIDER || "kimi";
+    if (provider === "kimi") return "kimi-for-coding";
+    if (provider === "groq") return "groq-llama-3.3-70b";
+    return "gemini-2.5-flash";
+  })();
 
   const label = `Filed since ${generatedAt.split("T")[1].slice(0, 5)}`;
 

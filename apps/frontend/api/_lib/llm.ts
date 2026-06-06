@@ -7,7 +7,16 @@ interface LlmConfig {
 }
 
 function getPrimaryConfig(): LlmConfig {
-  const provider = process.env.DISPATCH_AI_PROVIDER || "gemini";
+  const provider = process.env.DISPATCH_AI_PROVIDER || "kimi";
+
+  if (provider === "kimi" || process.env.KIMI_API_KEY) {
+    return {
+      baseUrl: "https://api.kimi.com/coding/v1",
+      apiKey: process.env.KIMI_API_KEY!,
+      model: "kimi-for-coding",
+    };
+  }
+
   if (provider === "groq") {
     return {
       baseUrl: "https://api.groq.com/openai/v1",
@@ -15,6 +24,7 @@ function getPrimaryConfig(): LlmConfig {
       model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
     };
   }
+
   return {
     baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
     apiKey: process.env.GEMINI_API_KEY!,
@@ -23,7 +33,18 @@ function getPrimaryConfig(): LlmConfig {
 }
 
 function getFallbackConfig(): LlmConfig | null {
-  const primary = process.env.DISPATCH_AI_PROVIDER || "gemini";
+  const primary = process.env.DISPATCH_AI_PROVIDER || "kimi";
+
+  // Kimi primary → fallback to Gemini, then Groq
+  if ((primary === "kimi" || process.env.KIMI_API_KEY) && process.env.GEMINI_API_KEY) {
+    return {
+      baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+      apiKey: process.env.GEMINI_API_KEY,
+      model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    };
+  }
+
+  // Gemini primary → fallback to Groq
   if (primary === "gemini" && process.env.GROQ_API_KEY) {
     return {
       baseUrl: "https://api.groq.com/openai/v1",
@@ -31,6 +52,8 @@ function getFallbackConfig(): LlmConfig | null {
       model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
     };
   }
+
+  // Groq primary → fallback to Gemini
   if (primary === "groq" && process.env.GEMINI_API_KEY) {
     return {
       baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
@@ -38,6 +61,7 @@ function getFallbackConfig(): LlmConfig | null {
       model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
     };
   }
+
   return null;
 }
 
