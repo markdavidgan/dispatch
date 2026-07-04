@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_gYYqRCaIan2ZZtWnKx4FeXZpYGKV",
+  "orgId": "team_VeigYkTWA0BpjoBliHw3J1Y8",
+  "projectName": "dispatch-demo",
+  "settings": {
+    "createdAt": 1779667531670,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": "npm install",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

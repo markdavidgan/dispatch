@@ -6,8 +6,8 @@
   "installCommand": "npm install",
   "rewrites": [
     { "source": "/api/proxy/(.*)", "destination": "/api/proxy/$1" },
-    { "source": "/api/(.*)", "destination": "https://dispatch-demo-api.marklab.uk/api/$1" },
-    { "source": "/health", "destination": "https://dispatch-demo-api.marklab.uk/health" },
+    { "source": "/api/(.*)", "destination": "https://dispatch-api.marklab.uk/api/$1" },
+    { "source": "/health", "destination": "https://dispatch-api.marklab.uk/health" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [

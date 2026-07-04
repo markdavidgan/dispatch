@@ -1,6 +1,7 @@
 # Pinned for container reproducibility (target: Python 3.13 container).
 # Local Python 3.14 dev: install without pins — see Task 1.5 Dockerfile.
-# No aiobotocore/botocore — R2 access uses Cloudflare REST API (Task 4.2).
+# aiobotocore powers the S3-compatible R2 storage backend (storage.provider=r2)
+# used by the self-hosted marklab deployment for audio/media in Cloudflare R2.
 fastapi==0.115.6
 uvicorn[standard]==0.32.1
 pydantic==2.10.3
@@ -19,3 +20,4 @@ feedgen==1.0.0
 feedparser==6.0.11
 notebooklm-py==0.4.0
 google-cloud-texttospeech==2.25.1
+aiobotocore==3.7.0
